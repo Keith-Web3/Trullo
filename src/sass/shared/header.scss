@@ -13,7 +13,11 @@
     font-family: 'Poppins';
     font-weight: 500;
     font-size: 1.35rem;
-    margin-left: $spacer;
+    margin-left: $spacer * 1.5;
+
+    @include screen(1184) {
+      display: none;
+    }
 
     div {
       background-color: $gray-50;

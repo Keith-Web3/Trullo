@@ -11,14 +11,14 @@ const Header = function () {
 
   return (
     <header className="header">
-      <img className="header__logo" src="Logo.svg" alt="logo" />
+      <img className="header__logo" src="/Logo.svg" alt="logo" />
       {location.pathname !== '/' && (
         <div className="boards__info">
-          Devchallenges Board
+          {location.state.name}
           <div></div>
           <Link to="/">
             <Button tag>
-              <img src="grid.svg" alt="apps" />
+              <img src="/grid.svg" alt="apps" />
               <span>All boards</span>
             </Button>
           </Link>
@@ -29,7 +29,7 @@ const Header = function () {
         <Button>search</Button>
       </label>
       <div className="user">
-        <img className="user__image" src="user.jpg" alt="user" />
+        <img className="user__image" src="/user.jpg" alt="user" />
         <p className="user__name">olorunnishola olamilekan</p>
         {
           // TODO add title to view fullname
@@ -38,7 +38,7 @@ const Header = function () {
           animate={{ rotate: isDropDownOpen ? '180deg' : '0deg' }}
           onClick={() => setIsDropDownOpen(prev => !prev)}
           className="user__caret"
-          src="caret-down-solid.svg"
+          src="/caret-down-solid.svg"
           alt="drop down"
         />
       </div>

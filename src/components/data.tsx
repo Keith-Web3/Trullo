@@ -2,6 +2,7 @@ const mockData = [
   {
     id: 1,
     name: 'Devchallenges board',
+    isPrivate: true,
     image: 'https://source.unsplash.com/random?7',
     users: [
       { image: 'https://source.unsplash.com/random/?user?1', name: 'John Doe' },
@@ -17,6 +18,7 @@ const mockData = [
   },
   {
     id: 2,
+    isPrivate: true,
     name: 'Another Board',
     image: 'https://source.unsplash.com/random?6',
     users: [
@@ -25,27 +27,27 @@ const mockData = [
         name: 'Michael Brown',
       },
       {
-        image: 'https://source.unsplash.com/random/?user?4',
+        image: 'https://source.unsplash.com/random/?user?84',
         name: 'Emily Adams',
       },
       {
-        image: 'https://source.unsplash.com/random/?user?4',
+        image: 'https://source.unsplash.com/random/?user?85',
         name: 'Emily Adams',
       },
       {
-        image: 'https://source.unsplash.com/random/?user?4',
+        image: 'https://source.unsplash.com/random/?user?82',
         name: 'Emily Adams',
       },
       {
-        image: 'https://source.unsplash.com/random/?user?4',
+        image: 'https://source.unsplash.com/random/?user?94',
         name: 'Emily Adams',
       },
       {
-        image: 'https://source.unsplash.com/random/?user?4',
+        image: 'https://source.unsplash.com/random/?user?04',
         name: 'Emily Adams',
       },
       {
-        image: 'https://source.unsplash.com/random/?user?4',
+        image: 'https://source.unsplash.com/random/?user?54',
         name: 'Emily Adams',
       },
       { image: null, name: 'Chris Wilson' },
@@ -85,6 +87,7 @@ const mockData = [
   },
   {
     id: 5,
+    isPrivate: true,
     name: 'Travel Bucket List',
     image: 'https://source.unsplash.com/random?3',
     users: [

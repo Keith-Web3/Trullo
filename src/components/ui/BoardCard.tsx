@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom'
 import '../../sass/ui/boardcard.scss'
+import { renderUsers } from '../utils/renderusers'
 
 interface BoardCardProps {
   name: string
@@ -13,30 +15,20 @@ interface BoardCardProps {
         name: string
       }
   )[]
+  id: number
 }
-const BoardCard = function ({ name, image, users }: BoardCardProps) {
-  const displayedUsers = users.slice(0, 3).map((el, idx) => {
-    if (el.image !== null) return <img src={el.image} alt={el.name} key={idx} />
-    return (
-      <div key={idx}>
-        {el.name
-          .split(' ')
-          .map(el => el[0])
-          .join('')
-          .toUpperCase()}
-      </div>
-    )
-  })
+const BoardCard = function ({ name, image, users, id }: BoardCardProps) {
+  const displayedUsers = renderUsers(users.slice(0, 3))
   const isUsersLong = users.length > 3
 
   return (
-    <div className="board-card">
+    <Link to={`board/${id}`} className="board-card" state={{ name }}>
       <img src={image} className="board-card__image" alt="project" />
       <p>{name}</p>
       <div className="users">
         {displayedUsers} {isUsersLong && `+${users.length - 3} others`}
       </div>
-    </div>
+    </Link>
   )
 }
 

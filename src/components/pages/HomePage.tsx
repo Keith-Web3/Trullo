@@ -14,6 +14,7 @@ const HomePage = function () {
         {mockData.map(el => (
           <BoardCard
             key={el.id}
+            id={el.id}
             name={el.name}
             image={el.image}
             users={el.users}

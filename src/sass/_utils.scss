@@ -1,0 +1,25 @@
+@use './variables' as *;
+
+@mixin users {
+  display: flex;
+  align-items: center;
+  gap: $spacer * 0.5;
+  font-family: 'Noto Sans';
+  font-weight: 500;
+  color: $gray-300;
+
+  img,
+  div {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  div {
+    background-color: $gray-300;
+    display: grid;
+    place-content: center;
+    color: $white;
+    font-weight: 500;
+  }
+}
