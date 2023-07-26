@@ -1,0 +1,30 @@
+@use '../variables' as *;
+
+.homepage {
+  background-color: $blue-50;
+  padding: $spacer * 1.5;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Poppins';
+    font-weight: 500;
+    margin-bottom: $spacer * 1.5;
+
+    & > p {
+      text-transform: capitalize;
+      font-size: 1.25rem;
+      color: $dark-100;
+    }
+    & > button {
+      font-size: 1.1rem;
+    }
+  }
+  .boards {
+    display: grid;
+    gap: $spacer;
+    grid-template-columns: repeat(auto-fit, minmax(243px, 1fr));
+    grid-auto-rows: auto;
+  }
+}
