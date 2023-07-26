@@ -1,0 +1,18 @@
+$blue-50: #f8f9fd;
+$blue-100: #dae4fd;
+$blue-200: #d5e6fb;
+$blue-300: #2f80ed;
+$dark-100: #333333;
+$black: #000000;
+$white: #ffffff;
+$gray-50: #e0e0e0;
+$gray-100: #f2f2f2;
+$gray-200: #828282;
+$gray-300: #bdbdbd;
+$spacer: 1em;
+
+@mixin screen($width, $type: 'max') {
+  @media (#{$type}-width: #{$width}px) {
+    @content;
+  }
+}

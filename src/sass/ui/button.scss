@@ -1,0 +1,31 @@
+@use '../variables' as *;
+
+.button {
+  display: block;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: 'Poppins', 'Nunito';
+  font-weight: 500;
+  text-transform: capitalize;
+  background-color: $blue-300;
+  color: $white;
+  padding: 0.75em 1.3em;
+  font-size: 0.95rem;
+
+  &.tag {
+    background-color: $gray-100;
+    color: $gray-200;
+    display: flex;
+    align-items: center;
+    gap: $spacer * 0.65;
+
+    img {
+      width: 1.25rem;
+    }
+    span {
+      line-height: 0;
+    }
+  }
+}

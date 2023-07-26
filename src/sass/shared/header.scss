@@ -1,0 +1,106 @@
+@use '../variables' as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: $spacer;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.05);
+
+  .boards__info {
+    display: flex;
+    align-items: center;
+    color: $dark-100;
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1.35rem;
+    margin-left: $spacer;
+
+    div {
+      background-color: $gray-50;
+      height: 2.5rem;
+      margin-inline: $spacer;
+      width: 2px;
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+
+  &__label {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.1));
+    background-color: $white;
+    border-radius: 0.5rem;
+    padding: $spacer * 0.2;
+    margin-left: auto;
+
+    input {
+      border: none;
+      outline: none;
+      height: 100%;
+      background-color: transparent;
+      font-family: 'Poppins';
+      font-weight: 500;
+      color: $gray-200;
+      padding-inline: $spacer;
+      font-size: 0.95rem;
+      width: 100%;
+
+      &::placeholder {
+        color: $gray-300;
+      }
+    }
+    @include screen(480) {
+      width: calc(100% - (98px + 1rem));
+    }
+    @include screen(400) {
+      max-width: 150px;
+      &:has(input:focus) {
+        max-width: unset;
+      }
+      button {
+        display: none;
+      }
+      input {
+        padding-block: 0.75em;
+      }
+    }
+  }
+  .user {
+    display: flex;
+    align-items: center;
+    gap: $spacer * 0.8;
+    margin-left: $spacer * 2.5;
+
+    &__image {
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      object-fit: cover;
+      object-position: top center;
+    }
+    &__name {
+      text-transform: capitalize;
+      font-weight: 700;
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      @include screen(770) {
+        display: none;
+      }
+    }
+    &__caret {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      object-fit: contain;
+    }
+
+    @include screen(600) {
+      display: none;
+    }
+  }
+}
