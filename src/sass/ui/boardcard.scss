@@ -14,11 +14,17 @@
   }
   & > p {
     margin-block: $spacer;
+    font-family: 'Noto Sans';
+    font-size: 1.1rem;
+    font-weight: 500;
   }
   .users {
     display: flex;
     align-items: center;
     gap: $spacer * 0.5;
+    font-family: 'Noto Sans';
+    font-weight: 500;
+    color: $gray-300;
 
     img,
     div {

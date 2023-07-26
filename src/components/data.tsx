@@ -28,6 +28,26 @@ const mockData = [
         image: 'https://source.unsplash.com/random/?user?4',
         name: 'Emily Adams',
       },
+      {
+        image: 'https://source.unsplash.com/random/?user?4',
+        name: 'Emily Adams',
+      },
+      {
+        image: 'https://source.unsplash.com/random/?user?4',
+        name: 'Emily Adams',
+      },
+      {
+        image: 'https://source.unsplash.com/random/?user?4',
+        name: 'Emily Adams',
+      },
+      {
+        image: 'https://source.unsplash.com/random/?user?4',
+        name: 'Emily Adams',
+      },
+      {
+        image: 'https://source.unsplash.com/random/?user?4',
+        name: 'Emily Adams',
+      },
       { image: null, name: 'Chris Wilson' },
     ],
   },
