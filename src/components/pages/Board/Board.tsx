@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom'
 
 import BoardHeader from './BoardHeader'
-import mockData from '../../data'
+import mockData, { mockData1 } from '../../data'
+import Task from './Task'
 
 const Board = function () {
   const params = useParams<{ boardId: string }>()
@@ -9,7 +10,11 @@ const Board = function () {
   const currentBoard = mockData[+params!.boardId!]
   return (
     <div className="board">
-      <BoardHeader users={currentBoard.users} isPrivate={true} />
+      <BoardHeader
+        users={currentBoard.users}
+        isPrivate={!!currentBoard.isPrivate}
+      />
+      <Task {...mockData1[0]} />
     </div>
   )
 }
