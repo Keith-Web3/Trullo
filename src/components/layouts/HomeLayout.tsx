@@ -5,7 +5,7 @@ import Header from '../shared/Header'
 const HomeLayout = function () {
   return (
     <main>
-      <Header />
+      {/* <Header /> */}
       <Outlet />
     </main>
   )
