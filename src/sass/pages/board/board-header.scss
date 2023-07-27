@@ -5,6 +5,11 @@
   display: flex;
   gap: $spacer * 1.5;
   padding-block: $spacer;
+  position: relative;
+
+  @include screen(650) {
+    padding-inline: $spacer;
+  }
 
   .board__users {
     @include utils.users;
@@ -17,6 +22,12 @@
     }
     .add-user {
       background-color: $blue-300;
+    }
+    @include screen(650) {
+      img,
+      div {
+        display: none;
+      }
     }
   }
 }

@@ -151,7 +151,10 @@ interface Message {
 
 // Generate random image URL from Unsplash
 function getRandomUnsplashImage(): string {
-  return `https://source.unsplash.com/random/${Math.random() * 100}`
+  const randomNum = Math.random() * 2
+  return randomNum > 0.9
+    ? `https://source.unsplash.com/random/${Math.random() * 100}`
+    : ''
 }
 
 // Generate random timestamp
@@ -164,12 +167,13 @@ const generateList = (_: unknown, index: number) => {
   // Generate random number for user ID
   const userId = index + 1
 
+  const num = Math.round(Math.random() * 3)
   // Create the user objects
   const users: User[] = [
     { id: userId, image: getRandomUnsplashImage(), name: 'User 1' },
     { id: userId + 1, image: getRandomUnsplashImage(), name: 'User 2' },
     { id: userId + 2, image: getRandomUnsplashImage(), name: 'User 3' },
-  ]
+  ].slice(0, num)
 
   // Create the messages array
   const messages: Message[] = [
@@ -202,8 +206,8 @@ const generateList = (_: unknown, index: number) => {
 
 // Create the mockData array
 const mockData1 = Array(2).fill(0).map(generateList)
-const mockData2 = Array(5).fill(0).map(generateList)
-const mockData3 = Array(3).fill(0).map(generateList)
+const mockData2 = Array(3).fill(0).map(generateList)
+const mockData3 = Array(2).fill(0).map(generateList)
 const mockData4 = Array(1).fill(0).map(generateList)
 
 export const mockDataArr = [mockData1, mockData2, mockData3, mockData4]

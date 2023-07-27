@@ -11,9 +11,10 @@ function renderUsers(
   )[]
 ) {
   return users.map((el, idx) => {
-    if (el.image !== null) return <img src={el.image} alt={el.name} key={idx} />
+    if (el.image !== null && el.image !== '')
+      return <img src={el.image} alt={el.name} key={idx} />
     return (
-      <div key={idx}>
+      <div className="renderedImage" key={idx}>
         {el.name
           .split(' ')
           .map(el => el[0])

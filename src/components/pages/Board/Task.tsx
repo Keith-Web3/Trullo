@@ -23,7 +23,7 @@ interface TaskProps {
 const Task = function ({ image, taskName, tags, users, messages }: TaskProps) {
   return (
     <div className="task">
-      <img className="task__image" src={image} alt={taskName} />
+      {!!image && <img className="task__image" src={image} alt={taskName} />}
       <p className="task__title">{taskName}</p>
       <div className="tags">
         {tags.map((tag, idx) => {

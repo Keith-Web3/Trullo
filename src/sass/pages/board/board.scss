@@ -2,6 +2,10 @@
 
 .board {
   padding: $spacer $spacer * 1.5 0;
+
+  @include screen(650) {
+    padding-inline: 0;
+  }
   &__body {
     height: 100dvh;
     padding: $spacer;
@@ -22,6 +26,17 @@
     }
     &::-webkit-scrollbar-track {
       margin-block: 24px;
+    }
+    @include screen(650) {
+      padding-inline: $spacer;
+      border-radius: 0;
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 0;
+      }
+      &::-webkit-scrollbar-track {
+        margin-block: 0;
+      }
     }
   }
   .add-list {

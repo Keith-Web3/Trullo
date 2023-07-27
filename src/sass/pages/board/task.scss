@@ -7,6 +7,7 @@
   box-shadow: 0px 4px 12px 0px #0000000d;
   border-radius: 12px;
   margin-bottom: $spacer * 1.5;
+  min-width: 243px;
 
   &__image {
     aspect-ratio: 219 / 130;
@@ -34,6 +35,7 @@
   .footer {
     margin-top: $spacer;
     display: flex;
+    gap: $spacer * 0.65;
     justify-content: space-between;
   }
   &__users {
@@ -52,10 +54,10 @@
       gap: $spacer * 0.2;
       align-items: center;
       color: $gray-300;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
 
       img {
-        width: 20px;
+        width: 15px;
       }
     }
   }
