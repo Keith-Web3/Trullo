@@ -1,0 +1,37 @@
+@use '../../variables' as *;
+
+.list {
+  width: max-content;
+  max-width: 250px;
+
+  & > p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    span {
+      color: $dark-100;
+      font-family: 'Poppins';
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+    img {
+      cursor: pointer;
+    }
+  }
+  .add-card {
+    background-color: $blue-100;
+    color: $blue-300;
+    padding: $spacer * 0.75 $spacer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+
+    span:nth-child(2) {
+      font-size: 1.2rem;
+    }
+  }
+}

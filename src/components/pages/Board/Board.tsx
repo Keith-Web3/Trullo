@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom'
 
 import BoardHeader from './BoardHeader'
-import mockData, { mockData1 } from '../../data'
-import Task from './Task'
+import mockData, { mockDataArr } from '../../data'
+import List from './List'
+import '../../../sass/pages/board/board.scss'
 
 const Board = function () {
   const params = useParams<{ boardId: string }>()
@@ -14,7 +15,14 @@ const Board = function () {
         users={currentBoard.users}
         isPrivate={!!currentBoard.isPrivate}
       />
-      <Task {...mockData1[0]} />
+      <div className="board__body">
+        {mockDataArr.map((mockData, idx) => (
+          <List name="backlog" tasks={mockData} key={idx} />
+        ))}
+        <div className="add-list">
+          <span>Add another list</span> <span>+</span>
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,15 @@
 @use './resets';
+@use './variables' as *;
 
 body {
   font-family: 'Noto Sans';
+}
+html {
+  &::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($black, 0.2);
+  }
 }

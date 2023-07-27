@@ -43,7 +43,9 @@ const Task = function ({ image, taskName, tags, users, messages }: TaskProps) {
         })}
       </div>
       <div className="footer">
-        <div className="task__users">{renderUsers(users)}</div>
+        <div className="task__users">
+          {renderUsers(users.slice(0, 3))} <div>+</div>
+        </div>
         <div className="task__info">
           <p>
             <img src="/comment.svg" alt="comment" />
@@ -59,4 +61,5 @@ const Task = function ({ image, taskName, tags, users, messages }: TaskProps) {
   )
 }
 
+export type { TaskProps }
 export default Task

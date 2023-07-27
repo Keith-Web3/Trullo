@@ -2,10 +2,11 @@
 @use '../../utils' as utils;
 
 .task {
-  max-width: 243px;
   padding: $spacer;
+  background-color: $white;
   box-shadow: 0px 4px 12px 0px #0000000d;
   border-radius: 12px;
+  margin-bottom: $spacer * 1.5;
 
   &__image {
     aspect-ratio: 219 / 130;
@@ -37,19 +38,24 @@
   }
   &__users {
     @include utils.users;
+
+    div {
+      background-color: $blue-300;
+    }
   }
   &__info {
     display: flex;
-    gap: $spacer * 0.5;
+    gap: $spacer * 0.1;
 
     p {
       display: flex;
-      gap: $spacer * 0.25;
+      gap: $spacer * 0.2;
       align-items: center;
       color: $gray-300;
+      font-size: 0.9rem;
 
       img {
-        width: 25px;
+        width: 20px;
       }
     }
   }

@@ -4,7 +4,7 @@
 .board-header {
   display: flex;
   gap: $spacer * 1.5;
-  padding: $spacer;
+  padding-block: $spacer;
 
   .board__users {
     @include utils.users;

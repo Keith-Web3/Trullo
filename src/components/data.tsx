@@ -159,49 +159,53 @@ function getRandomTimestamp(): string {
   return new Date().toISOString()
 }
 
+//Generate list
+const generateList = (_: unknown, index: number) => {
+  // Generate random number for user ID
+  const userId = index + 1
+
+  // Create the user objects
+  const users: User[] = [
+    { id: userId, image: getRandomUnsplashImage(), name: 'User 1' },
+    { id: userId + 1, image: getRandomUnsplashImage(), name: 'User 2' },
+    { id: userId + 2, image: getRandomUnsplashImage(), name: 'User 3' },
+  ]
+
+  // Create the messages array
+  const messages: Message[] = [
+    {
+      user: users[0],
+      timestamp: getRandomTimestamp(),
+      message: 'Hello, this is User 1!',
+    },
+    {
+      user: users[1],
+      timestamp: getRandomTimestamp(),
+      message: 'Hey there, User 2 speaking!',
+    },
+    {
+      user: users[2],
+      timestamp: getRandomTimestamp(),
+      message: "Hi, it's User 3 here!",
+    },
+  ]
+
+  return {
+    id: index + 1,
+    image: getRandomUnsplashImage(),
+    taskName: `Task ${index + 1}`,
+    tags: ['technical', 'design'],
+    users,
+    messages,
+  }
+}
+
 // Create the mockData array
-const mockData1 = Array(7)
-  .fill(0)
-  .map((_, index) => {
-    // Generate random number for user ID
-    const userId = index + 1
+const mockData1 = Array(2).fill(0).map(generateList)
+const mockData2 = Array(5).fill(0).map(generateList)
+const mockData3 = Array(3).fill(0).map(generateList)
+const mockData4 = Array(1).fill(0).map(generateList)
 
-    // Create the user objects
-    const users: User[] = [
-      { id: userId, image: getRandomUnsplashImage(), name: 'User 1' },
-      { id: userId + 1, image: getRandomUnsplashImage(), name: 'User 2' },
-      { id: userId + 2, image: getRandomUnsplashImage(), name: 'User 3' },
-    ]
-
-    // Create the messages array
-    const messages: Message[] = [
-      {
-        user: users[0],
-        timestamp: getRandomTimestamp(),
-        message: 'Hello, this is User 1!',
-      },
-      {
-        user: users[1],
-        timestamp: getRandomTimestamp(),
-        message: 'Hey there, User 2 speaking!',
-      },
-      {
-        user: users[2],
-        timestamp: getRandomTimestamp(),
-        message: "Hi, it's User 3 here!",
-      },
-    ]
-
-    return {
-      id: index + 1,
-      image: getRandomUnsplashImage(),
-      taskName: `Task ${index + 1}`,
-      tags: ['technical', 'design'],
-      users,
-      messages,
-    }
-  })
-
-export { mockData1 }
+export const mockDataArr = [mockData1, mockData2, mockData3, mockData4]
 
 export default mockData
