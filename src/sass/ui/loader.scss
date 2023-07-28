@@ -1,0 +1,8 @@
+@use '../variables' as *;
+
+.loader {
+  aspect-ratio: 1 / 1;
+  border-style: solid;
+  border-radius: 50%;
+  background-color: inherit;
+}
