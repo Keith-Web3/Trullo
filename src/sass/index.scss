@@ -16,3 +16,6 @@ html {
 .renderedImage {
   background-color: $gray-300 !important;
 }
+[id^='__lpform_'] {
+  display: none !important;
+}

@@ -4,6 +4,7 @@
   min-height: 100dvh;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  position: relative;
 
   @include screen(760) {
     display: block;
@@ -21,6 +22,10 @@
   }
   & > img {
     object-fit: cover;
+    object-position: center;
+    position: absolute;
+    inset: 0 0 0 50%;
+    width: 50%;
 
     @include screen(760) {
       display: none;
@@ -96,26 +101,44 @@
       position: relative;
       margin-bottom: $spacer;
 
-      span {
+      img {
         position: absolute;
-        inset: 50% auto auto 1.3em;
-        top: 50%;
+        cursor: pointer;
+        width: 20px;
+        inset: 50% 1.3em auto auto;
         transform: translateY(-50%);
-        font-weight: 500;
-        color: $gray-200;
-        pointer-events: none;
-        transition: top 200ms linear;
       }
+
       input {
         padding: 0.75em 1.3em;
         width: 100%;
         border: 2px solid $gray-300;
         outline: none;
         border-radius: 4px;
-        color: $gray-200;
+        color: $dark-100;
+        background-image: none !important;
+
+        /* For most modern browsers */
+        &:-webkit-autofill {
+          background-color: transparent !important;
+        }
+
+        /* For Firefox */
+        &:-moz-autofill {
+          background-color: transparent !important;
+        }
+
+        /* For Microsoft Edge */
+        &:-ms-autofill {
+          background-color: transparent !important;
+        }
 
         &:focus {
           border: 2px solid $gray-200;
+        }
+        &::placeholder {
+          font-weight: 500;
+          color: $gray-200;
         }
       }
     }
@@ -127,6 +150,7 @@
       justify-content: space-between;
       color: $gray-400;
       font-weight: 500;
+      font-size: 0.95rem;
 
       label {
         display: flex;

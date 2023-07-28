@@ -1,8 +1,10 @@
 import { Form } from 'react-router-dom'
 
 import '../../../sass/features/auth/login.scss'
+import { useState } from 'react'
 
 const Login = function () {
+  const [viewPassword, setViewPassword] = useState(false)
   return (
     <div className="login">
       <div className="login__main">
@@ -17,18 +19,40 @@ const Login = function () {
             <span>Log in with Google</span>
           </button>
           <p className="or">or</p>
+
           <label htmlFor="email">
-            <span>Email</span>
-            <input type="email" name="email" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              autoComplete="off"
+              required
+            />
           </label>
           <label htmlFor="password">
-            <span>Password</span>
-            <input type="password" name="password" />
+            <input
+              type={viewPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Password"
+              autoComplete="off"
+              required
+            />
+            {!viewPassword ? (
+              <img
+                src="/eye.svg"
+                onClick={() => setViewPassword(prev => !prev)}
+              />
+            ) : (
+              <img
+                src="/visible.svg"
+                onClick={() => setViewPassword(prev => !prev)}
+              />
+            )}
           </label>
           <div className="footer">
             <label htmlFor="remember-password">
-              <input type="checkbox" name="checkbox" />
-              <span>Remember for 30 days</span>
+              <input type="checkbox" name="checkbox" id="remember-password" />
+              Remember for 30 days
             </label>
             <p>Forgot password</p>
           </div>
@@ -42,9 +66,13 @@ const Login = function () {
         </Form>
       </div>
       <img
-        src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dGFzayUyMG1hbmFnZW1lbnR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+        src={`https://source.unsplash.com/random/?task-management`}
         alt="thullo"
       />
+      {/* <img
+        src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dGFzayUyMG1hbmFnZW1lbnR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+        alt="thullo"
+      /> */}
     </div>
   )
 }
