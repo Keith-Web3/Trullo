@@ -1,7 +1,14 @@
-import { Form, Link } from 'react-router-dom'
+import { ActionFunction, Form, Link } from 'react-router-dom'
+import { useState } from 'react'
 
 import '../../../sass/features/auth/signup.scss'
-import { useState } from 'react'
+export const authAction: ActionFunction = async function ({ request }) {
+  const formData = await request.formData()
+  const email = formData.get('email')
+  const password = formData.get('password')
+  console.log(email, password)
+  return null
+}
 
 const SignUp = function () {
   const [viewPassword, setViewPassword] = useState(false)
