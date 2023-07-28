@@ -1,17 +1,36 @@
-import { ActionFunction, Form, Link } from 'react-router-dom'
+import {
+  ActionFunction,
+  Form,
+  Link,
+  useNavigation,
+  redirect,
+} from 'react-router-dom'
 import { useState } from 'react'
 
+import { supabase } from '../../data/supabase'
+
 import '../../../sass/features/auth/signup.scss'
+import Loader from '../../ui/Loader'
+
 export const authAction: ActionFunction = async function ({ request }) {
   const formData = await request.formData()
-  const email = formData.get('email')
-  const password = formData.get('password')
-  console.log(email, password)
+  const searchParams = new URL(request.url).searchParams.get('redirectTo')
+
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+
+  const { error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  })
+  if (error === null) throw redirect(searchParams || '/')
+
   return null
 }
 
 const SignUp = function () {
   const [viewPassword, setViewPassword] = useState(false)
+  const navigation = useNavigation()
 
   return (
     <div className="signup">
@@ -46,6 +65,7 @@ const SignUp = function () {
               name="password"
               placeholder="Password"
               autoComplete="off"
+              minLength={6}
               required
             />
             {!viewPassword ? (
@@ -64,7 +84,17 @@ const SignUp = function () {
             <img src="/google.png" alt="google sign-in" />
             <span>Sign up with Google</span>
           </button>
-          <button className="login__btn">Create account</button>
+          <button className="login__btn">
+            {navigation.state === 'submitting' && (
+              <Loader
+                width="24px"
+                ringWidth="3px"
+                loaderColor="#ffffff"
+                ringColor="#2f80ed"
+              />
+            )}
+            Create account
+          </button>
           <p>
             Already have an account?
             <Link to="/login"> Login</Link>

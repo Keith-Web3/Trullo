@@ -5,20 +5,26 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom'
 
-import HomeLayout from './components/layouts/HomeLayout'
+import HomeLayout, {
+  loader as HomeLayoutLoader,
+} from './components/layouts/HomeLayout'
 import HomePage from './components/pages/HomePage'
 import Board from './components/pages/Board/Board'
-import Login from './components/features/auth/Login'
+import Login, {
+  authAction as loginAction,
+} from './components/features/auth/Login'
 import SignUp, { authAction } from './components/features/auth/SignUp'
 
 const App = function () {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<HomeLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="board/:boardId" element={<Board />} />
-        <Route path="login" element={<Login />} />
+      <Route path="/">
+        <Route path="login" action={loginAction} element={<Login />} />
         <Route path="signup" action={authAction} element={<SignUp />} />
+        <Route loader={HomeLayoutLoader} element={<HomeLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="board/:boardId" element={<Board />} />
+        </Route>
       </Route>
     )
   )

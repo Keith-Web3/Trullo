@@ -1,10 +1,36 @@
-import { Form, Link } from 'react-router-dom'
+import {
+  ActionFunction,
+  Form,
+  Link,
+  redirect,
+  useNavigation,
+} from 'react-router-dom'
+import { useState } from 'react'
 
 import '../../../sass/features/auth/login.scss'
-import { useState } from 'react'
+import { supabase } from '../../data/supabase'
+import Loader from '../../ui/Loader'
+import { signinWithGoogle } from '../../utils/requireAuth'
+
+export const authAction: ActionFunction = async function ({ request }) {
+  const formData = await request.formData()
+  const searchParams = new URL(request.url).searchParams.get('redirectTo')
+
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  })
+  if (error === null) throw redirect(searchParams || '/')
+
+  return null
+}
 
 const Login = function () {
   const [viewPassword, setViewPassword] = useState(false)
+  const navigation = useNavigation()
 
   return (
     <div className="login">
@@ -15,7 +41,7 @@ const Login = function () {
           <p className="login__subheader">
             Welcome back! Please enter your details.
           </p>
-          <button className="google__btn">
+          <button className="google__btn" onClick={signinWithGoogle}>
             <img src="/google.png" alt="google sign-in" />
             <span>Log in with Google</span>
           </button>
@@ -56,7 +82,17 @@ const Login = function () {
             </label>
             <p>Forgot password</p>
           </div>
-          <button className="login__btn">Log in</button>
+          <button className="login__btn">
+            {navigation.state === 'submitting' && (
+              <Loader
+                width="24px"
+                ringWidth="3px"
+                loaderColor="#ffffff"
+                ringColor="#2f80ed"
+              />
+            )}
+            Log in
+          </button>
           <p>
             Don't have an account?
             <Link to="/signup">
