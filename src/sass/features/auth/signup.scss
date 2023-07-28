@@ -1,0 +1,22 @@
+@use '../../variables' as *;
+@use '../../utils' as utils;
+
+.signup {
+  @include utils.auth;
+
+  &__main {
+    form {
+      .google__btn {
+        margin-top: $spacer * 2.3;
+      }
+      .login__btn + p {
+        a {
+          text-decoration: 2px solid underline;
+        }
+      }
+    }
+  }
+  &__subheader {
+    margin-bottom: $spacer * 1.8;
+  }
+}
