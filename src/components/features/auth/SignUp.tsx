@@ -81,7 +81,7 @@ const SignUp = function () {
               />
             )}
           </label>
-          <button className="google__btn">
+          <button className="google__btn" type="button">
             <img src="/google.png" alt="google sign-in" />
             <span>Sign up with Google</span>
           </button>

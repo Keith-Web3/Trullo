@@ -22,6 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           fontSize: '16px',
           maxWidth: '500px',
           padding: '16px 24px',
+          color: '#333333',
         },
       }}
     />

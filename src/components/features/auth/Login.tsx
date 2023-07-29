@@ -43,7 +43,11 @@ const Login = function () {
           <p className="login__subheader">
             Welcome back! Please enter your details.
           </p>
-          <button className="google__btn" onClick={signinWithGoogle}>
+          <button
+            className="google__btn"
+            type="button"
+            onClick={signinWithGoogle}
+          >
             <img src="/google.png" alt="google sign-in" />
             <span>Log in with Google</span>
           </button>

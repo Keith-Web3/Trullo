@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import { supabase } from '../data/supabase'
 
 export async function requireAuth() {
@@ -8,8 +9,9 @@ export async function requireAuth() {
 }
 
 export async function signinWithGoogle() {
-  const { data, error } = await supabase.auth.signInWithOAuth({
+  toast.loading('redirecting...')
+  const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
   })
-  console.log(data, error)
+  if (error) toast.error(error.message)
 }
