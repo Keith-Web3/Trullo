@@ -187,9 +187,12 @@
           cursor: pointer;
         }
       }
-      p {
+      button {
         text-decoration: underline;
         cursor: pointer;
+        background-color: inherit;
+        border: none;
+        outline: none;
       }
     }
     .login__btn {

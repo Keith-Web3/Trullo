@@ -5,7 +5,7 @@ import {
   redirect,
   useNavigation,
 } from 'react-router-dom'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import '../../../sass/features/auth/login.scss'
@@ -20,6 +20,15 @@ export const authAction: ActionFunction = async function ({ request }) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
+  if (password === '') {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:5173/update-password',
+    })
+    if (error) toast.error(error.message)
+    if (!error) toast.success(`reset email sent to ${email}`)
+    return null
+  }
+
   const { error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
@@ -33,12 +42,19 @@ export const authAction: ActionFunction = async function ({ request }) {
 const Login = function () {
   const [viewPassword, setViewPassword] = useState(false)
   const navigation = useNavigation()
+  const passwordRef = useRef<HTMLInputElement>(null)
 
   return (
     <div className="login">
       <div className="login__main">
         <img src="/Logo-small.svg" alt="logo" />
-        <Form replace method="post">
+        <Form
+          replace
+          method="post"
+          onSubmit={() => {
+            passwordRef.current!.required = true
+          }}
+        >
           <h1>Welcome back, Trailblazers.</h1>
           <p className="login__subheader">
             Welcome back! Please enter your details.
@@ -66,7 +82,9 @@ const Login = function () {
               type={viewPassword ? 'text' : 'password'}
               name="password"
               placeholder="Password"
+              ref={passwordRef}
               autoComplete="off"
+              minLength={6}
               required
             />
             {!viewPassword ? (
@@ -86,7 +104,15 @@ const Login = function () {
               <input type="checkbox" name="checkbox" id="remember-password" />
               Remember for 30 days
             </label>
-            <p>Forgot password</p>
+            <button
+              type="submit"
+              onClick={() => {
+                passwordRef.current!.required = false
+                passwordRef.current!.value = ''
+              }}
+            >
+              Forgot password
+            </button>
           </div>
           <button className="login__btn">
             {navigation.state === 'submitting' && (

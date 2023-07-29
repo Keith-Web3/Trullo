@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         },
         style: {
           fontSize: '16px',
-          maxWidth: '500px',
+          maxWidth: 'max-content',
           padding: '16px 24px',
           color: '#333333',
         },
