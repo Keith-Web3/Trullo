@@ -6,6 +6,7 @@ import {
   useNavigation,
 } from 'react-router-dom'
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import '../../../sass/features/auth/login.scss'
 import { supabase } from '../../data/supabase'
@@ -24,6 +25,7 @@ export const authAction: ActionFunction = async function ({ request }) {
     password: password,
   })
   if (error === null) throw redirect(searchParams || '/')
+  toast.error(error.message)
 
   return null
 }

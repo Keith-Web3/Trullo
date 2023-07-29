@@ -6,9 +6,9 @@ import {
   redirect,
 } from 'react-router-dom'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 
 import { supabase } from '../../data/supabase'
-
 import '../../../sass/features/auth/signup.scss'
 import Loader from '../../ui/Loader'
 
@@ -24,6 +24,7 @@ export const authAction: ActionFunction = async function ({ request }) {
     password: password,
   })
   if (error === null) throw redirect(searchParams || '/')
+  toast.error(error.message)
 
   return null
 }
