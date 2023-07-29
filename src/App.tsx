@@ -14,11 +14,13 @@ import Login, {
   authAction as loginAction,
 } from './components/features/auth/Login'
 import SignUp, { authAction } from './components/features/auth/SignUp'
+import ForgotPassword from './components/features/auth/ForgotPassword'
 
 const App = function () {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
+        <Route path="update-password" element={<ForgotPassword />} />
         <Route path="login" action={loginAction} element={<Login />} />
         <Route path="signup" action={authAction} element={<SignUp />} />
         <Route loader={HomeLayoutLoader} element={<HomeLayout />}>
