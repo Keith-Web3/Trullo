@@ -1,0 +1,82 @@
+@use '../../variables' as *;
+
+.add-board {
+  width: min(90%, 350px);
+  padding: $spacer * 1.8;
+  border-radius: 8px;
+  background-color: $white;
+  position: sticky;
+  top: $spacer * 2;
+  margin-inline: auto;
+  z-index: 1;
+
+  .cover-photo {
+    position: relative;
+
+    .cover-img {
+      width: 100%;
+      aspect-ratio: 259 / 78;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+    }
+    .close-btn {
+      position: absolute;
+      inset: 0 0 auto auto;
+      width: 32px;
+      background-color: $blue-300;
+      border-radius: 8px;
+      transform: translate(50%, -50%);
+      cursor: pointer;
+    }
+  }
+  input {
+    margin-top: $spacer;
+    width: 100%;
+    padding: 0.65em 1.3em;
+    outline: none;
+    border: 1px solid $gray-50;
+    box-shadow: 0px 4px 12px 0px #0000001a;
+    border-radius: 8px;
+    color: $gray-400;
+
+    &::placeholder {
+      color: $gray-300;
+    }
+  }
+  .btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block: $spacer * 1.5 $spacer * 2;
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $spacer;
+
+    button {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    button:first-child {
+      color: $gray-200;
+      background-color: transparent;
+    }
+    button:last-child {
+      background-color: $blue-300;
+      color: $white;
+      padding: 0.75em 1.3em;
+      border-radius: 8px;
+
+      span {
+        font-size: 1.25rem;
+        font-weight: 400;
+        margin-right: $spacer * 0.25;
+      }
+    }
+  }
+}

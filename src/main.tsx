@@ -1,12 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Toaster } from 'react-hot-toast'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 import './sass/index.scss'
 import App from './App.tsx'
 
+const queryClient = new QueryClient()
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
     <Toaster
       position="top-center"
       gutter={12}
@@ -26,6 +32,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         },
       }}
     />
-    <App />
   </React.StrictMode>
 )

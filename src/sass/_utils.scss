@@ -193,6 +193,8 @@
         background-color: inherit;
         border: none;
         outline: none;
+        user-select: none;
+        -webkit-user-select: none;
       }
     }
     .login__btn {
@@ -228,4 +230,8 @@
       }
     }
   }
+}
+
+[data-lastpass-icon-root] {
+  display: none;
 }

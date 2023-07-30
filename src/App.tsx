@@ -20,10 +20,10 @@ const App = function () {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        <Route path="update-password" element={<ForgotPassword />} />
         <Route path="login" action={loginAction} element={<Login />} />
         <Route path="signup" action={authAction} element={<SignUp />} />
         <Route loader={HomeLayoutLoader} element={<HomeLayout />}>
+          <Route path="update-password" element={<ForgotPassword />} />
           <Route index element={<HomePage />} />
           <Route path="board/:boardId" element={<Board />} />
         </Route>
