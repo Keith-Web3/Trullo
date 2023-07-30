@@ -6,7 +6,7 @@
   border-radius: 8px;
   background-color: $white;
   position: sticky;
-  top: $spacer * 2;
+  top: $spacer;
   margin-inline: auto;
   z-index: 1;
 
@@ -49,6 +49,10 @@
     align-items: center;
     justify-content: space-between;
     margin-block: $spacer * 1.5 $spacer * 2;
+
+    button:first-child {
+      position: relative;
+    }
   }
   .footer {
     display: flex;

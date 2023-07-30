@@ -1,0 +1,61 @@
+@use '../variables' as *;
+
+.photo-search {
+  width: 300px;
+  position: absolute;
+  inset: 110% auto auto 0;
+  text-align: start;
+  border: 1px solid $gray-50;
+  box-shadow: 0px 2px 4px 0px hsla(0, 0%, 0%, 0.051);
+  background-color: $white;
+  padding: $spacer;
+  border-radius: 12px;
+
+  h1 {
+    font-size: 1.25rem;
+    text-transform: capitalize;
+    font-family: 'Poppins';
+    font-weight: 600;
+    color: $gray-400;
+  }
+  h1 + p {
+    color: $gray-200;
+  }
+  label {
+    display: flex;
+    align-items: center;
+    background-color: $white;
+    width: 100%;
+    box-shadow: 0px 4px 12px 0px #0000001a;
+    border-radius: 8px;
+    margin-block: $spacer;
+    padding: 0.2em;
+
+    input {
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+      margin: 0;
+    }
+    img {
+      background-color: $blue-300;
+      width: 42px !important;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      padding: 0.5em;
+      cursor: pointer;
+    }
+  }
+  .images {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: $spacer;
+
+    img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+  }
+}
