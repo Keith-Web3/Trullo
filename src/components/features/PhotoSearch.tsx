@@ -1,9 +1,14 @@
-import { useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import { motion } from 'framer-motion'
 import { useState, useRef } from 'react'
+import { nanoid } from 'nanoid'
 
 import '../../sass/features/photo-search.scss'
 import Loader from '../ui/Loader'
+
+interface PhotoSearchProps {
+  setCoverSrc: React.Dispatch<React.SetStateAction<string>>
+}
 
 const visibilityAnimation = {
   initial: { y: -20, opacity: 0 },
@@ -11,9 +16,8 @@ const visibilityAnimation = {
   exit: { y: -20, opacity: 0 },
 }
 
-const PhotoSearch = function () {
+const PhotoSearch = function ({ setCoverSrc }: PhotoSearchProps) {
   const [searchQuery, setSearchQuery] = useState('')
-  const queryClient = useQueryClient()
   const searchBar = useRef<HTMLInputElement>(null)
 
   const { data, isLoading } = useQuery({
@@ -25,16 +29,16 @@ const PhotoSearch = function () {
       )
       return res.json()
     },
-    queryKey: 'photo-search',
+    queryKey: ['photo-search', searchQuery],
+    refetchOnWindowFocus: false,
   })
-
-  console.log(isLoading)
 
   return (
     <motion.div
       {...visibilityAnimation}
       key="photo-search"
       className="photo-search"
+      onClick={e => e.stopPropagation()}
     >
       <h1>photo search</h1>
       <p>Search Unsplash for photos</p>
@@ -44,8 +48,6 @@ const PhotoSearch = function () {
           onKeyDown={e => {
             if (e.key !== 'Enter') return
             setSearchQuery((e.target as HTMLInputElement).value)
-            console.log('ran', (e.target as HTMLInputElement).value)
-            queryClient.invalidateQueries('photo-search')
           }}
           type="text"
           placeholder="Keywords..."
@@ -53,11 +55,7 @@ const PhotoSearch = function () {
         <img
           src="/search.svg"
           alt="search"
-          onClick={() => {
-            setSearchQuery(searchBar.current!.value)
-            console.log('ran', searchBar.current!.value)
-            queryClient.invalidateQueries('photo-search')
-          }}
+          onClick={() => setSearchQuery(searchBar.current!.value)}
         />
       </label>
       <div className="images">
@@ -69,8 +67,13 @@ const PhotoSearch = function () {
             ringColor="#2f80ed"
           />
         ) : (
-          data.results.map((el: any) => (
-            <img src={el.urls.regular} alt="random_image" />
+          data.results?.map((el: any) => (
+            <img
+              key={nanoid()}
+              onClick={() => setCoverSrc(el.urls.regular)}
+              src={el.urls.regular}
+              alt="random_image"
+            />
           ))
         )}
       </div>

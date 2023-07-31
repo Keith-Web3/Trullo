@@ -11,6 +11,9 @@ interface AddCardProps {
 
 const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
   const [isSearchModalShown, setIsSearchModalShown] = useState(false)
+  const [coverSrc, setCoverSrc] = useState(
+    'https://source.unsplash.com/random/?collaboration'
+  )
   return (
     <div className="add-board">
       <div className="cover-photo">
@@ -20,19 +23,15 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
           className="close-btn"
           onClick={() => setIsAddCardModalShown(prev => !prev)}
         />
-        <img
-          className="cover-img"
-          src="https://source.unsplash.com/random/?collaboration"
-          alt="random-unsplash-photo"
-        />
+        <img className="cover-img" src={coverSrc} alt="random-unsplash-photo" />
       </div>
       <input type="text" placeholder="Add board title" />
       <div className="btn-container">
-        <Button tag onClick={() => setIsSearchModalShown(true)}>
+        <Button tag onClick={() => setIsSearchModalShown(prev => !prev)}>
           <img src="/gallery.svg" alt="gallery" />
           <span>Cover</span>
           <AnimatePresence>
-            {isSearchModalShown && <PhotoSearch />}
+            {isSearchModalShown && <PhotoSearch setCoverSrc={setCoverSrc} />}
           </AnimatePresence>
         </Button>
         <Button tag>
