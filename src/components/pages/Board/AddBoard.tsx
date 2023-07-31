@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
-import { useMutation } from 'react-query'
 
 import Button from '../../ui/Button'
 import '../../../sass/pages/board/add-board.scss'
 import PhotoSearch from '../../features/PhotoSearch'
-import Visiblity from '../../ui/Visiblity'
-import { supabase } from '../../data/supabase'
+// import Visiblity from '../../ui/Visiblity'
+// import { supabase } from '../../data/supabase'
+// import { useMutation } from '@tanstack/react-query'
 
 interface AddCardProps {
   setIsAddCardModalShown: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,9 +19,11 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
     'https://source.unsplash.com/random/?collaboration'
   )
   const inputRef = useRef<HTMLInputElement>(null)
-  const mutation = useMutation(data => {
-    return supabase.from('Trullo').insert([data]).select()
-  })
+  // const mutation = useMutation({
+  //   mutationFn: data => {
+  //     return supabase.from('Trullo').insert([data]).select()
+  //   },
+  // })
 
   const handleCreateBoard: React.MouseEventHandler<HTMLButtonElement> =
     function () {
@@ -29,6 +31,7 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
         inputRef.current!.focus()
         toast.error('Please add a board title')
       }
+      // mutation.mutate({name: inputRef})
     }
 
   return (
