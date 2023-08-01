@@ -15,7 +15,6 @@ const HomePage = function () {
     queryKey: ['getBoards'],
     queryFn: getBoards,
   })
-  console.log(data)
   return (
     <div className="homepage">
       <div className="homepage__header">

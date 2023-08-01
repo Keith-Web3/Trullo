@@ -1,20 +1,20 @@
-import { Outlet, redirect } from 'react-router-dom'
+import { Outlet, defer, redirect, useLoaderData } from 'react-router-dom'
 
 import Header from '../shared/Header'
-import { requireAuth } from '../utils/requireAuth'
+import { getUserDetails, requireAuth } from '../utils/requireAuth'
 
 export const loader = async function ({ request }: { request: Request }) {
   const path = new URL(request.url).pathname
   const user = await requireAuth()
-  console.log(user)
   if (user === null)
     throw redirect(path !== '/' ? `/login?redirectTo=${path}` : '/login')
-  return null
+  return defer({ userDetails: getUserDetails() })
 }
 const HomeLayout = function () {
+  const { userDetails } = useLoaderData() as { userDetails: unknown }
   return (
     <main>
-      <Header />
+      <Header userDetails={userDetails} />
       <Outlet />
     </main>
   )

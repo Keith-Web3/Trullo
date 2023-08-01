@@ -1,3 +1,4 @@
+import { toast } from 'react-hot-toast'
 import { supabase } from '../data/supabase'
 
 interface BoardData {
@@ -17,14 +18,23 @@ const addBoard = async function (boardData: BoardData) {
     .insert([boardData])
     .select()
 
-  if (error) console.log(error.message)
+  if (error) toast.error(error.message)
   return data
 }
 
 const getBoards = async function () {
   const { data: Boards, error } = await supabase.from('Boards').select('*')
-  console.log(Boards, error)
+  if (error) toast.error(error.message)
   return Boards
 }
 
-export { addBoard, getBoards }
+const getUser = async function (id: string) {
+  const { data: users, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('user_id', id)
+  if (error) toast.error('Error getting user')
+  return users
+}
+
+export { addBoard, getBoards, getUser }

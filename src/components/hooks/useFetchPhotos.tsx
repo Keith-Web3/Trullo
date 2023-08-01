@@ -7,13 +7,13 @@ type hookType = () => [
 ]
 
 const useFetchPhotos: hookType = function () {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState('collaboration')
 
   const getPhotos = async function () {
     const res = await fetch(
       `https://api.unsplash.com/search/photos?client_id=${
         import.meta.env.VITE_UNSPLASH_KEY
-      }&page=1&query=${searchQuery.trim() || 'collaboration'}&per_page=12`
+      }&page=1&query=${searchQuery.trim()}&per_page=12`
     )
     const data = await res.json()
     return data.results

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { ForwardedRef, forwardRef, useRef } from 'react'
 import { nanoid } from 'nanoid'
 
 import '../../sass/features/photo-search.scss'
@@ -17,7 +17,10 @@ const visibilityAnimation = {
   exit: { y: -20, opacity: 0 },
 }
 
-const PhotoSearch = function ({ setCoverSrc }: PhotoSearchProps) {
+const PhotoSearch = function (
+  { setCoverSrc }: PhotoSearchProps,
+  ref: ForwardedRef<HTMLDivElement>
+) {
   const [searchQuery, setSearchQuery, getPhotos] = useFetchPhotos()
   const searchBar = useRef<HTMLInputElement>(null)
 
@@ -30,6 +33,7 @@ const PhotoSearch = function ({ setCoverSrc }: PhotoSearchProps) {
   return (
     <motion.div
       {...visibilityAnimation}
+      ref={ref}
       key="photo-search"
       className="photo-search"
       onClick={e => e.stopPropagation()}
@@ -70,4 +74,4 @@ const PhotoSearch = function ({ setCoverSrc }: PhotoSearchProps) {
   )
 }
 
-export default PhotoSearch
+export default forwardRef(PhotoSearch)

@@ -3,25 +3,32 @@ import { ForwardedRef, forwardRef } from 'react'
 
 import '../../sass/ui/visibility.scss'
 
+interface VisibilityProps {
+  setIsPrivate?: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 const visibilityAnimation = {
   initial: { y: -20, opacity: 0 },
   animate: { y: 0, opacity: 1 },
   exit: { y: -20, opacity: 0 },
 }
 
-const Visiblity = function ({}, ref: ForwardedRef<HTMLDivElement>) {
+const Visibility = function (
+  { setIsPrivate }: VisibilityProps,
+  ref: ForwardedRef<HTMLDivElement>
+) {
   return (
     <motion.div {...visibilityAnimation} className="visibility" ref={ref}>
       <p className="visibility__header">visibility</p>
       <p className="visibility__subheader">Choose who can see this board.</p>
-      <div className="visibility__option">
+      <div className="visibility__option" onClick={() => setIsPrivate?.(false)}>
         <p>
           <img src="/public.svg" alt="public" />
           <span>public</span>
         </p>
         <p>Anyone on the internet can see this.</p>
       </div>
-      <div className="visibility__option">
+      <div className="visibility__option" onClick={() => setIsPrivate?.(true)}>
         <p>
           <img src="/private.svg" alt="private" />
           <span>private</span>
@@ -32,4 +39,4 @@ const Visiblity = function ({}, ref: ForwardedRef<HTMLDivElement>) {
   )
 }
 
-export default forwardRef(Visiblity)
+export default forwardRef(Visibility)

@@ -213,3 +213,16 @@ const mockData4 = Array(1).fill(0).map(generateList)
 export const mockDataArr = [mockData1, mockData2, mockData3, mockData4]
 
 export default mockData
+
+// users = [
+//   {
+//     name: 'my-name',
+//     id: 'my-id',
+//     user_img: 'my_img',
+//   },
+//   {
+//     name: 'your-name',
+//     id: 'your-id',
+//     user_img: 'your_img',
+//   },
+// ]

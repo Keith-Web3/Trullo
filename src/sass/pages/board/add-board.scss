@@ -50,8 +50,21 @@
     justify-content: space-between;
     margin-block: $spacer * 1.5 $spacer * 2;
 
-    button:first-child {
+    button {
       position: relative;
+
+      .visibility {
+        inset: 110% auto auto 0;
+        min-width: max-content;
+        text-align: start;
+
+        @include screen(777) {
+          inset: 110% 0 auto auto;
+        }
+        @include screen(433) {
+          min-width: 300px;
+        }
+      }
     }
   }
   .footer {

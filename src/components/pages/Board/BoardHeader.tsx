@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid'
 import Button from '../../ui/Button'
 import { renderUsers } from '../../utils/renderusers'
 import '../../../sass/pages/board/board-header.scss'
-import Visiblity from '../../ui/Visiblity'
+import Visibility from '../../ui/Visibility'
 
 interface BoardHeaderProps {
   users: (
@@ -56,7 +56,7 @@ const BoardHeader = function ({ users, isPrivate }: BoardHeaderProps) {
         <span>show menu</span>
       </Button>
       <AnimatePresence>
-        {isVisibilityOpen && <Visiblity key={nanoid()} ref={visibility} />}
+        {isVisibilityOpen && <Visibility key={nanoid()} ref={visibility} />}
       </AnimatePresence>
     </div>
   )

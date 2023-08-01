@@ -91,6 +91,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: #4f4f4f;
 
       @include screen(770) {
         display: none;

@@ -1,11 +1,32 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link, useLocation } from 'react-router-dom'
+import { Await, Link, useLocation } from 'react-router-dom'
 
 import Button from '../ui/Button'
 import '../../sass/shared/header.scss'
+import Loader from '../ui/Loader'
 
-const Header = function () {
+type ResolvedData = {
+  name: string
+  img: string | undefined
+  id: string
+}
+
+const loaderRenderProp = function (resolvedData: ResolvedData) {
+  return (
+    <>
+      <img
+        className="user__image"
+        src={resolvedData.img || '/user.svg'}
+        alt="user"
+      />
+      <p className="user__name" title={resolvedData.name}>
+        {resolvedData.name}
+      </p>
+    </>
+  )
+}
+const Header = function ({ userDetails }: { userDetails: unknown }) {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
   const location = useLocation()
 
@@ -29,11 +50,9 @@ const Header = function () {
         <Button>search</Button>
       </label>
       <div className="user">
-        <img className="user__image" src="/user.jpg" alt="user" />
-        <p className="user__name">olorunnishola olamilekan</p>
-        {
-          // TODO add title to view fullname
-        }
+        <Suspense fallback={<Loader />}>
+          <Await resolve={userDetails}>{loaderRenderProp}</Await>
+        </Suspense>
         <motion.img
           animate={{ rotate: isDropDownOpen ? '180deg' : '0deg' }}
           onClick={() => setIsDropDownOpen(prev => !prev)}

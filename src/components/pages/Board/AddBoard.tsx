@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
@@ -6,10 +6,10 @@ import toast from 'react-hot-toast'
 import Button from '../../ui/Button'
 import '../../../sass/pages/board/add-board.scss'
 import PhotoSearch from '../../features/PhotoSearch'
-import { addBoard } from '../../utils/apis'
+import { addBoard, getUser } from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import { requireAuth } from '../../utils/requireAuth'
-// import Visiblity from '../../ui/Visiblity'
+import Visibility from '../../ui/Visibility'
 
 interface AddCardProps {
   setIsAddCardModalShown: React.Dispatch<React.SetStateAction<boolean>>
@@ -17,11 +17,19 @@ interface AddCardProps {
 
 const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
   const [isSearchModalShown, setIsSearchModalShown] = useState(false)
+  const [isVisibilityModalShown, setIsVisibilityModalShown] = useState(false)
+  const [isPrivate, setIsPrivate] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const addBoardRef = useRef<HTMLDivElement>(null)
+  const visibilityRef = useRef<HTMLDivElement>(null)
+  const photoSearchRef = useRef<HTMLDivElement>(null)
+
   const queryClient = useQueryClient()
   const [coverSrc, setCoverSrc] = useState(
-    'https://source.unsplash.com/random/?collaboration'
+    `https://source.unsplash.com/random/?collaboration?${
+      Math.random() * 100000
+    }`
   )
-  const inputRef = useRef<HTMLInputElement>(null)
   const { mutate, isLoading } = useMutation({
     mutationFn: addBoard,
     onSuccess: () => {
@@ -29,6 +37,39 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
       queryClient.invalidateQueries({ queryKey: ['getBoards'] })
     },
   })
+
+  const handleOuterClick: (this: HTMLElement, ev: MouseEvent) => any =
+    function (e) {
+      if (
+        addBoardRef.current &&
+        !addBoardRef.current!.contains(e.target as Node)
+      ) {
+        setIsAddCardModalShown(false)
+      }
+      if (
+        visibilityRef.current &&
+        !visibilityRef.current!.contains(e.target as Node)
+      ) {
+        setIsVisibilityModalShown(false)
+      }
+      if (
+        photoSearchRef.current &&
+        !photoSearchRef.current!.contains(e.target as Node)
+      ) {
+        setIsSearchModalShown(false)
+      }
+    }
+
+  useEffect(() => {
+    document
+      .getElementById('modal-root')
+      ?.addEventListener('click', handleOuterClick, true)
+
+    return () =>
+      document
+        .getElementById('modal-root')
+        ?.removeEventListener('click', handleOuterClick)
+  }, [])
 
   const handleCreateBoard: React.MouseEventHandler<HTMLButtonElement> =
     async function () {
@@ -38,22 +79,30 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
         toast.error('Please add a board title')
         return
       }
+
       const user = await requireAuth()
+      let name = user!.user_metadata.name
+
+      if (!name) {
+        const users = await getUser(user!.id)
+        name = users?.[0].name
+      }
       const currentUser = {
-        name: user!.user_metadata.name,
+        name,
         img: user!.user_metadata.avatar_url,
         id: user!.id,
       }
+
       mutate({
         name: inputRef.current!.value,
         users: [currentUser],
         cover_img: coverSrc,
-        isPrivate: false,
+        isPrivate: isPrivate,
       })
     }
 
   return (
-    <div className="add-board">
+    <div className="add-board" ref={addBoardRef}>
       <div className="cover-photo">
         <img
           src="/close.svg"
@@ -69,17 +118,26 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
           <img src="/gallery.svg" alt="gallery" />
           <span>Cover</span>
           <AnimatePresence>
-            {isSearchModalShown && <PhotoSearch setCoverSrc={setCoverSrc} />}
+            {isSearchModalShown && (
+              <PhotoSearch setCoverSrc={setCoverSrc} ref={photoSearchRef} />
+            )}
           </AnimatePresence>
         </Button>
-        <Button tag>
-          <img src="/private.svg" alt="private" />
-          <span>Private</span>
-          {/* TODO <Visiblity /> */}
+        <Button tag onClick={() => setIsVisibilityModalShown(prev => !prev)}>
+          <img
+            src={isPrivate ? '/private.svg' : '/public.svg'}
+            alt="visibility"
+          />
+          <span>{isPrivate ? 'Private' : 'Public'}</span>
+          <AnimatePresence>
+            {isVisibilityModalShown && (
+              <Visibility setIsPrivate={setIsPrivate} ref={visibilityRef} />
+            )}
+          </AnimatePresence>
         </Button>
       </div>
       <div className="footer">
-        <button>Cancel</button>
+        <button onClick={() => setIsAddCardModalShown(false)}>Cancel</button>
         <button disabled={isLoading} onClick={handleCreateBoard}>
           {isLoading ? (
             <>

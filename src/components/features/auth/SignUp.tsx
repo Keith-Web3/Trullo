@@ -18,13 +18,20 @@ export const authAction: ActionFunction = async function ({ request }) {
 
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+  const name = formData.get('name') as string
 
-  const { error } = await supabase.auth.signUp({
+  const { error, data } = await supabase.auth.signUp({
     email: email,
     password: password,
   })
-  if (error === null) throw redirect(searchParams || '/')
-  toast.error(error.message)
+
+  const { error: nameError } = await supabase
+    .from('users')
+    .insert([{ user_id: data.user?.id, name }])
+    .select()
+
+  if (error === null && nameError === null) throw redirect(searchParams || '/')
+  toast.error((error || nameError)!.message)
 
   return null
 }
@@ -45,6 +52,7 @@ const SignUp = function () {
           <label htmlFor="name">
             <input
               type="text"
+              name="name"
               id="name"
               placeholder="Name"
               autoComplete="off"
