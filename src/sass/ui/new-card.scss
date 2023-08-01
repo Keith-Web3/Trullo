@@ -1,0 +1,36 @@
+@use '../variables' as *;
+
+.new-card {
+  padding: $spacer;
+  background-color: $white;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0px 2px 8px 0px #0000001a;
+  border-radius: 12px;
+  margin-bottom: $spacer * 1.5;
+  transform-origin: top;
+
+  textarea {
+    display: block;
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    resize: none;
+    font-weight: 500;
+    color: $gray-400;
+
+    &::placeholder {
+      color: $gray-300;
+    }
+  }
+  button {
+    border: none;
+    outline: none;
+    color: $white;
+    padding: 0.5em 1.3em;
+    border-radius: 8px;
+    background-color: #219653;
+    text-transform: capitalize;
+    cursor: pointer;
+  }
+}
