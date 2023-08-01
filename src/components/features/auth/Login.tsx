@@ -115,14 +115,7 @@ const Login = function () {
             </button>
           </div>
           <button className="login__btn">
-            {navigation.state === 'submitting' && (
-              <Loader
-                width="24px"
-                ringWidth="3px"
-                loaderColor="#ffffff"
-                ringColor="#2f80ed"
-              />
-            )}
+            {navigation.state === 'submitting' && <Loader />}
             Log in
           </button>
           <p>

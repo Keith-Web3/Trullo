@@ -10,11 +10,11 @@ import Visiblity from '../../ui/Visiblity'
 interface BoardHeaderProps {
   users: (
     | {
-        image: string
+        img: string
         name: string
       }
     | {
-        image: null
+        img: undefined
         name: string
       }
   )[]

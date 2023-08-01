@@ -1,14 +1,21 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useQuery } from '@tanstack/react-query'
 
-import mockData from '../data'
 import BoardCard from '../ui/BoardCard'
 import Button from '../ui/Button'
 import '../../sass/pages/homepage.scss'
 import AddBoard from './Board/AddBoard'
+import { getBoards } from '../utils/apis'
+import Loader from '../ui/Loader'
 
 const HomePage = function () {
   const [isAddCardModalShown, setIsAddCardModalShown] = useState(false)
+  const { data, isLoading } = useQuery({
+    queryKey: ['getBoards'],
+    queryFn: getBoards,
+  })
+  console.log(data)
   return (
     <div className="homepage">
       <div className="homepage__header">
@@ -18,15 +25,19 @@ const HomePage = function () {
         </Button>
       </div>
       <div className="boards">
-        {mockData.map(el => (
-          <BoardCard
-            key={el.id}
-            id={el.id}
-            name={el.name}
-            image={el.image}
-            users={el.users}
-          />
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          data!.map(el => (
+            <BoardCard
+              key={el.id}
+              id={el.id}
+              name={el.name}
+              image={el.cover_img}
+              users={el.users}
+            />
+          ))
+        )}
         {isAddCardModalShown &&
           createPortal(
             <AddBoard setIsAddCardModalShown={setIsAddCardModalShown} />,

@@ -6,6 +6,7 @@ import { requireAuth } from '../utils/requireAuth'
 export const loader = async function ({ request }: { request: Request }) {
   const path = new URL(request.url).pathname
   const user = await requireAuth()
+  console.log(user)
   if (user === null)
     throw redirect(path !== '/' ? `/login?redirectTo=${path}` : '/login')
   return null

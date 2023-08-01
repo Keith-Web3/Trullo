@@ -4,7 +4,7 @@ import { getRandomColor } from '../../utils/getRandomColor'
 
 type User = {
   id: number
-  image: string
+  img: string
   name: string
 }
 

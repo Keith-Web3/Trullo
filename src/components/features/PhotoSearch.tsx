@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { nanoid } from 'nanoid'
 
 import '../../sass/features/photo-search.scss'
 import Loader from '../ui/Loader'
+import useFetchPhotos from '../hooks/useFetchPhotos'
 
 interface PhotoSearchProps {
   setCoverSrc: React.Dispatch<React.SetStateAction<string>>
@@ -17,18 +18,11 @@ const visibilityAnimation = {
 }
 
 const PhotoSearch = function ({ setCoverSrc }: PhotoSearchProps) {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery, getPhotos] = useFetchPhotos()
   const searchBar = useRef<HTMLInputElement>(null)
 
   const { data, isLoading } = useQuery({
-    queryFn: async function () {
-      const res = await fetch(
-        `https://api.unsplash.com/search/photos?client_id=${
-          import.meta.env.VITE_UNSPLASH_KEY
-        }&page=1&query=${searchQuery.trim() || 'collaboration'}&per_page=12`
-      )
-      return res.json()
-    },
+    queryFn: getPhotos,
     queryKey: ['photo-search', searchQuery],
     refetchOnWindowFocus: false,
   })
@@ -60,14 +54,9 @@ const PhotoSearch = function ({ setCoverSrc }: PhotoSearchProps) {
       </label>
       <div className="images">
         {isLoading ? (
-          <Loader
-            width="24px"
-            ringWidth="3px"
-            loaderColor="#ffffff"
-            ringColor="#2f80ed"
-          />
+          <Loader />
         ) : (
-          data.results?.map((el: any) => (
+          data?.map((el: any) => (
             <img
               key={nanoid()}
               onClick={() => setCoverSrc(el.urls.regular)}

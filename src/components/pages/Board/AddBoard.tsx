@@ -1,13 +1,15 @@
 import { useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import Button from '../../ui/Button'
 import '../../../sass/pages/board/add-board.scss'
 import PhotoSearch from '../../features/PhotoSearch'
+import { addBoard } from '../../utils/apis'
+import Loader from '../../ui/Loader'
+import { requireAuth } from '../../utils/requireAuth'
 // import Visiblity from '../../ui/Visiblity'
-// import { supabase } from '../../data/supabase'
-// import { useMutation } from '@tanstack/react-query'
 
 interface AddCardProps {
   setIsAddCardModalShown: React.Dispatch<React.SetStateAction<boolean>>
@@ -15,23 +17,39 @@ interface AddCardProps {
 
 const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
   const [isSearchModalShown, setIsSearchModalShown] = useState(false)
+  const queryClient = useQueryClient()
   const [coverSrc, setCoverSrc] = useState(
     'https://source.unsplash.com/random/?collaboration'
   )
   const inputRef = useRef<HTMLInputElement>(null)
-  // const mutation = useMutation({
-  //   mutationFn: data => {
-  //     return supabase.from('Trullo').insert([data]).select()
-  //   },
-  // })
+  const { mutate, isLoading } = useMutation({
+    mutationFn: addBoard,
+    onSuccess: () => {
+      toast.success('Successful')
+      queryClient.invalidateQueries({ queryKey: ['getBoards'] })
+    },
+  })
 
   const handleCreateBoard: React.MouseEventHandler<HTMLButtonElement> =
-    function () {
+    async function () {
+      if (isLoading) return
       if (!inputRef.current!.value.trim()) {
         inputRef.current!.focus()
         toast.error('Please add a board title')
+        return
       }
-      // mutation.mutate({name: inputRef})
+      const user = await requireAuth()
+      const currentUser = {
+        name: user!.user_metadata.name,
+        img: user!.user_metadata.avatar_url,
+        id: user!.id,
+      }
+      mutate({
+        name: inputRef.current!.value,
+        users: [currentUser],
+        cover_img: coverSrc,
+        isPrivate: false,
+      })
     }
 
   return (
@@ -62,8 +80,22 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
       </div>
       <div className="footer">
         <button>Cancel</button>
-        <button onClick={handleCreateBoard}>
-          <span>+</span> Create
+        <button disabled={isLoading} onClick={handleCreateBoard}>
+          {isLoading ? (
+            <>
+              <Loader
+                width="24px"
+                ringWidth="3px"
+                loaderColor="#ffffff"
+                ringColor="#2f80ed"
+              />
+              Creating...
+            </>
+          ) : (
+            <>
+              <span>+</span> Create
+            </>
+          )}
         </button>
       </div>
     </div>
