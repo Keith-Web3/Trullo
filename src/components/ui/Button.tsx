@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import '../../sass/ui/button.scss'
+import { motion } from 'framer-motion'
 
 interface ButtonProps {
   children: ReactNode
@@ -9,9 +10,14 @@ interface ButtonProps {
 }
 const Button = function ({ children, tag = false, onClick }: ButtonProps) {
   return (
-    <button onClick={onClick} className={`button ${tag ? 'tag' : ''}`}>
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={onClick}
+      className={`button ${tag ? 'tag' : ''}`}
+    >
       {children}
-    </button>
+    </motion.button>
   )
 }
 

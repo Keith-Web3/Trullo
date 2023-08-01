@@ -17,6 +17,7 @@ const addBoard = async function (boardData: BoardData) {
     .from('Boards')
     .insert([boardData])
     .select()
+  console.log(data)
 
   if (error) toast.error(error.message)
   return data

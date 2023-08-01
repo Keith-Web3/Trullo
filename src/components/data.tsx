@@ -208,7 +208,7 @@ const generateList = (_: unknown, index: number) => {
 const mockData1 = Array(2).fill(0).map(generateList)
 const mockData2 = Array(3).fill(0).map(generateList)
 const mockData3 = Array(2).fill(0).map(generateList)
-const mockData4 = Array(1).fill(0).map(generateList)
+const mockData4 = Array(0).fill(0).map(generateList)
 
 export const mockDataArr = [mockData1, mockData2, mockData3, mockData4]
 
