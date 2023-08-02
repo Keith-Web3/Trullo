@@ -6,9 +6,11 @@ import { nanoid } from 'nanoid'
 import '../../sass/features/photo-search.scss'
 import Loader from '../ui/Loader'
 import useFetchPhotos from '../hooks/useFetchPhotos'
+import Img from '../ui/Img'
 
 interface PhotoSearchProps {
   setCoverSrc: React.Dispatch<React.SetStateAction<string>>
+  setCoverBlurHash: React.Dispatch<React.SetStateAction<string>>
 }
 
 const visibilityAnimation = {
@@ -18,7 +20,7 @@ const visibilityAnimation = {
 }
 
 const PhotoSearch = function (
-  { setCoverSrc }: PhotoSearchProps,
+  { setCoverSrc, setCoverBlurHash }: PhotoSearchProps,
   ref: ForwardedRef<HTMLDivElement>
 ) {
   const [searchQuery, setSearchQuery, getPhotos] = useFetchPhotos()
@@ -61,12 +63,25 @@ const PhotoSearch = function (
           <Loader />
         ) : (
           data?.map((el: any) => (
-            <img
+            <Img
               key={nanoid()}
-              onClick={() => setCoverSrc(el.urls.regular)}
+              onClick={() => {
+                setCoverSrc(el.urls.regular)
+                setCoverBlurHash(el.blur_hash)
+              }}
+              blurhash={el.blur_hash}
               src={el.urls.regular}
               alt="random_image"
             />
+            // <img
+            //   key={nanoid()}
+            //   onClick={() => {
+            //     setCoverSrc(el.urls.regular)
+            //     setCoverBlurHash(el.blur_hash)
+            //   }}
+            //   src={el.urls.regular}
+            //   alt="random_image"
+            // />
           ))
         )}
       </div>

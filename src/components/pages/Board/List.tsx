@@ -1,10 +1,10 @@
 import { AnimatePresence } from 'framer-motion'
 import { useParams } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 
 import Task, { TaskProps } from './Task'
 import '../../../sass/pages/board/list.scss'
 import NewCard from '../../ui/NewCard'
-import { useMutation } from '@tanstack/react-query'
 
 interface ListProps {
   name: string

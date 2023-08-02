@@ -15,6 +15,7 @@ const HomePage = function () {
     queryKey: ['getBoards'],
     queryFn: getBoards,
   })
+
   return (
     <div className="homepage">
       <div className="homepage__header">
@@ -34,6 +35,7 @@ const HomePage = function () {
               name={el.name}
               image={el.cover_img}
               users={el.users}
+              blurhash={el.cover_blurhash}
             />
           ))
         )}

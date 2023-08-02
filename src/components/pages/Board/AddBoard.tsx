@@ -10,6 +10,7 @@ import { addBoard, getUser } from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import { requireAuth } from '../../utils/requireAuth'
 import Visibility from '../../ui/Visibility'
+import Img from '../../ui/Img'
 
 interface AddCardProps {
   setIsAddCardModalShown: React.Dispatch<React.SetStateAction<boolean>>
@@ -29,6 +30,9 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
     `https://source.unsplash.com/random/?collaboration?${
       Math.random() * 100000
     }`
+  )
+  const [coverBlurHash, setCoverBlurHash] = useState(
+    'L4N,_8e-4ms:DhDiofIA4maeRPof'
   )
   const { mutate, isLoading } = useMutation({
     mutationFn: addBoard,
@@ -97,6 +101,7 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
         name: inputRef.current!.value,
         users: [currentUser],
         cover_img: coverSrc,
+        cover_blurhash: coverBlurHash!,
         isPrivate: isPrivate,
       })
     }
@@ -110,7 +115,7 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
           className="close-btn"
           onClick={() => setIsAddCardModalShown(prev => !prev)}
         />
-        <img className="cover-img" src={coverSrc} alt="random-unsplash-photo" />
+        <Img className="cover-img" src={coverSrc} alt="random-unsplash-photo" />
       </div>
       <input type="text" ref={inputRef} placeholder="Add board title" />
       <div className="btn-container">
@@ -119,7 +124,11 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
           <span>Cover</span>
           <AnimatePresence>
             {isSearchModalShown && (
-              <PhotoSearch setCoverSrc={setCoverSrc} ref={photoSearchRef} />
+              <PhotoSearch
+                setCoverSrc={setCoverSrc}
+                setCoverBlurHash={setCoverBlurHash}
+                ref={photoSearchRef}
+              />
             )}
           </AnimatePresence>
         </Button>

@@ -13,7 +13,8 @@
   .cover-photo {
     position: relative;
 
-    .cover-img {
+    .cover-img,
+    canvas {
       width: 100%;
       aspect-ratio: 259 / 78;
       object-fit: cover;

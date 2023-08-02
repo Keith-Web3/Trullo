@@ -32,5 +32,13 @@
     background-color: #219653;
     text-transform: capitalize;
     cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $gray-200;
+      display: flex;
+      align-items: center;
+      gap: $spacer;
+    }
   }
 }

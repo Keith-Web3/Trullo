@@ -11,8 +11,8 @@ interface ButtonProps {
 const Button = function ({ children, tag = false, onClick }: ButtonProps) {
   return (
     <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={tag ? undefined : { scale: 1.05 }}
+      whileTap={tag ? undefined : { scale: 0.95 }}
       onClick={onClick}
       className={`button ${tag ? 'tag' : ''}`}
     >

@@ -51,7 +51,8 @@
     grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
     gap: $spacer;
 
-    img {
+    img,
+    canvas {
       width: 100%;
       aspect-ratio: 1 / 1;
       object-fit: cover;
