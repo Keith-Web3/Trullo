@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import './sass/index.scss'
 import App from './App.tsx'
+import { supabase } from './components/data/supabase.tsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,3 +43,23 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     />
   </React.StrictMode>
 )
+
+const { data, error } = await supabase.rpc('update_many_boardlists', {
+  payload: [
+    { id: 1, name: 'updated-project-10' },
+    { id: 2, name: 'updated-project-21' },
+  ],
+})
+// .upsert(
+//   [
+//     { id: 22, order: 1 },
+//     { id: 23, order: 2 },
+//     { id: 24, order: 3 },
+//     { id: 25, order: 4 },
+//     { id: 26, order: 5 },
+//   ],
+//   { ignoreDuplicates: true }
+// )
+// .select()
+
+console.log(data, error)

@@ -7,19 +7,24 @@ import { ListData } from '../utils/apis'
 import { useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Loader from './Loader'
+import { getUserDetails } from '../utils/requireAuth'
 
 interface NewCardProps {
-  setNewTaskIndex?: React.Dispatch<React.SetStateAction<number>>
+  setCardDisplay:
+    | React.Dispatch<React.SetStateAction<number | boolean>>
+    | React.Dispatch<React.SetStateAction<boolean>>
   type: string
   mutate: UseMutateFunction<void, unknown, ListData, unknown>
   isLoading: boolean
+  id?: number
 }
 
 const NewCard = function ({
-  setNewTaskIndex,
+  setCardDisplay,
   type,
   mutate,
   isLoading,
+  id,
 }: NewCardProps) {
   const params = useParams<{ boardId: string }>()
   const newCardRef = useRef<HTMLDivElement>(null)
@@ -27,21 +32,29 @@ const NewCard = function ({
 
   const handleOuterClick = function (e: MouseEvent) {
     if (newCardRef.current && !newCardRef.current!.contains(e.target as Node)) {
-      setNewTaskIndex?.(-1)
+      setCardDisplay(false)
     }
   }
 
   const handleSubmitList: React.MouseEventHandler<HTMLButtonElement> =
-    function () {
+    async function () {
       if (textAreaRef.current && !textAreaRef.current!.value) {
         toast.error('Please enter a list name')
         textAreaRef.current.focus()
         return
       }
-      mutate({
-        name: textAreaRef.current!.value,
-        board_id: +params.boardId!,
-      })
+      const mutateData =
+        type === 'list'
+          ? {
+              name: textAreaRef.current!.value,
+              board_id: +params.boardId!,
+            }
+          : {
+              task_name: textAreaRef.current!.value,
+              list_id: id!,
+              users: [await getUserDetails()],
+            }
+      mutate(mutateData)
     }
 
   useEffect(() => {
@@ -68,6 +81,12 @@ const NewCard = function ({
         id="new-card"
         placeholder={`Enter a title for this ${type}...`}
         ref={textAreaRef}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            ;(handleSubmitList as () => void)()
+          }
+        }}
       ></textarea>
       <motion.button
         onClick={handleSubmitList}

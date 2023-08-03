@@ -17,7 +17,6 @@ const Img = function ({
   className,
 }: ImgProps) {
   const [isImgLoaded, setIsImgLoaded] = useState(false)
-  console.log(blurhash)
   return (
     <>
       {!isImgLoaded && <BlurhashCanvas hash={blurhash} punch={1} />}

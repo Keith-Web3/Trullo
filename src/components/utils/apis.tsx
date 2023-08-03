@@ -19,8 +19,9 @@ export type ListData =
       board_id: number
     }
   | {
-      name: string
+      task_name: string
       list_id: number
+      users: { name?: string; img: string; id: string }[]
     }
 
 const addBoard = async function (boardData: BoardData) {
@@ -28,7 +29,6 @@ const addBoard = async function (boardData: BoardData) {
     .from('Boards')
     .insert([boardData])
     .select()
-  console.log(data)
 
   if (error) toast.error(error.message)
   return data
@@ -50,25 +50,56 @@ const getUser = async function (id: string) {
 }
 
 const addList = async function (listData: ListData) {
-  const { data, error } = await supabase
-    .from('BoardList')
-    .insert([listData])
-    .select()
+  const { error } = await supabase.from('BoardList').insert([listData]).select()
   if (error) toast.error(error.message)
   if (!error) toast.success('Saved successfully')
-  console.log(data, error)
+}
+const addTask = async function (taskData: ListData) {
+  const { error } = await supabase.from('Tasks').insert([taskData]).select()
+  if (error) toast.error(error.message)
+  if (!error) toast.success('Saved successfully')
 }
 
-const getLists = async function (boardId: number) {
-  const { data: boardList, error } = await supabase
-    .from('BoardList')
-    .select('*')
-    .eq('board_id', boardId)
-  console.log(boardList)
+const getLists = function (boardId: number) {
+  return async function () {
+    const { data: boardList, error } = await supabase
+      .from('BoardList')
+      .select('*')
+      .eq('board_id', boardId)
+    if (error) toast.error(error.message)
+    return boardList
+  }
 }
-getLists(1)
-// const addTask = async function (taskData: ListData) {
 
-// }
+const getBoard = function (boardId: number) {
+  return async function () {
+    const { data, error } = await supabase
+      .from('Boards')
+      .select('*')
+      .eq('id', boardId)
+    if (error) toast.error('Could not fetch board data')
+    return data
+  }
+}
 
-export { addBoard, getBoards, getUser, addList }
+const getListTasks = function (listId: number) {
+  return async function () {
+    const { data, error } = await supabase
+      .from('Tasks')
+      .select('*')
+      .eq('list_id', listId)
+    if (error) toast.error(error.message)
+    return data
+  }
+}
+
+export {
+  addBoard,
+  getBoards,
+  getUser,
+  addList,
+  getLists,
+  getBoard,
+  addTask,
+  getListTasks,
+}

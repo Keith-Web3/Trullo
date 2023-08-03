@@ -1,4 +1,4 @@
-import { renderUsers } from '../../utils/renderusers'
+import { Users, renderUsers } from '../../utils/renderusers'
 import '../../../sass/pages/board/task.scss'
 import { getRandomColor } from '../../utils/getRandomColor'
 
@@ -12,7 +12,7 @@ interface TaskProps {
   image: string
   taskName: string
   tags: string[]
-  users: User[]
+  users: Users
   messages: {
     user: User
     timestamp: string
@@ -26,7 +26,7 @@ const Task = function ({ image, taskName, tags, users, messages }: TaskProps) {
       {!!image && <img className="task__image" src={image} alt={taskName} />}
       <p className="task__title">{taskName}</p>
       <div className="tags">
-        {tags.map((tag, idx) => {
+        {tags?.map((tag, idx) => {
           const color = getRandomColor()
           return (
             <p
@@ -49,7 +49,7 @@ const Task = function ({ image, taskName, tags, users, messages }: TaskProps) {
         <div className="task__info">
           <p>
             <img src="/comment.svg" alt="comment" />
-            <span>{messages.length}</span>
+            <span>{messages?.length || 0}</span>
           </p>
           <p>
             <img src="/attach.svg" alt="attachments" />

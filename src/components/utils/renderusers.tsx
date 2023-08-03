@@ -1,23 +1,24 @@
-type Users = (
+export type Users = (
   | {
       img: string
       name: string
-      id: string
+      id?: string
     }
   | {
       img: undefined
       name: string
-      id: string
+      id?: string
     }
 )[]
+//TODO figure out use of Id
 
 function renderUsers(users: Users) {
   return users.map((el, idx) => {
     if (el.img !== undefined && el.img !== '') {
-      return <img src={el.img} alt={el.name} key={idx} />
+      return <img src={el.img} title={el.name} alt={el.name} key={idx} />
     }
     return (
-      <div className="renderedImage" key={idx}>
+      <div className="renderedImage" key={idx} title={el.name}>
         {formatName(el.name)}
       </div>
     )
