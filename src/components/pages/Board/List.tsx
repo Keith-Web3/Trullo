@@ -2,7 +2,7 @@ import { AnimatePresence } from 'framer-motion'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 // import { useParams } from 'react-router-dom'
 
-import Task, { TaskProps } from './Task'
+import Task from '../../features/Task/Task'
 import '../../../sass/pages/board/list.scss'
 import NewCard from '../../ui/NewCard'
 import { addTask, getListTasks } from '../../utils/apis'

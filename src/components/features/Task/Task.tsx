@@ -61,5 +61,4 @@ const Task = function ({ image, taskName, tags, users, messages }: TaskProps) {
   )
 }
 
-export type { TaskProps }
 export default Task
