@@ -93,6 +93,23 @@ const getListTasks = function (listId: number) {
   }
 }
 
+const changeTaskCover = async function ({
+  taskId,
+  src,
+  coverHash,
+}: {
+  taskId: number
+  src: string
+  coverHash: string
+}) {
+  const { data, error } = await supabase
+    .from('Tasks')
+    .update({ image: src, image_blurhash: coverHash })
+    .eq('id', taskId)
+    .select()
+  if (error) toast.error(error.message)
+}
+
 export {
   addBoard,
   getBoards,
@@ -102,4 +119,5 @@ export {
   getBoard,
   addTask,
   getListTasks,
+  changeTaskCover,
 }

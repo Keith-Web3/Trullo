@@ -1,0 +1,104 @@
+@use '../../variables' as *;
+
+.task-info {
+  background-color: $white;
+  position: relative;
+  z-index: 1;
+  padding: $spacer * 1.5;
+  width: min(90%, 670px);
+  display: grid;
+  grid-template: auto 1fr / 1fr max-content;
+  grid-template-areas: 'cover cover' 'main actions';
+  align-items: baseline;
+  gap: $spacer;
+  margin: $spacer auto;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px 0px #0000000d;
+
+  .cover-container {
+    position: relative;
+    grid-area: cover;
+
+    .cover__img,
+    canvas {
+      width: 100%;
+      aspect-ratio: 617 / 130;
+      object-fit: cover;
+      border-radius: 0.75rem;
+    }
+    .cancel {
+      position: absolute;
+      inset: 0 0 auto auto;
+      background-color: $blue-300;
+      border-radius: 8px;
+      width: 30px;
+      transform: translate(50%, -50%);
+      cursor: pointer;
+    }
+  }
+  &__main {
+    font-family: 'Noto Sans';
+    grid-area: main;
+    h1 {
+      font-weight: 400;
+      font-size: 1.35rem;
+    }
+    .task-list {
+      display: flex;
+      align-items: center;
+      gap: $spacer * 0.5;
+      font-weight: 500;
+      color: $gray-300;
+      font-size: 0.95rem;
+
+      span {
+        color: $dark-100;
+      }
+    }
+  }
+  &__description {
+    margin-top: $spacer * 2;
+
+    .description {
+      color: $black;
+      margin-block: $spacer * 0.6;
+      font-size: 1.15rem;
+      font-family: 'Poppins';
+    }
+  }
+  .description-header {
+    display: flex;
+    align-items: center;
+    gap: $spacer;
+
+    p,
+    button {
+      display: flex;
+      align-items: center;
+      gap: $spacer * 0.65;
+      text-transform: capitalize;
+      font-size: 0.95rem;
+      font-weight: 500;
+
+      img {
+        width: 20px;
+      }
+    }
+    p {
+      color: $gray-300;
+    }
+    button {
+      border: 1px solid $gray-300;
+      color: $gray-200;
+      outline: none;
+      border-radius: 12px;
+      background-color: transparent;
+      padding: 0.5em 1.1em;
+      cursor: pointer;
+
+      img {
+        width: 17px;
+      }
+    }
+  }
+}

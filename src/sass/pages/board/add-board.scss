@@ -5,8 +5,8 @@
   padding: $spacer * 1.8;
   border-radius: 8px;
   background-color: $white;
-  position: sticky;
-  top: $spacer;
+  position: relative;
+  margin-top: $spacer;
   margin-inline: auto;
   z-index: 1;
 

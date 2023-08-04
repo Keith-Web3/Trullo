@@ -1,6 +1,11 @@
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
+
 import { Users, renderUsers } from '../../utils/renderusers'
-import '../../../sass/pages/board/task.scss'
+import '../../../sass/features/task/task.scss'
 import { getRandomColor } from '../../utils/getRandomColor'
+import TaskInfo from './TaskInfo'
+import Img from '../../ui/Img'
 
 type User = {
   id: number
@@ -13,6 +18,10 @@ interface TaskProps {
   taskName: string
   tags: string[]
   users: Users
+  taskId: number
+  listName: string
+  blurhash: string
+  listId: number
   messages: {
     user: User
     timestamp: string
@@ -20,10 +29,28 @@ interface TaskProps {
   }[]
 }
 
-const Task = function ({ image, taskName, tags, users, messages }: TaskProps) {
+const Task = function ({
+  image,
+  taskName,
+  tags,
+  users,
+  messages,
+  taskId,
+  listName,
+  blurhash,
+  listId,
+}: TaskProps) {
+  const [isTaskInfoShown, setIsTaskInfoShown] = useState(false)
   return (
-    <div className="task">
-      {!!image && <img className="task__image" src={image} alt={taskName} />}
+    <div className="task" onClick={() => setIsTaskInfoShown(true)}>
+      {!!image && (
+        <Img
+          className="task__image"
+          blurhash={blurhash}
+          src={image}
+          alt={taskName}
+        />
+      )}
       <p className="task__title">{taskName}</p>
       <div className="tags">
         {tags?.map((tag, idx) => {
@@ -57,6 +84,19 @@ const Task = function ({ image, taskName, tags, users, messages }: TaskProps) {
           </p>
         </div>
       </div>
+      {isTaskInfoShown &&
+        createPortal(
+          <TaskInfo
+            setIsTaskInfoShown={setIsTaskInfoShown}
+            taskName={taskName}
+            listName={listName}
+            taskId={taskId}
+            coverImg={image}
+            coverBlurHash={blurhash}
+            listId={listId}
+          />,
+          document.getElementById('modal-root')!
+        )}
     </div>
   )
 }

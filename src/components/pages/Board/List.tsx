@@ -1,6 +1,5 @@
 import { AnimatePresence } from 'framer-motion'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-// import { useParams } from 'react-router-dom'
 
 import Task from '../../features/Task/Task'
 import '../../../sass/pages/board/list.scss'
@@ -45,7 +44,16 @@ const List = function ({
         <Loader />
       ) : (
         data?.map(task => (
-          <Task key={task.id} taskName={task.task_name} users={task.users} />
+          <Task
+            listName={name}
+            listId={id}
+            key={task.id}
+            taskId={task.id}
+            taskName={task.task_name}
+            users={task.users}
+            image={task.image}
+            blurhash={task.image_blurhash}
+          />
         ))
       )}
       <AnimatePresence>

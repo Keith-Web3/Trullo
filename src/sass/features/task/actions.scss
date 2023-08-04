@@ -1,0 +1,45 @@
+@use '../../variables' as *;
+
+.actions {
+  grid-area: actions;
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1ch;
+
+    img {
+      opacity: 0.7;
+      width: 30px;
+    }
+    p {
+      text-transform: capitalize;
+      color: $gray-300;
+      font-family: 'Poppins';
+      font-weight: 500;
+    }
+  }
+  .action {
+    display: flex;
+    align-items: center;
+    gap: $spacer;
+    font-weight: 500;
+    text-transform: capitalize;
+    background-color: $gray-100;
+    max-width: 160px;
+    padding: $spacer * 0.5 $spacer;
+    border-radius: 8px;
+    margin-top: $spacer * 0.5;
+    cursor: pointer;
+    position: relative;
+
+    &:not(:nth-child(2)) {
+      margin-top: $spacer;
+    }
+    p {
+      color: $gray-200;
+    }
+    img {
+      width: 22px;
+    }
+  }
+}

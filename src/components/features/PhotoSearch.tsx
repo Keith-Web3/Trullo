@@ -64,7 +64,7 @@ const PhotoSearch = function (
         ) : (
           data?.map((el: any) => (
             <Img
-              key={nanoid()}
+              key={el.blur_hash}
               onClick={() => {
                 setCoverSrc(el.urls.regular)
                 setCoverBlurHash(el.blur_hash)
@@ -73,15 +73,6 @@ const PhotoSearch = function (
               src={el.urls.regular}
               alt="random_image"
             />
-            // <img
-            //   key={nanoid()}
-            //   onClick={() => {
-            //     setCoverSrc(el.urls.regular)
-            //     setCoverBlurHash(el.blur_hash)
-            //   }}
-            //   src={el.urls.regular}
-            //   alt="random_image"
-            // />
           ))
         )}
       </div>

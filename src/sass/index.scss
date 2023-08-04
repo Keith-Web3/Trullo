@@ -21,13 +21,22 @@ html {
   display: none !important;
 }
 #modal-root {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  overflow-y: auto;
+  inset: 0 0 auto 0;
+  height: 100vh;
   z-index: 1;
+  &::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($black, 0.2);
+  }
 
   &::after {
     content: '';
-    position: absolute;
+    position: fixed;
     inset: 0;
     background-color: rgba($black, 0.1);
   }

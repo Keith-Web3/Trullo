@@ -10,7 +10,8 @@
   min-width: 243px;
   cursor: pointer;
 
-  &__image {
+  &__image,
+  canvas {
     aspect-ratio: 219 / 130;
     object-fit: cover;
     border-radius: 12px;

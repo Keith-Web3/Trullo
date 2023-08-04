@@ -48,7 +48,7 @@ const Board = function () {
         {isLoading ? (
           <Loader />
         ) : (
-          data!.map((listData, idx) => (
+          data?.map((listData, idx) => (
             <List
               name={listData.name}
               newTaskIndex={newTaskIndex}
