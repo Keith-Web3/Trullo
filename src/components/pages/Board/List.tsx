@@ -5,7 +5,6 @@ import Task from '../../features/Task/Task'
 import '../../../sass/pages/board/list.scss'
 import NewCard from '../../ui/NewCard'
 import { addTask, getListTasks } from '../../utils/apis'
-import Loader from '../../ui/Loader'
 import TaskSkeleton from '../../ui/TaskSkeleton'
 
 interface ListProps {
