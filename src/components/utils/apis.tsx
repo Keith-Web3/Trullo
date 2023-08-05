@@ -117,9 +117,31 @@ const updateTaskTags = async function ({
   tags: { text: string; color: string }[]
   taskId: number
 }) {
+  const { data: tasks, error: fetchError } = await supabase
+    .from('Tasks')
+    .select('tags')
+    .eq('id', taskId)
+  if (fetchError) {
+    toast.error(fetchError.message)
+    return
+  }
+
+  let merged = [...(tasks[0]?.tags || []), ...tags]
+
+  merged = merged.reduceRight((acc, el) => {
+    if (
+      acc.some(
+        (obj: { text: string; color: string }) =>
+          obj.text.toLowerCase() === el.text.toLowerCase()
+      )
+    )
+      return acc
+    return [...acc, el]
+  }, [])
+
   const { error } = await supabase
     .from('Tasks')
-    .update({ tags })
+    .update({ tags: merged })
     .eq('id', taskId)
     .select()
   if (error) toast.error(error.message)
