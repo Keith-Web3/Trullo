@@ -14,6 +14,11 @@ function Messages({ userImg }: MessagesProps) {
           id="message"
           className="text-input"
           placeholder="Write a comment..."
+          onKeyUp={e => {
+            ;(e.target as HTMLTextAreaElement).style.height = 'auto'
+            const scHeight = (e.target as HTMLTextAreaElement).scrollHeight
+            ;(e.target as HTMLTextAreaElement).style.height = `${scHeight}px`
+          }}
         ></textarea>
         <Button>Comment</Button>
       </div>
