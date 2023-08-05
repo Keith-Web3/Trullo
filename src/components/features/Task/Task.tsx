@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
+import { nanoid } from 'nanoid'
 
 import { Users, renderUsers } from '../../utils/renderusers'
 import '../../../sass/features/task/task.scss'
-import { getRandomColor } from '../../utils/getRandomColor'
 import TaskInfo from './TaskInfo'
 import Img from '../../ui/Img'
 
@@ -16,7 +16,7 @@ type User = {
 interface TaskProps {
   image: string
   taskName: string
-  tags: string[]
+  tags: { text: string; color: string }[]
   users: Users
   taskId: number
   listName: string
@@ -53,18 +53,17 @@ const Task = function ({
       )}
       <p className="task__title">{taskName}</p>
       <div className="tags">
-        {tags?.map((tag, idx) => {
-          const color = getRandomColor()
+        {tags?.map(tag => {
           return (
             <p
-              key={idx}
+              key={nanoid()}
               className="tag"
               style={{
-                color: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
-                backgroundColor: `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.15)`,
+                color: `rgb(${tag.color})`,
+                backgroundColor: `rgba(${tag.color}, 0.25)`,
               }}
             >
-              {tag}
+              {tag.text}
             </p>
           )
         })}

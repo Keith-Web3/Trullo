@@ -46,6 +46,7 @@ const List = function ({
         data?.map(task => (
           <Task
             listName={name}
+            tags={task.tags}
             listId={id}
             key={task.id}
             taskId={task.id}

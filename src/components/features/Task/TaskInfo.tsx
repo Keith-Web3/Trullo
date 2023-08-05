@@ -1,14 +1,14 @@
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import Img from '../../ui/Img'
 import Messages from '../Messages'
 import Actions from './Actions'
 import Attachments from './Attachments'
 import '../../../sass/features/task/task-info.scss'
-import { useEffect, useRef, useState } from 'react'
 import PhotoSearch from '../PhotoSearch'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { changeTaskCover } from '../../utils/apis'
+import { updateTaskCover } from '../../utils/apis'
 
 interface TaskinfoProps {
   coverImg: string
@@ -29,11 +29,13 @@ const TaskInfo = function ({
   setIsTaskInfoShown,
 }: TaskinfoProps) {
   const taskInfoRef = useRef<HTMLDivElement>(null)
+  const photoSearchRef = useRef<HTMLDivElement>(null)
   const [coverSrc, setCoverSrc] = useState(coverImg)
   const [coverHash, setCoverHash] = useState(coverBlurHash)
+  const [showPhotoSearch, setShowPhotoSearch] = useState(false)
   const queryClient = useQueryClient()
   const { mutate } = useMutation({
-    mutationFn: changeTaskCover,
+    mutationFn: updateTaskCover,
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['get-tasks', listId] })
     },
@@ -46,6 +48,12 @@ const TaskInfo = function ({
         !taskInfoRef.current?.contains(e.target as Node)
       )
         setIsTaskInfoShown(false)
+      if (
+        photoSearchRef.current &&
+        !photoSearchRef.current?.contains(e.target as Node)
+      ) {
+        setShowPhotoSearch(false)
+      }
     }
 
   useEffect(() => {
@@ -118,11 +126,20 @@ const TaskInfo = function ({
         <Attachments />
         <Messages userImg="/user.svg" />
       </div>
-      <Actions>
-        <PhotoSearch
-          setCoverSrc={setCoverSrc}
-          setCoverBlurHash={setCoverHash}
-        />
+      <Actions
+        listId={listId}
+        taskId={taskId}
+        setShowPhotoSearch={setShowPhotoSearch}
+      >
+        <AnimatePresence>
+          {showPhotoSearch && (
+            <PhotoSearch
+              ref={photoSearchRef}
+              setCoverSrc={setCoverSrc}
+              setCoverBlurHash={setCoverHash}
+            />
+          )}
+        </AnimatePresence>
       </Actions>
     </div>
   )

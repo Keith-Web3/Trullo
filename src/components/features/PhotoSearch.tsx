@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { ForwardedRef, forwardRef, useRef } from 'react'
-import { nanoid } from 'nanoid'
 
 import '../../sass/features/photo-search.scss'
 import Loader from '../ui/Loader'

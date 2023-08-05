@@ -1,0 +1,104 @@
+@use '../../variables' as *;
+
+.labels {
+  width: 300px;
+  position: absolute;
+  inset: 110% auto auto 0;
+  text-align: start;
+  border: 1px solid $gray-50;
+  box-shadow: 0px 2px 4px 0px hsla(0, 0%, 0%, 0.051);
+  background-color: $white;
+  padding: $spacer;
+  border-radius: 12px;
+  z-index: 1;
+  cursor: default;
+
+  h1 {
+    font-size: 1.25rem;
+    text-transform: capitalize;
+    font-family: 'Poppins';
+    font-weight: 600;
+    color: $gray-400;
+  }
+  h1 + p {
+    color: $gray-200;
+  }
+  input {
+    border: none;
+    outline: none;
+    box-shadow: 0px 4px 12px 0px #0000001a;
+    padding: 0.7em $spacer;
+    font-family: 'Poppins';
+    font-weight: 500;
+    color: $gray-200;
+    border-radius: 8px;
+    margin-top: $spacer;
+    width: 100%;
+
+    &::placeholder {
+      color: $gray-300;
+    }
+  }
+  .colors-container {
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(4, 1fr);
+    gap: $spacer * 0.5;
+    margin-top: $spacer;
+
+    .color {
+      width: 100%;
+      aspect-ratio: 50 / 27;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+  .current-labels {
+    margin-top: $spacer;
+    p:first-child {
+      display: flex;
+      align-items: center;
+      gap: 1ch;
+      color: $gray-300;
+
+      img {
+        opacity: 0.6;
+      }
+    }
+    .tags {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: $spacer * 0.5;
+      gap: $spacer * 0.6;
+
+      p {
+        text-transform: capitalize;
+        border-radius: 100vh;
+        padding: 0.35em 1em;
+        font-size: 0.9rem;
+      }
+    }
+  }
+  button {
+    display: block;
+    background-color: $blue-300;
+    border: none;
+    outline: none;
+    padding: 0.55em 1.7em;
+    margin-inline: auto;
+    border-radius: 8px;
+    color: $white;
+    font-weight: 500;
+    font-family: 'Poppins';
+    margin-top: $spacer;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: $spacer * 0.5;
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $gray-200;
+    }
+  }
+}
