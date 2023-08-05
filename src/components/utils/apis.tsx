@@ -21,7 +21,12 @@ export type ListData =
   | {
       task_name: string
       list_id: number
-      users: { name?: string; img: string; id: string }[]
+      users: {
+        name?: string
+        img: string
+        id: string
+        role: 'admin' | 'user'
+      }[]
     }
 
 const addBoard = async function (boardData: BoardData) {
@@ -147,6 +152,34 @@ const updateTaskTags = async function ({
   if (error) toast.error(error.message)
 }
 
+const getTaskDescription = function (taskId: number) {
+  return async function () {
+    const { data, error } = await supabase
+      .from('Tasks')
+      .select('description')
+      .eq('id', taskId)
+    if (error) toast.error(error.message)
+    return data?.[0].description
+  }
+}
+
+const updateTaskDescription = async function ({
+  taskId,
+  description,
+}: {
+  taskId: number
+  description: string
+}) {
+  const { data, error } = await supabase
+    .from('Tasks')
+    .update({ description })
+    .eq('id', taskId)
+    .select()
+
+  if (error) toast.error(error.message)
+  return data
+}
+
 export {
   addBoard,
   getBoards,
@@ -158,4 +191,6 @@ export {
   getListTasks,
   updateTaskCover,
   updateTaskTags,
+  getTaskDescription,
+  updateTaskDescription,
 }

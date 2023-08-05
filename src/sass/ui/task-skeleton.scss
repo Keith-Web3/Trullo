@@ -1,0 +1,56 @@
+@use '../variables' as *;
+@use '../utils' as utils;
+
+.task-skeleton {
+  padding: $spacer;
+  background-color: $white;
+  box-shadow: 0px 4px 12px 0px #0000000d;
+  border-radius: 12px;
+  min-width: 243px;
+  margin-bottom: $spacer * 1.5;
+  cursor: pointer;
+
+  .image {
+    width: 100%;
+    aspect-ratio: 219 / 130;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  span {
+    display: block;
+    height: 100%;
+  }
+  .title {
+    margin-block: 0.5em;
+    font-size: 1.25rem;
+    height: 24px;
+  }
+  .skeleton-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacer * 0.6;
+    margin-block: 0.9em;
+
+    .label {
+      text-transform: capitalize;
+      border-radius: 100vh;
+      font-size: 0.85rem;
+      font-weight: 500;
+      min-width: 71px;
+      height: 28px;
+      overflow: hidden;
+    }
+  }
+  .users {
+    @include utils.users;
+
+    .user {
+      display: unset !important;
+      place-content: unset !important;
+
+      &--special {
+        margin-left: auto;
+      }
+    }
+  }
+}

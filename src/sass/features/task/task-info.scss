@@ -64,6 +64,69 @@
       margin-block: $spacer * 0.6;
       font-size: 1.15rem;
       font-family: 'Poppins';
+      white-space: pre-wrap; /* Since CSS 2.1 */
+      white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+      white-space: -pre-wrap; /* Opera 4-6 */
+      white-space: -o-pre-wrap; /* Opera 7 */
+      word-wrap: break-word;
+    }
+    .no-description {
+      color: $gray-300;
+      margin-bottom: $spacer * 1.5;
+    }
+    .edit-input {
+      display: block;
+      width: 100%;
+      resize: none;
+      min-height: 150px;
+      max-height: 400px;
+      outline: none;
+      border: none;
+      background-color: $white;
+      padding: $spacer * 0.6;
+      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      color: $gray-200;
+      margin-bottom: $spacer;
+    }
+    .edit-btn-container {
+      display: flex;
+      align-items: center;
+      gap: $spacer;
+      justify-content: flex-end;
+
+      button {
+        border: none;
+        outline: none;
+        text-transform: capitalize;
+        padding: 0.75em 1.3em;
+        color: $white;
+        font-weight: 500;
+        border-radius: 8px;
+        cursor: pointer;
+
+        &:disabled {
+          cursor: not-allowed;
+        }
+      }
+      .cancel-btn {
+        color: $dark-100;
+        background-color: transparent;
+
+        &:disabled {
+          color: $white;
+        }
+      }
+      .save-btn {
+        background-color: rgb(35, 168, 35);
+        display: flex;
+        align-items: center;
+        gap: $spacer;
+
+        &:disabled {
+          background-color: $gray-200;
+        }
+      }
     }
   }
   .description-header {
@@ -95,6 +158,10 @@
       background-color: transparent;
       padding: 0.5em 1.1em;
       cursor: pointer;
+
+      &:disabled {
+        cursor: not-allowed;
+      }
 
       img {
         width: 17px;

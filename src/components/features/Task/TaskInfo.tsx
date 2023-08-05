@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -9,6 +9,7 @@ import Attachments from './Attachments'
 import '../../../sass/features/task/task-info.scss'
 import PhotoSearch from '../PhotoSearch'
 import { updateTaskCover } from '../../utils/apis'
+import Description from './Description'
 
 interface TaskinfoProps {
   coverImg: string
@@ -97,32 +98,7 @@ const TaskInfo = function ({
           in list
           <span>{listName}</span>
         </p>
-        <div className="task-info__description">
-          <div className="description-header">
-            <p>
-              <img src="/description.svg" alt="description" />
-              description
-            </p>
-            <motion.button
-              layout
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="edit-btn"
-            >
-              <img src="/edit.svg" alt="edit" />
-              edit
-            </motion.button>
-          </div>
-          <p className="description">
-            Ideas are created and share here through a card. Here you can
-            describe what you'd like to accomplish. For example you can follow
-            three simple questions to create the card related to your idea: *
-            Why ? (Why do you wish to do it ?) * What ? (What it is it, what are
-            the goals, who is concerned) * How ? (How do you think you can do it
-            ? What are the required steps ?) After creation, you can move your
-            card to the todo list.
-          </p>
-        </div>
+        <Description taskId={taskId} />
         <Attachments />
         <Messages userImg="/user.svg" />
       </div>

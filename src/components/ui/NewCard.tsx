@@ -52,7 +52,9 @@ const NewCard = function ({
           : {
               task_name: textAreaRef.current!.value,
               list_id: id!,
-              users: [await getUserDetails()],
+              users: [
+                { ...(await getUserDetails()), role: 'admin' as 'admin' },
+              ],
             }
       mutate(mutateData)
     }
