@@ -1,7 +1,15 @@
-import { Outlet, defer, redirect, useLoaderData } from 'react-router-dom'
+import {
+  Outlet,
+  defer,
+  redirect,
+  useLoaderData,
+  useSearchParams,
+} from 'react-router-dom'
 
 import Header from '../shared/Header'
 import { getUserDetails, requireAuth } from '../utils/requireAuth'
+import { useEffect } from 'react'
+import { uploadUserOnSignUp } from '../utils/apis'
 
 export const loader = async function ({ request }: { request: Request }) {
   const path = new URL(request.url).pathname
@@ -12,6 +20,18 @@ export const loader = async function ({ request }: { request: Request }) {
 }
 const HomeLayout = function () {
   const { userDetails } = useLoaderData() as { userDetails: unknown }
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  useEffect(() => {
+    if (searchParams.get('isManual')) {
+      const params = new URLSearchParams(searchParams)
+      params.delete('isManual')
+      setSearchParams(params)
+      return
+    }
+    uploadUserOnSignUp()
+  }, [])
+
   return (
     <main>
       <Header userDetails={userDetails} />

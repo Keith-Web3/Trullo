@@ -14,7 +14,7 @@ export async function signinWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
   })
-  if (error) toast.error(error.message)
+  if (error) toast.error(`Error signing in with Google: ${error.message}`)
 }
 
 export async function getUserDetails() {

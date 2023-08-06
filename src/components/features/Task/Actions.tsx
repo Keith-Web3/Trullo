@@ -3,6 +3,7 @@ import { ReactNode, useState } from 'react'
 import '../../../sass/features/task/actions.scss'
 import Labels from './Labels'
 import { AnimatePresence } from 'framer-motion'
+import Members from './Members'
 
 interface ActionsProps {
   children: ReactNode
@@ -24,10 +25,6 @@ const Actions = function ({
         <img src="/user.svg" alt="user" />
         <p>actions</p>
       </div>
-      <div className="action">
-        <img src="/members.svg" alt="members" />
-        <p>members</p>
-      </div>
       <div className="action" onClick={() => setShowLabel(true)}>
         <img src="/label.svg" alt="label" />
         <p>labels</p>
@@ -46,6 +43,7 @@ const Actions = function ({
         <p>cover</p>
         {children}
       </div>
+      <Members taskId={taskId} />
     </div>
   )
 }

@@ -180,6 +180,33 @@ const updateTaskDescription = async function ({
   return data
 }
 
+const getTaskMembers = function (taskId: number) {
+  return async function () {
+    const { data, error } = await supabase
+      .from('Tasks')
+      .select('users')
+      .eq('id', taskId)
+    if (error) toast.error(error.message)
+    return data?.[0].users
+  }
+}
+
+const uploadUserOnSignUp = async function () {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.refreshSession()
+  if (error) toast.error('Error fetching user details')
+  if (user?.created_at!.slice(0, -7) !== user?.last_sign_in_at!.slice(0, -7))
+    return
+
+  const { error: nameError } = await supabase
+    .from('users')
+    .insert([{ user_id: user?.id, name: user?.user_metadata.full_name }])
+    .select()
+  if (nameError) toast.error('Error uploading user details')
+}
+
 export {
   addBoard,
   getBoards,
@@ -193,4 +220,6 @@ export {
   updateTaskTags,
   getTaskDescription,
   updateTaskDescription,
+  getTaskMembers,
+  uploadUserOnSignUp,
 }

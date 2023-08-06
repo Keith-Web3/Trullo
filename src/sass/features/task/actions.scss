@@ -22,10 +22,16 @@
     display: flex;
     align-items: center;
     gap: $spacer;
+    &__header {
+      display: flex;
+      align-items: center;
+      gap: $spacer;
+    }
     font-weight: 500;
     text-transform: capitalize;
     background-color: $gray-100;
-    max-width: 160px;
+    max-width: 180px;
+    min-width: 170px;
     padding: $spacer * 0.5 $spacer;
     border-radius: 8px;
     margin-top: $spacer * 0.5;
@@ -40,6 +46,47 @@
     }
     img {
       width: 22px;
+    }
+    &.members {
+      display: block;
+      background-color: unset;
+      padding: unset;
+      margin-top: $spacer * 2;
+
+      p {
+        color: #bdbdbd;
+      }
+
+      .member {
+        display: flex;
+        align-items: center;
+        gap: $spacer;
+        margin-block: $spacer;
+
+        img {
+          width: 40px;
+        }
+        p {
+          color: $dark-100;
+          font-weight: 500;
+        }
+      }
+      .assign {
+        display: flex;
+        align-items: center;
+        background-color: $blue-100;
+        color: $blue-300;
+        font-weight: 500;
+        border-radius: 8px;
+        padding: $spacer * 0.6 $spacer;
+        font-size: 0.9rem;
+        cursor: pointer;
+        gap: $spacer;
+
+        span {
+          font-size: 1.2rem;
+        }
+      }
     }
   }
 }

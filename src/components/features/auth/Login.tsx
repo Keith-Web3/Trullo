@@ -33,7 +33,10 @@ export const authAction: ActionFunction = async function ({ request }) {
     email: email,
     password: password,
   })
-  if (error === null) throw redirect(searchParams || '/')
+  if (error === null)
+    throw redirect(
+      searchParams ? `${searchParams}?isManual=true` : '/?isManual=true'
+    )
   toast.error(error.message)
 
   return null

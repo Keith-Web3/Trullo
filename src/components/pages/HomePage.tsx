@@ -7,7 +7,7 @@ import Button from '../ui/Button'
 import '../../sass/pages/homepage.scss'
 import AddBoard from './Board/AddBoard'
 import { getBoards } from '../utils/apis'
-import Loader from '../ui/Loader'
+import BoardCardSkeleton from '../ui/BoardCardSkeleton'
 
 const HomePage = function () {
   const [isAddCardModalShown, setIsAddCardModalShown] = useState(false)
@@ -26,7 +26,12 @@ const HomePage = function () {
       </div>
       <div className="boards">
         {isLoading ? (
-          <Loader />
+          <>
+            <BoardCardSkeleton />
+            <BoardCardSkeleton />
+            <BoardCardSkeleton />
+            <BoardCardSkeleton />
+          </>
         ) : (
           data!.map(el => (
             <BoardCard
