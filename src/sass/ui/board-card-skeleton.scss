@@ -1,0 +1,32 @@
+@use '../variables' as *;
+@use '../utils' as utils;
+
+.board-card-skeleton {
+  background-color: $white;
+  box-shadow: 0px 4px 12px 0px #0000000d;
+  border-radius: 12px;
+  padding: $spacer;
+  text-decoration: none;
+
+  .image {
+    width: 100%;
+    aspect-ratio: 219 / 130;
+    border-radius: 12px;
+    object-fit: cover;
+    overflow: hidden;
+
+    span {
+      display: block;
+      height: 100%;
+    }
+  }
+  .name {
+    margin-block: $spacer;
+    font-size: 1.1rem;
+    font-weight: 500;
+    width: 90%;
+  }
+  .users {
+    @include utils.users;
+  }
+}
