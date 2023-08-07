@@ -53,20 +53,22 @@ const Task = function ({
       )}
       <p className="task__title">{taskName}</p>
       <div className="tags">
-        {tags?.map(tag => {
-          return (
-            <p
-              key={nanoid()}
-              className="tag"
-              style={{
-                color: `rgb(${tag.color})`,
-                backgroundColor: `rgba(${tag.color}, 0.25)`,
-              }}
-            >
-              {tag.text}
-            </p>
-          )
-        })}
+        {tags
+          ?.sort((a, b) => b.text.length - a.text.length)
+          .map(tag => {
+            return (
+              <p
+                key={nanoid()}
+                className="tag"
+                style={{
+                  color: `rgb(${tag.color})`,
+                  backgroundColor: `rgba(${tag.color}, 0.25)`,
+                }}
+              >
+                {tag.text}
+              </p>
+            )
+          })}
       </div>
       <div className="footer">
         <div className="task__users">

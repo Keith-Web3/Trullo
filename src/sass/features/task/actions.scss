@@ -65,10 +65,12 @@
 
         img {
           width: 40px;
+          border-radius: 8px;
         }
         p {
           color: $dark-100;
           font-weight: 500;
+          font-size: 0.9rem;
         }
       }
       .assign {

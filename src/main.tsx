@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import './sass/index.scss'
 import App from './App.tsx'
+import { supabase } from './components/data/supabase.tsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,3 +43,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     />
   </React.StrictMode>
 )
+;(async function () {
+  const { data, error } = await supabase.rpc('update_many_another', {
+    payload: [
+      { id: 1, name: 'updated-project-1' },
+      { id: 2, name: 'updated-project-2' },
+    ],
+  })
+  console.log(data, error)
+})()
