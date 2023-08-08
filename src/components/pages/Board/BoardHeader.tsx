@@ -7,6 +7,7 @@ import { renderUsers } from '../../utils/renderusers'
 import '../../../sass/pages/board/board-header.scss'
 import Visibility from '../../ui/Visibility'
 import Loader from '../../ui/Loader'
+import AddUser from '../../features/AddUser'
 
 interface BoardHeaderProps {
   users: (
@@ -66,7 +67,11 @@ const BoardHeader = function ({
             <span>{isPrivate ? 'Private' : 'Public'}</span>
           </Button>
           <div className="board__users">
-            {renderUsers(users)} <div className="add-user">+</div>
+            {renderUsers(users)}{' '}
+            <div className="add-user-btn">
+              +
+              <AddUser type="board" />
+            </div>
           </div>
         </>
       )}

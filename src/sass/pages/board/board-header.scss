@@ -15,13 +15,15 @@
     @include utils.users;
     margin-right: auto;
 
-    img,
-    div {
+    & > img,
+    & > div {
       width: 40px;
       height: 40px;
     }
-    .add-user {
+    .add-user-btn {
       background-color: $blue-300;
+      position: relative;
+      cursor: pointer;
     }
     @include screen(650) {
       img,

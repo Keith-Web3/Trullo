@@ -21,13 +21,13 @@ export const authAction: ActionFunction = async function ({ request }) {
   const name = formData.get('name') as string
 
   const { error, data } = await supabase.auth.signUp({
-    email: email,
-    password: password,
+    email: email.trim(),
+    password: password.trim(),
   })
 
   const { error: nameError } = await supabase
     .from('users')
-    .insert([{ user_id: data.user?.id, name }])
+    .insert([{ user_id: data.user?.id, name: name.trim(), email: email.trim() }])
     .select()
 
   if (error === null && nameError === null) throw redirect(searchParams || '/')

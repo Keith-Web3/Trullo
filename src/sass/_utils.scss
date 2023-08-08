@@ -8,14 +8,14 @@
   font-weight: 500;
   color: $gray-300;
 
-  img,
-  div {
+  & > img,
+  & > div {
     width: 30px;
     height: 30px;
     border-radius: 8px;
     object-fit: cover;
   }
-  div {
+  & > div {
     background-color: $gray-300;
     display: grid;
     place-content: center;

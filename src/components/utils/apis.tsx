@@ -202,9 +202,37 @@ const uploadUserOnSignUp = async function () {
 
   const { error: nameError } = await supabase
     .from('users')
-    .insert([{ user_id: user?.id, name: user?.user_metadata.full_name }])
+    .insert([
+      {
+        user_id: user?.id,
+        name: user?.user_metadata.full_name,
+        email: user?.email,
+        img: user?.user_metadata.avatar_url,
+      },
+    ])
     .select()
   if (nameError) toast.error('Error uploading user details')
+}
+
+const getUsers = function (searchQuery: string) {
+  return async function () {
+    if (searchQuery.trim() === '') {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .range(0, 2)
+      if (error) toast.error('Error fetching users')
+      if (data?.length === 0) toast.error('Could not find user')
+      return data
+    }
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .or(`name.ilike.%${searchQuery}%, email.eq.${searchQuery}`)
+    if (error) toast.error('Error fetching users')
+    if (data?.length === 0) toast.error('Could not find user')
+    return data
+  }
 }
 
 export {
@@ -222,4 +250,5 @@ export {
   updateTaskDescription,
   getTaskMembers,
   uploadUserOnSignUp,
+  getUsers,
 }
