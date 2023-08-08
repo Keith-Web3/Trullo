@@ -1,10 +1,13 @@
 import { Suspense, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Await, Link, useLocation } from 'react-router-dom'
+import { Await, Link, useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 import Button from '../ui/Button'
 import '../../sass/shared/header.scss'
 import Loader from '../ui/Loader'
+import { supabase } from '../data/supabase'
 
 type ResolvedData = {
   name: string
@@ -28,14 +31,25 @@ const loaderRenderProp = function (resolvedData: ResolvedData) {
 }
 const Header = function ({ userDetails }: { userDetails: unknown }) {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
-  const location = useLocation()
+  const params = useParams()
+  const { isLoading, data } = useQuery({
+    queryKey: ['get-board-id', params.boardId],
+    queryFn: async function () {
+      const { data, error } = await supabase
+        .from('Boards')
+        .select('name')
+        .eq('id', params.boardId)
+      if (error) toast.error(error.message)
+      return data
+    },
+  })
 
   return (
     <header className="header">
       <img className="header__logo" src="/Logo.svg" alt="logo" />
-      {location.pathname !== '/' && (
+      {params.boardId !== undefined && (
         <div className="boards__info">
-          {location.state.name}
+          {isLoading ? <Loader /> : data?.[0].name}
           <div></div>
           <Link to="/">
             <Button tag>

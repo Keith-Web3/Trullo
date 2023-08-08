@@ -41,6 +41,8 @@ const Board = function () {
       <BoardHeader
         isFetchingBoard={isFetchingBoard}
         boardInfo={boardData?.[0].board_info}
+        boardName={boardData?.[0].name}
+        boardId={boardData?.[0].id}
         users={boardData?.[0].users}
         isPrivate={boardData?.[0].isPrivate}
       />

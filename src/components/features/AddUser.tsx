@@ -1,27 +1,49 @@
 import { useRef, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 
 import '../../sass/features/add-user.scss'
-import { getUsers } from '../utils/apis'
+import { getUsers, sendInvite } from '../utils/apis'
 import SuggestedUserSkeleton from '../ui/SuggestedUserSkeleton'
+import toast from 'react-hot-toast'
+import Loader from '../ui/Loader'
 
 interface AddUserProps {
   type: 'board' | 'task'
+  boardName: string
+  boardId: number
 }
 
-const AddUser = function ({ type }: AddUserProps) {
+const AddUser = function ({ type, boardName, boardId }: AddUserProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const { isLoading, data } = useQuery({
     queryKey: ['get-board-users', searchQuery],
     queryFn: getUsers(searchQuery),
   })
+  const [notifications, setNotifications] = useState<string[]>([])
+  const { mutate, isLoading: isSendingInvites } = useMutation({
+    mutationFn: sendInvite,
+    onSuccess() {
+      toast.success('Invites sent successfully')
+      setNotifications([])
+    },
+  })
+  const handleSelectUser = function (userId: string) {
+    return function () {
+      setNotifications(prev => {
+        if (prev.includes(userId)) {
+          return prev.filter(el => el !== userId)
+        }
+        return [...prev, userId]
+      })
+    }
+  }
 
   return (
     <motion.div
       initial={{ top: -24, opacity: 0 }}
-      animate={{ top: 0, opacity: 1 }}
+      animate={{ top: '110%', opacity: 1 }}
       exit={{ top: -24, opacity: 0 }}
       className="add-user"
     >
@@ -67,7 +89,11 @@ const AddUser = function ({ type }: AddUserProps) {
               img: string | null
               id: number
             }) => (
-              <div key={user.id} className="suggested-user">
+              <div
+                key={user.id}
+                className="suggested-user"
+                onClick={handleSelectUser(user.user_id)}
+              >
                 <img src={user.img || '/user.svg'} alt="profile-image" />
                 <p className="name" title={user.name}>
                   {user.name}
@@ -81,7 +107,19 @@ const AddUser = function ({ type }: AddUserProps) {
         )}
       </div>
       <div className="selected-invites"></div>
-      <button>invite</button>
+      <button
+        disabled={notifications.length === 0}
+        onClick={() =>
+          mutate({
+            inviteDetails: notifications,
+            board_id: boardId,
+            board_name: boardName,
+          })
+        }
+      >
+        {isSendingInvites && <Loader />}
+        invite
+      </button>
     </motion.div>
   )
 }

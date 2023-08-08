@@ -1,5 +1,6 @@
 import { toast } from 'react-hot-toast'
 import { supabase } from '../data/supabase'
+import { getUserDetails } from './requireAuth'
 
 interface BoardData {
   name: string
@@ -235,6 +236,35 @@ const getUsers = function (searchQuery: string) {
   }
 }
 
+const sendInvite = async function ({
+  inviteDetails,
+  board_id,
+  board_name,
+}: {
+  inviteDetails: string[]
+  board_id: number
+  board_name: string
+}) {
+  const userDetails = await getUserDetails()
+
+  const invitations = inviteDetails.map(detail => {
+    return {
+      status: 'pending',
+      board_id,
+      board_name,
+      inviter_name: userDetails.name,
+      invited_user_id: detail,
+    }
+  })
+
+  const { data, error } = await supabase
+    .from('invites')
+    .insert(invitations)
+    .select()
+  console.log(data)
+  if (error) toast.error(error.message)
+}
+
 export {
   addBoard,
   getBoards,
@@ -251,4 +281,5 @@ export {
   getTaskMembers,
   uploadUserOnSignUp,
   getUsers,
+  sendInvite,
 }

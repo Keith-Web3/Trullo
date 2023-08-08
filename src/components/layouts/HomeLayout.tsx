@@ -5,10 +5,10 @@ import {
   useLoaderData,
   useSearchParams,
 } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import Header from '../shared/Header'
 import { getUserDetails, requireAuth } from '../utils/requireAuth'
-import { useEffect } from 'react'
 import { uploadUserOnSignUp } from '../utils/apis'
 
 export const loader = async function ({ request }: { request: Request }) {

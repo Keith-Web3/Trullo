@@ -24,16 +24,21 @@ interface BoardHeaderProps {
   )[]
   isPrivate: boolean
   boardInfo: string
+  boardName: string
+  boardId: number
   isFetchingBoard: boolean
 }
 const BoardHeader = function ({
   users,
   isPrivate,
   boardInfo,
+  boardName,
+  boardId,
   isFetchingBoard,
 }: BoardHeaderProps) {
   const [isVisibilityOpen, setIsVisibilityOpen] = useState(false)
   const visibility = useRef<HTMLDivElement>(null)
+  const [isAddUserShown, setIsAddUserShown] = useState(false)
 
   const handleOuterClick = function (e: MouseEvent) {
     if (!visibility.current) return
@@ -68,9 +73,11 @@ const BoardHeader = function ({
           </Button>
           <div className="board__users">
             {renderUsers(users)}{' '}
-            <div className="add-user-btn">
-              +
-              <AddUser type="board" />
+            <div
+              className="add-user-btn"
+              onClick={() => setIsAddUserShown(true)}
+            >
+              +{isAddUserShown && <AddUser boardName={boardName} boardId={boardId} type="board" />}
             </div>
           </div>
         </>
