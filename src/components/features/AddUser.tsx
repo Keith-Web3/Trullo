@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 
@@ -11,11 +11,18 @@ interface AddUserProps {
   type: 'board' | 'task'
   boardName: string
   boardId: number
+  setIsAddUserShown: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const AddUser = function ({ type, boardName, boardId }: AddUserProps) {
+const AddUser = function ({
+  type,
+  boardName,
+  boardId,
+  setIsAddUserShown,
+}: AddUserProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+  const addUserRef = useRef<HTMLDivElement>(null)
   const { isLoading, data } = useQuery({
     queryKey: ['get-board-users', searchQuery],
     queryFn: getUsers(searchQuery),
@@ -37,12 +44,23 @@ const AddUser = function ({ type, boardName, boardId }: AddUserProps) {
       })
     }
   }
+  const handleOuterClick = function (this: Document, ev: MouseEvent) {
+    if (!addUserRef.current?.contains(ev.target as Node)) {
+      setIsAddUserShown(false)
+    }
+  }
+  useEffect(() => {
+    document.addEventListener('click', handleOuterClick, true)
+
+    return () => document.removeEventListener('click', handleOuterClick)
+  }, [])
 
   return (
     <motion.div
       initial={{ top: -24, opacity: 0 }}
       animate={{ top: '110%', opacity: 1 }}
       exit={{ top: -24, opacity: 0 }}
+      ref={addUserRef}
       className="add-user"
     >
       {type === 'board' ? (

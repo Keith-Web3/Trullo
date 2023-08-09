@@ -77,7 +77,17 @@ const BoardHeader = function ({
               className="add-user-btn"
               onClick={() => setIsAddUserShown(true)}
             >
-              +{isAddUserShown && <AddUser boardName={boardName} boardId={boardId} type="board" />}
+              +
+              <AnimatePresence>
+                {isAddUserShown && (
+                  <AddUser
+                    setIsAddUserShown={setIsAddUserShown}
+                    boardName={boardName}
+                    boardId={boardId}
+                    type="board"
+                  />
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </>
