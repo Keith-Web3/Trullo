@@ -274,7 +274,7 @@ const sendInvite = async function ({
     toast.error(error.message)
     return
   }
-  toast.success('Invites sent successfully')
+  toast.success('Board Access Invitations Sent')
 }
 
 export {
