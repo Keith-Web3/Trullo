@@ -284,6 +284,42 @@ const getNotifications = async function () {
   return data
 }
 
+const replyInvitation = async function ({
+  id,
+  response,
+  boardId,
+}: {
+  id: number
+  response: 'declined' | 'accepted'
+  boardId: number
+}) {
+  const toastId = toast.loading('Replying invite')
+  const { error } = await supabase
+    .from('invites')
+    .update({ status: response })
+    .eq('id', id)
+    .select()
+  if (error) {
+    toast.dismiss(toastId)
+    throw error
+  }
+  if (response === 'accepted') {
+    const userDetails = await getUserDetails()
+    const { error } = await supabase.rpc('add_user_to_board', {
+      board_id: +boardId,
+      new_user: userDetails,
+    })
+    if (error) {
+      toast.dismiss(toastId)
+      throw error
+    }
+  }
+  if (!error) {
+    await supabase.from('invites').delete().eq('id', id)
+  }
+  toast.dismiss(toastId)
+}
+
 export {
   addBoard,
   getBoards,
@@ -302,4 +338,5 @@ export {
   getUsers,
   sendInvite,
   getNotifications,
+  replyInvitation,
 }

@@ -103,6 +103,10 @@
         border-radius: 4px;
         cursor: pointer;
 
+        &:disabled {
+          background-color: $gray-200;
+          cursor: pointer;
+        }
         &:first-child {
           background-color: rgba(#eb0a0a, 0.7);
           color: $white;

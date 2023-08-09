@@ -20,8 +20,8 @@ const Members = function ({ taskId }: MembersProps) {
         {isLoading ? (
           <Loader />
         ) : (
-          data.map((member: { img: string; name: string }) => (
-            <div className="member">
+          data.map((member: { img: string; name: string , id: string}) => (
+            <div className="member" key={member.id}>
               <img src={member.img || '/user.svg'} alt="member" />
               <p>{member.name}</p>
             </div>

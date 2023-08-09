@@ -1,9 +1,11 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import '../../sass/shared/notifications.scss'
 import formatDate from '../utils/formatDate'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../data/supabase'
+import { replyInvitation } from '../utils/apis'
+import toast from 'react-hot-toast'
 
 interface NotificationsProps {
   setShowNotifications: React.Dispatch<React.SetStateAction<boolean>>
@@ -20,20 +22,44 @@ const Notifications = function ({
   setShowNotifications,
 }: NotificationsProps) {
   const [notifFilter, setNotifFilter] = useState('unread')
+  const notificationRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation({
+    mutationFn: replyInvitation,
+    onSuccess(_data, { response }) {
+      toast.success(`Invitation successfully ${response}`)
+      queryClient.invalidateQueries({
+        queryKey: ['getBoards', 'get-board'],
+      })
+      setShowNotifications(false)
+    },
+    onError(error: any) {
+      toast.error(error.message)
+    },
+  })
 
   const filteredNotifications = notifications?.filter(
     notif => notif.read_status === notifFilter
   )
+  function handleOuterClick(this: Document, e: MouseEvent) {
+    if (
+      notificationRef.current &&
+      !notificationRef.current?.contains(e.target as Node)
+    )
+      setShowNotifications(false)
+  }
 
   useEffect(() => {
+    document.addEventListener('click', handleOuterClick, true)
+
     return () => {
+      document.removeEventListener('click', handleOuterClick)
       queryClient.invalidateQueries({ queryKey: ['get-notifications'] })
     }
-  })
+  }, [])
 
   return (
-    <div className="notifications">
+    <div className="notifications" ref={notificationRef}>
       <div className="notifications__header">
         <h1>Notifications</h1>
         <img
@@ -86,8 +112,30 @@ const Notifications = function ({
                   <p className="date">{formattedDate}</p>
                 </div>
                 <div className="notification__actions">
-                  <button>Decline</button>
-                  <button>Accept</button>
+                  <button
+                    disabled={isLoading}
+                    onClick={() =>
+                      mutate({
+                        response: 'declined',
+                        boardId: notification.board_id,
+                        id: notification.id,
+                      })
+                    }
+                  >
+                    Decline
+                  </button>
+                  <button
+                    disabled={isLoading}
+                    onClick={() =>
+                      mutate({
+                        response: 'accepted',
+                        boardId: notification.board_id,
+                        id: notification.id,
+                      })
+                    }
+                  >
+                    Accept
+                  </button>
                 </div>
               </Notification>
             )
