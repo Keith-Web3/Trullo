@@ -10,7 +10,6 @@ const Members = function ({ taskId }: MembersProps) {
     queryKey: ['get-task-users', taskId],
     queryFn: getTaskMembers(taskId),
   })
-  console.log(data)
   return (
     <div className="action members">
       <div className="action__header">

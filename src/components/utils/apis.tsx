@@ -1,6 +1,6 @@
 import { toast } from 'react-hot-toast'
 import { supabase } from '../data/supabase'
-import { getUserDetails } from './requireAuth'
+import { getUserDetails, requireAuth } from './requireAuth'
 
 interface BoardData {
   name: string
@@ -217,10 +217,12 @@ const uploadUserOnSignUp = async function () {
 
 const getUsers = function (searchQuery: string) {
   return async function () {
+    const user = await requireAuth()
     if (searchQuery.trim() === '') {
       const { data, error } = await supabase
         .from('users')
         .select('*')
+        .neq('user_id', user!.id)
         .range(0, 2)
       if (error) toast.error('Error fetching users')
       if (data?.length === 0) toast.error('Could not find user')
@@ -230,6 +232,7 @@ const getUsers = function (searchQuery: string) {
       .from('users')
       .select('*')
       .or(`name.ilike.%${searchQuery}%, email.eq.${searchQuery}`)
+      .neq('user_id', user!.id)
     if (error) toast.error('Error fetching users')
     if (data?.length === 0) toast.error('Could not find user')
     return data
