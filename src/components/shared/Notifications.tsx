@@ -29,7 +29,7 @@ const Notifications = function ({
     onSuccess(_data, { response }) {
       toast.success(`Invitation successfully ${response}`)
       queryClient.invalidateQueries({
-        queryKey: ['getBoards', 'get-board'],
+        queryKey: ['getBoards'],
       })
       setShowNotifications(false)
     },
