@@ -15,11 +15,15 @@
     font-size: 1.35rem;
     margin-left: $spacer * 1.5;
 
+    p {
+      width: 130px;
+    }
+
     @include screen(1184) {
       display: none;
     }
 
-    div {
+    div:not(.loader) {
       background-color: $gray-50;
       height: 2.5rem;
       margin-inline: $spacer;
@@ -29,7 +33,28 @@
       text-decoration: none;
     }
   }
-
+  &__notifications {
+    margin-inline: auto $spacer * 3;
+    position: relative;
+    z-index: 1;
+    &.unread {
+      &::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        aspect-ratio: 1 / 1;
+        background-color: #ff0000;
+        border-radius: 50%;
+        inset: auto 0 50% auto;
+        cursor: pointer;
+      }
+    }
+    .bell {
+      display: block;
+      width: 20px;
+      cursor: pointer;
+    }
+  }
   &__label {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -37,7 +62,6 @@
     background-color: $white;
     border-radius: 0.5rem;
     padding: $spacer * 0.2;
-    margin-left: auto;
 
     input {
       border: none;

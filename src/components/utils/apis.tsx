@@ -258,10 +258,11 @@ const sendInvite = async function ({
       inviter_name: userDetails.name,
       invited_user_id: detail,
       invitation_id: `${board_id}-${detail}`,
+      inviter_img: userDetails.img,
     }
   })
 
-  const { error } = await supabase.from('invites').insert(invitations).select()
+  const { error } = await supabase.from('invites').insert(invitations)
   if (
     error?.message ===
     'duplicate key value violates unique constraint "invites_invitation_id_key"'
@@ -275,6 +276,12 @@ const sendInvite = async function ({
     return
   }
   toast.success('Board Access Invitations Sent')
+}
+
+const getNotifications = async function () {
+  const { data, error } = await supabase.from('invites').select('*')
+  if (error) toast.error(error.message)
+  return data
 }
 
 export {
@@ -294,4 +301,5 @@ export {
   uploadUserOnSignUp,
   getUsers,
   sendInvite,
+  getNotifications,
 }
