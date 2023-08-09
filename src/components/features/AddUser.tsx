@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import '../../sass/features/add-user.scss'
 import { getUsers, sendInvite } from '../utils/apis'
 import SuggestedUserSkeleton from '../ui/SuggestedUserSkeleton'
-import toast from 'react-hot-toast'
 import Loader from '../ui/Loader'
 
 interface AddUserProps {
@@ -25,7 +24,6 @@ const AddUser = function ({ type, boardName, boardId }: AddUserProps) {
   const { mutate, isLoading: isSendingInvites } = useMutation({
     mutationFn: sendInvite,
     onSuccess() {
-      toast.success('Invites sent successfully')
       setNotifications([])
     },
   })
@@ -91,7 +89,9 @@ const AddUser = function ({ type, boardName, boardId }: AddUserProps) {
             }) => (
               <div
                 key={user.id}
-                className="suggested-user"
+                className={`suggested-user ${
+                  notifications.includes(user.user_id) ? 'selected' : ''
+                }`}
                 onClick={handleSelectUser(user.user_id)}
               >
                 <img src={user.img || '/user.svg'} alt="profile-image" />
@@ -108,7 +108,7 @@ const AddUser = function ({ type, boardName, boardId }: AddUserProps) {
       </div>
       <div className="selected-invites"></div>
       <button
-        disabled={notifications.length === 0}
+        disabled={notifications.length === 0 || isSendingInvites}
         onClick={() =>
           mutate({
             inviteDetails: notifications,

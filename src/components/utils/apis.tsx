@@ -257,15 +257,24 @@ const sendInvite = async function ({
       board_name,
       inviter_name: userDetails.name,
       invited_user_id: detail,
+      invitation_id: `${board_id}-${detail}`,
     }
   })
 
-  const { data, error } = await supabase
-    .from('invites')
-    .insert(invitations)
-    .select()
-  console.log(data)
-  if (error) toast.error(error.message)
+  const { error } = await supabase.from('invites').insert(invitations).select()
+  if (
+    error?.message ===
+    'duplicate key value violates unique constraint "invites_invitation_id_key"'
+  ) {
+    toast.error('This user has already been invited')
+    return
+  } else {
+  }
+  if (error) {
+    toast.error(error.message)
+    return
+  }
+  toast.success('Invites sent successfully')
 }
 
 export {

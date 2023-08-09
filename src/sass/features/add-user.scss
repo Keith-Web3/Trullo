@@ -109,6 +109,9 @@
       cursor: pointer;
       padding: 0.5em;
       border-radius: 5px;
+      &.selected {
+        background-color: $gray-100 !important;
+      }
       &:not(:last-child) {
         margin-bottom: 0.2em;
       }
