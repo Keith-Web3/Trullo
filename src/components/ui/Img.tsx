@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { MouseEventHandler, useState } from 'react'
 import { BlurhashCanvas } from 'react-blurhash'
 
 interface ImgProps {
@@ -19,7 +19,13 @@ const Img = function ({
   const [isImgLoaded, setIsImgLoaded] = useState(false)
   return (
     <>
-      {!isImgLoaded && <BlurhashCanvas hash={blurhash} punch={1} />}
+      {!isImgLoaded && (
+        <BlurhashCanvas
+          onClick={onClick as MouseEventHandler<HTMLCanvasElement> | undefined}
+          hash={blurhash}
+          punch={1}
+        />
+      )}
       <img
         style={{ display: isImgLoaded ? 'block' : 'none' }}
         onLoad={() => setIsImgLoaded(true)}
