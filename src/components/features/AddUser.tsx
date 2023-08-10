@@ -24,8 +24,8 @@ const AddUser = function ({
   const inputRef = useRef<HTMLInputElement>(null)
   const addUserRef = useRef<HTMLDivElement>(null)
   const { isLoading, data } = useQuery({
-    queryKey: ['get-board-users', searchQuery],
-    queryFn: getUsers(searchQuery),
+    queryKey: ['get-board-users', searchQuery, boardId],
+    queryFn: getUsers(searchQuery, boardId),
   })
   const [notifications, setNotifications] = useState<string[]>([])
   const { mutate, isLoading: isSendingInvites } = useMutation({

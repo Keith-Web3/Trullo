@@ -215,9 +215,18 @@ const uploadUserOnSignUp = async function () {
   if (nameError) toast.error('Error uploading user details')
 }
 
-const getUsers = function (searchQuery: string) {
+const getUsers = function (searchQuery: string, boardId: number) {
   return async function () {
     const user = await requireAuth()
+
+    const { data: boards, error: boardsError } = await supabase
+      .from('Boards')
+      .select('users')
+      .eq('id', boardId)
+    const users = boards?.[0].users
+
+    if (boardsError) toast.error(boardsError.message)
+
     if (searchQuery.trim() === '') {
       const { data, error } = await supabase
         .from('users')
@@ -226,7 +235,10 @@ const getUsers = function (searchQuery: string) {
         .range(0, 2)
       if (error) toast.error('Error fetching users')
       if (data?.length === 0) toast.error('Could not find user')
-      return data
+      return data?.filter(
+        userData =>
+          !users.some((user: { id: number }) => user.id === userData.user_id)
+      )
     }
     const { data, error } = await supabase
       .from('users')
@@ -235,7 +247,10 @@ const getUsers = function (searchQuery: string) {
       .neq('user_id', user!.id)
     if (error) toast.error('Error fetching users')
     if (data?.length === 0) toast.error('Could not find user')
-    return data
+    return data?.filter(
+      userData =>
+        !users.some((user: { id: number }) => user.id === userData.user_id)
+    )
   }
 }
 
