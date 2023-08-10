@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import { toast } from 'react-hot-toast'
 
 import { getTaskDescription, updateTaskDescription } from '../../utils/apis'
 import Loader from '../../ui/Loader'
-import { toast } from 'react-hot-toast'
 
 interface DescriptionProps {
   taskId: number
@@ -22,7 +22,6 @@ const Description = function ({ taskId }: DescriptionProps) {
         queryKey: ['get-task-description', taskId],
       })
       setIsEditing(false)
-      toast.success('Description successfully updated')
     },
   })
   const [isEditing, setIsEditing] = useState(false)

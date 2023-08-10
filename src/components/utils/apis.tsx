@@ -177,7 +177,15 @@ const updateTaskDescription = async function ({
     .eq('id', taskId)
     .select()
 
-  if (error) toast.error(error.message)
+  if (error) {
+    toast.error(error.message)
+    return
+  }
+  if (data.length === 0) {
+    toast.error('Unauthorized to edit this task.')
+    return
+  }
+  toast.success('Description successfully updated')
   return data
 }
 
