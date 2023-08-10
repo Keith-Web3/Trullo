@@ -269,7 +269,12 @@ const sendInvite = async function ({
   ) {
     toast.error('This user has already been invited')
     return
-  } else {
+  } else if (
+    error?.message ===
+    'new row violates row-level security policy for table "invites"'
+  ) {
+    toast.error('The user is already a member of this board')
+    return
   }
   if (error) {
     toast.error(error.message)
