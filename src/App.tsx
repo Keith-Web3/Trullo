@@ -13,20 +13,24 @@ import Board from './components/pages/Board/Board'
 import Login, {
   authAction as loginAction,
 } from './components/features/auth/Login'
-import SignUp, { authAction } from './components/features/auth/SignUp'
+import SignUp, {
+  authAction as signUpAction,
+} from './components/features/auth/SignUp'
 import ForgotPassword from './components/features/auth/ForgotPassword'
+import PageNotFound from './components/pages/PageNotFound'
 
 const App = function () {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
         <Route path="login" action={loginAction} element={<Login />} />
-        <Route path="signup" action={authAction} element={<SignUp />} />
+        <Route path="signup" action={signUpAction} element={<SignUp />} />
         <Route loader={HomeLayoutLoader} element={<HomeLayout />}>
           <Route path="update-password" element={<ForgotPassword />} />
           <Route index element={<HomePage />} />
           <Route path="board/:boardId" element={<Board />} />
         </Route>
+        <Route path="*" element={<PageNotFound />} />
       </Route>
     )
   )

@@ -1,0 +1,78 @@
+@use '../variables' as *;
+
+.page-not-found {
+  font-family: 'Roboto';
+  font-weight: 400;
+
+  &__container {
+    padding: $spacer;
+    min-height: 100dvh;
+    max-width: 1098px;
+    margin-inline: auto;
+    display: grid;
+    grid-template: auto 1fr / 1fr 1fr;
+    grid-template-areas: 'logo logo' 'message img';
+    align-items: center;
+    height: 100%;
+
+    @include screen(820) {
+      grid-template: repeat(3, auto) / 1fr;
+      grid-template-areas: 'logo' 'img' 'message';
+      place-items: center;
+    }
+
+    header {
+      grid-area: logo;
+      width: 100%;
+    }
+    section {
+      color: $dark-100;
+      grid-area: message;
+      @include screen(820) {
+        text-align: center;
+      }
+      .oops {
+        font-weight: 700;
+        font-size: 2.3rem;
+        text-transform: capitalize;
+      }
+      .not-found {
+        font-size: 2.5rem;
+      }
+      .not-found-message {
+        color: #4b4b4b;
+        max-width: 400px;
+        line-height: 1.5;
+      }
+      a {
+        text-decoration: none;
+        margin-top: $spacer;
+        display: block;
+        width: max-content;
+        @include screen(820) {
+          margin-inline: auto;
+        }
+      }
+      button {
+        display: flex;
+        align-items: center;
+        gap: $spacer * 0.7;
+        background-color: #2e77e9;
+        color: $white;
+        border: none;
+        outline: none;
+        padding: 0.55em 1em;
+        border-radius: 5px;
+        cursor: pointer;
+
+        img {
+          width: 25px;
+        }
+      }
+    }
+    .error-image {
+      grid-area: img;
+      width: 100%;
+    }
+  }
+}
