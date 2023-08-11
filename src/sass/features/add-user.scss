@@ -109,6 +109,11 @@
       cursor: pointer;
       padding: 0.5em;
       border-radius: 5px;
+      &--task {
+        display: flex;
+        gap: $spacer;
+        font-size: 1rem;
+      }
       &.selected {
         background-color: $gray-100 !important;
       }

@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { getTaskMembers } from '../../utils/apis'
 import Loader from '../../ui/Loader'
+import AddTaskUser from '../AddTaskUser'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 interface MembersProps {
   taskId: number
@@ -10,6 +13,8 @@ const Members = function ({ taskId }: MembersProps) {
     queryKey: ['get-task-users', taskId],
     queryFn: getTaskMembers(taskId),
   })
+  const [isAddMemberShown, setIsAddMemberShown] = useState(false)
+  const params = useParams<{ boardId: string }>()
   return (
     <div className="action members">
       <div className="action__header">
@@ -20,7 +25,7 @@ const Members = function ({ taskId }: MembersProps) {
         {isLoading ? (
           <Loader />
         ) : (
-          data.map((member: { img: string; name: string , id: string}) => (
+          data.map((member: { img: string; name: string; id: string }) => (
             <div className="member" key={member.id}>
               <img src={member.img || '/user.svg'} alt="member" />
               <p>{member.name}</p>
@@ -28,9 +33,16 @@ const Members = function ({ taskId }: MembersProps) {
           ))
         )}
       </div>
-      <div className="assign">
+      <div className="assign" onClick={() => setIsAddMemberShown(true)}>
         Assign a member
         <span>+</span>
+        {isAddMemberShown && (
+          <AddTaskUser
+            setIsAddUserShown={setIsAddMemberShown}
+            boardId={+params.boardId!}
+            taskId={taskId}
+          />
+        )}
       </div>
     </div>
   )

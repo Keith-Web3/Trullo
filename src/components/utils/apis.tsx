@@ -246,7 +246,13 @@ const getUsers = function (searchQuery: string, boardId: number) {
       return data?.filter(
         userData =>
           !users.some((user: { id: number }) => user.id === userData.user_id)
-      )
+      ) as {
+        name: string
+        email: string
+        user_id: string
+        img: string | null
+        id: number
+      }[]
     }
     const { data, error } = await supabase
       .from('users')
@@ -258,7 +264,47 @@ const getUsers = function (searchQuery: string, boardId: number) {
     return data?.filter(
       userData =>
         !users.some((user: { id: number }) => user.id === userData.user_id)
+    ) as {
+      name: string
+      email: string
+      user_id: string
+      img: string | null
+      id: number
+    }[]
+  }
+}
+const getTaskUsers = function (
+  searchQuery: string,
+  boardId: number,
+  taskId: number
+) {
+  return async function () {
+    const users = await getTaskMembers(taskId)()
+
+    const { data: boardUsers, error: usersError } = await supabase
+      .from('Boards')
+      .select('users')
+      .eq('id', boardId)
+    if (usersError) toast.error('Error fetching users')
+    console.log(users, boardUsers)
+
+    const boardUsersExtracted = boardUsers?.[0].users.filter(
+      (boardUser: { id: string }) =>
+        !users.some((user: { id: string }) => user.id === boardUser.id)
     )
+    console.log(boardUsersExtracted)
+
+    if (searchQuery.trim() === '') {
+      return boardUsersExtracted.slice(0, 3) as {
+        id: string
+        name: string
+        img?: string
+      }[]
+    }
+    return boardUsersExtracted.filter(
+      (boardUser: { name: string }) =>
+        boardUser.name.trim().toLowerCase() === searchQuery.trim().toLowerCase()
+    ) as { id: string; name: string; img?: string }[]
   }
 }
 
@@ -348,6 +394,20 @@ const replyInvitation = async function ({
   toast.dismiss(toastId)
 }
 
+const assignUsersToBoard = async function ({
+  users,
+  taskId,
+}: {
+  users: { img?: string; id: string; name: string; role: 'assignee' }[]
+  taskId: number
+}) {
+  const { error } = await supabase.rpc('add_users_to_task', {
+    task_id: taskId,
+    new_users: users,
+  })
+  if (error) toast.error('this user has been assigned to the task')
+}
+
 export {
   addBoard,
   getBoards,
@@ -367,4 +427,6 @@ export {
   sendInvite,
   getNotifications,
   replyInvitation,
+  getTaskUsers,
+  assignUsersToBoard,
 }

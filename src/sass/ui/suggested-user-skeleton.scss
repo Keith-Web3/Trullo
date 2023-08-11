@@ -10,12 +10,17 @@
   &:not(:last-child) {
     margin-bottom: $spacer;
   }
+  & * {
+    font-size: 1rem !important;
+  }
 
   .image {
     grid-area: img;
     width: 45px;
     border-radius: 8px;
-    height: 90%;
+    height: 90% !important;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
     overflow: hidden;
 
     span {

@@ -84,7 +84,6 @@ const BoardHeader = function ({
                     setIsAddUserShown={setIsAddUserShown}
                     boardName={boardName}
                     boardId={boardId}
-                    type="board"
                   />
                 )}
               </AnimatePresence>

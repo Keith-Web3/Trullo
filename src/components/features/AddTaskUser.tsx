@@ -1,37 +1,40 @@
 import { useEffect, useRef, useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 
 import '../../sass/features/add-user.scss'
-import { getUsers, sendInvite } from '../utils/apis'
+import { assignUsersToBoard, getTaskUsers } from '../utils/apis'
 import SuggestedUserSkeleton from '../ui/SuggestedUserSkeleton'
-import Loader from '../ui/Loader'
 
 interface AddUserProps {
-  boardName: string
   boardId: number
+  taskId: number
   setIsAddUserShown: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const AddUser = function ({
-  boardName,
   boardId,
+  taskId,
   setIsAddUserShown,
 }: AddUserProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const addUserRef = useRef<HTMLDivElement>(null)
+  const queryClient = useQueryClient()
   const { isLoading, data } = useQuery({
-    queryKey: ['get-board-users', searchQuery, boardId],
-    queryFn: getUsers(searchQuery, boardId),
+    queryKey: ['get-task-users', searchQuery, boardId, taskId],
+    queryFn: getTaskUsers(searchQuery, boardId, taskId),
   })
-  const [notifications, setNotifications] = useState<string[]>([])
-  const { mutate, isLoading: isSendingInvites } = useMutation({
-    mutationFn: sendInvite,
+  const { isLoading: isAssigning, mutate } = useMutation({
+    mutationFn: assignUsersToBoard,
     onSuccess() {
-      setNotifications([])
+      queryClient.invalidateQueries({
+        queryKey: ['get-task-users', searchQuery, boardId, taskId],
+      })
     },
   })
+  const [notifications, setNotifications] = useState<string[]>([])
+
   const handleSelectUser = function (userId: string) {
     return function () {
       setNotifications(prev => {
@@ -61,8 +64,8 @@ const AddUser = function ({
       ref={addUserRef}
       className="add-user"
     >
-      <h1>Invite to Board</h1>
-      <p className="subheader">Search users you want to invite</p>
+      <h1>Members</h1>
+      <p className="subheader">Assign members to this card</p>
       <label htmlFor="search-users" className="search-box">
         <input
           ref={inputRef}
@@ -89,17 +92,14 @@ const AddUser = function ({
           data?.map(user => (
             <div
               key={user.id}
-              className={`suggested-user ${
-                notifications.includes(user.user_id) ? 'selected' : ''
+              className={`suggested-user suggested-user--task ${
+                notifications.includes(user.id) ? 'selected' : ''
               }`}
-              onClick={handleSelectUser(user.user_id)}
+              onClick={handleSelectUser(user.id)}
             >
               <img src={user.img || '/user.svg'} alt="profile-image" />
               <p className="name" title={user.name}>
                 {user.name}
-              </p>
-              <p className="email" title={user.email}>
-                {user.email}
               </p>
             </div>
           ))
@@ -107,17 +107,24 @@ const AddUser = function ({
       </div>
       <div className="selected-invites"></div>
       <button
-        disabled={notifications.length === 0 || isSendingInvites}
-        onClick={() =>
-          mutate({
-            inviteDetails: notifications,
-            board_id: boardId,
-            board_name: boardName,
-          })
-        }
+        disabled={isAssigning || notifications.length === 0}
+        onClick={() => {
+          const users = data!
+            .map(user => {
+              if (notifications.includes(user.id))
+                return { ...user, role: 'assignee' }
+              return null
+            })
+            .filter(user => user !== null) as {
+            role: 'assignee'
+            id: string
+            name: string
+            img?: string | undefined
+          }[]
+          mutate({ taskId, users })
+        }}
       >
-        {isSendingInvites && <Loader />}
-        invite
+        add users
       </button>
     </motion.div>
   )

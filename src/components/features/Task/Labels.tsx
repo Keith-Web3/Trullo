@@ -91,7 +91,7 @@ const Labels = function ({ taskId, listId, setShowLabel }: LabelsProps) {
               setTags(prev => [
                 ...prev,
                 {
-                  text: inputRef.current!.value.trim(),
+                  text: inputRef.current!.value.trim().toLowerCase(),
                   color,
                 },
               ])

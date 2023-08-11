@@ -70,9 +70,11 @@
         }
       }
     }
-    .error-image {
+    .error-image,
+    canvas {
       grid-area: img;
       width: 100%;
+      aspect-ratio: 1 / 1;
     }
   }
 }
