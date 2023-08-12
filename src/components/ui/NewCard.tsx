@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 import { UseMutateFunction } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 import '../../sass/ui/new-card.scss'
 import { ListData } from '../utils/apis'
-import { useParams } from 'react-router-dom'
-import toast from 'react-hot-toast'
 import Loader from './Loader'
 import { getUserDetails } from '../utils/requireAuth'
 

@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
+import { useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import '../../../sass/features/auth/forgot-password.scss'
 import { supabase } from '../../data/supabase'
-import { useRef, useState } from 'react'
-import toast from 'react-hot-toast'
 
 const ForgotPassword = function () {
   const passwordRef = useRef<HTMLInputElement>(null)

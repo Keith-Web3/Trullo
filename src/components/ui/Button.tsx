@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
+import { motion } from 'framer-motion'
 
 import '../../sass/ui/button.scss'
-import { motion } from 'framer-motion'
 
 interface ButtonProps {
   children: ReactNode

@@ -1,8 +1,8 @@
 import { ReactNode, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 
 import '../../../sass/features/task/actions.scss'
 import Labels from './Labels'
-import { AnimatePresence } from 'framer-motion'
 import Members from './Members'
 
 interface ActionsProps {

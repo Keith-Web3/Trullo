@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+
 import '../../sass/ui/loader.scss'
 
 interface LoaderProp {

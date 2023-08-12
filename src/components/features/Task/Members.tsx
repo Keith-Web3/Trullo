@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+
 import { getTaskMembers } from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import AddTaskUser from '../AddTaskUser'
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 interface MembersProps {
   taskId: number

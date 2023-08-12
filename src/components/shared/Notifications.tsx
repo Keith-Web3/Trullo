@@ -1,11 +1,11 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 import '../../sass/shared/notifications.scss'
 import formatDate from '../utils/formatDate'
 import { supabase } from '../data/supabase'
 import { replyInvitation } from '../utils/apis'
-import toast from 'react-hot-toast'
 
 interface NotificationsProps {
   setShowNotifications: React.Dispatch<React.SetStateAction<boolean>>

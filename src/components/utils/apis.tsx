@@ -1,4 +1,5 @@
 import { toast } from 'react-hot-toast'
+
 import { supabase } from '../data/supabase'
 import { getUserDetails, requireAuth } from './requireAuth'
 

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { nanoid } from 'nanoid'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { motion } from 'framer-motion'
 
 import '../../../sass/features/task/labels.scss'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateTaskTags } from '../../utils/apis'
 import Loader from '../../ui/Loader'
-import { motion } from 'framer-motion'
 
 interface LabelsProps {
   taskId: number
