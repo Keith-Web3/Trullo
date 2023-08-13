@@ -58,7 +58,7 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
     animate:
       areNotificationsUnread && !showNotifications
         ? { rotate: ['0deg', '10deg', '-10deg', '10deg', '-10deg', '0deg'] }
-        : {},
+        : { rotate: '0deg' },
   }
   return (
     <header className="header">
