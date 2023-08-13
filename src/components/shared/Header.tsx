@@ -36,7 +36,7 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
   const [showNotifications, setShowNotifications] = useState(false)
   const params = useParams()
   const { isLoading, data } = useQuery({
-    queryKey: ['get-board-id', params.boardId],
+    queryKey: ['get-board-name', params.boardId],
     queryFn: async function () {
       const { data, error } = await supabase
         .from('Boards')
@@ -65,7 +65,7 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
       <img className="header__logo" src="/Logo.svg" alt="logo" />
       {params.boardId !== undefined && (
         <div className="boards__info">
-          {isLoading ? <Loader /> : data?.[0].name}
+          {isLoading ? <Loader /> : data?.[0]?.name}
           <div></div>
           <Link to="/">
             <Button tag>

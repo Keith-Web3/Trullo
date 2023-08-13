@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query'
 
 import BoardHeader from './BoardHeader'
@@ -36,7 +36,9 @@ const Board = function () {
     },
   })
 
-  return (
+  return boardData && boardData.length === 0 ? (
+    <Navigate to="/*" />
+  ) : (
     <div className="board">
       <BoardHeader
         isFetchingBoard={isFetchingBoard}
