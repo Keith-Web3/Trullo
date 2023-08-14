@@ -18,22 +18,19 @@ const Notification = function ({
   const notificationRef = useRef<HTMLDivElement>(null)
   const { mutate } = useMutation({
     mutationFn: async function () {
-      const { data, error } = await supabase
+      await supabase
         .from(from)
         .update({ read_status: 'read' })
         .eq('id', id)
         .select()
-      console.log(data, error)
     },
   })
   useEffect(() => {
     if (isRead) return
     const observer = new IntersectionObserver(entries => {
-      console.log(entries)
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           observer.unobserve(entry.target)
-          console.log('ran')
           mutate()
         }
       })

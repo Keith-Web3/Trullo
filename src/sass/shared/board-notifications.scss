@@ -13,6 +13,8 @@
 
     .sender_img {
       grid-area: img;
+      width: 48px;
+      border-radius: 50%;
     }
     .board-notification__message {
       grid-area: message;

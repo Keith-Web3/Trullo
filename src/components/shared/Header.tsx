@@ -1,7 +1,7 @@
 import { Suspense, useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Await, Link, useParams } from 'react-router-dom'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import Button from '../ui/Button'
@@ -37,7 +37,6 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
   const [showNotifications, setShowNotifications] = useState(false)
   const notificationRef = useRef<HTMLDivElement>(null)
   const params = useParams()
-  const queryClient = useQueryClient()
 
   const isBoardOpen = params.boardId !== undefined
 
@@ -81,7 +80,6 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
 
     return () => {
       document.removeEventListener('click', handleOuterClick)
-      queryClient.invalidateQueries({ queryKey: ['get-notifications'] })
     }
   }, [])
 

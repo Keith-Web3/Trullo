@@ -393,6 +393,7 @@ const replyInvitation = async function ({
   boardId: number
 }) {
   const toastId = toast.loading('Replying invite')
+
   const { error } = await supabase
     .from('invites')
     .update({ status: response })
@@ -408,6 +409,15 @@ const replyInvitation = async function ({
       board_id: +boardId,
       new_user: userDetails,
     })
+
+    await supabase.rpc('create_board_notifications', {
+      board_id: boardId,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      sender_id: userDetails.id,
+      message: ' has joined the board',
+    })
+
     if (error) {
       toast.dismiss(toastId)
       throw error

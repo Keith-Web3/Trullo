@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, useState } from 'react'
+import { ForwardedRef, forwardRef, useState, useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
@@ -35,6 +35,12 @@ const Notifications = function (
   const filteredNotifications = notifications?.filter(
     notif => notif.read_status === notifFilter
   )
+
+  useEffect(() => {
+    return () => {
+      queryClient.invalidateQueries({ queryKey: ['get-notifications'] })
+    }
+  }, [])
 
   return (
     <div className="notifications" ref={ref}>

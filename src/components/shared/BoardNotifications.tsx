@@ -1,4 +1,5 @@
-import { ForwardedRef, forwardRef } from 'react'
+import { ForwardedRef, forwardRef, useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
 import '../../sass/shared/board-notifications.scss'
 import Notification from './Notification'
@@ -13,12 +14,22 @@ const BoardNotifications = function (
   { notifications, setShowNotifications }: BoardNotificationsProps,
   ref: ForwardedRef<HTMLDivElement>
 ) {
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    return () => {
+      queryClient.invalidateQueries({ queryKey: ['get-notifications'] })
+    }
+  }, [])
   return (
     <div className="board-notifications" ref={ref}>
       <header className="board-notifications__header">
         <h1>Notifications</h1>
         <img
-          onClick={() => setShowNotifications(false)}
+          onClick={e => {
+            e.stopPropagation()
+            setShowNotifications(false)
+          }}
           src="/close-gray.svg"
           alt="close-btn"
         />
@@ -29,7 +40,7 @@ const BoardNotifications = function (
           <Notification
             key={notif.id}
             id={notif.id}
-            isRead={notif.read_status}
+            isRead={notif.read_status == 'read'}
             from="board_notifications"
           >
             <img className="sender_img" src={notif.sender_img || '/user.svg'} />
