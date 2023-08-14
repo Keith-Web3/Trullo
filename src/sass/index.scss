@@ -20,6 +20,12 @@ html {
 [id^='__lpform_'] {
   display: none !important;
 }
+[data-lastpass-icon-root] {
+  display: none;
+}
+#root {
+  isolation: isolate;
+}
 #modal-root {
   position: fixed;
   overflow-y: auto;

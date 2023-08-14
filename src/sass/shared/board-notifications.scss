@@ -1,0 +1,45 @@
+@use '../variables' as *;
+@use '../utils' as utils;
+
+.board-notifications {
+  @include utils.notifications;
+
+  .notification {
+    display: grid;
+    grid-template: repeat(2, auto) / auto 1fr auto;
+    grid-template-areas: 'img message dot' 'img date date';
+    gap: $spacer * 0.5;
+    margin-top: $spacer;
+
+    .sender_img {
+      grid-area: img;
+    }
+    .board-notification__message {
+      grid-area: message;
+
+      span {
+        font-weight: 500;
+      }
+    }
+    .dot {
+      grid-area: dot;
+      width: 10px;
+      border-radius: 50%;
+      aspect-ratio: 1 / 1;
+      margin-top: $spacer * 0.5;
+
+      &.active {
+        background-color: $blue-300;
+      }
+    }
+    &__time {
+      grid-area: date;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: $gray-200;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+  }
+}

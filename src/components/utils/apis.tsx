@@ -287,13 +287,11 @@ const getTaskUsers = function (
       .select('users')
       .eq('id', boardId)
     if (usersError) toast.error('Error fetching users')
-    console.log(users, boardUsers)
 
     const boardUsersExtracted = boardUsers?.[0].users.filter(
       (boardUser: { id: string }) =>
         !users.some((user: { id: string }) => user.id === boardUser.id)
     )
-    console.log(boardUsersExtracted)
 
     if (searchQuery.trim() === '') {
       return boardUsersExtracted.slice(0, 3) as {
@@ -338,19 +336,45 @@ const sendInvite = async function ({
     'duplicate key value violates unique constraint "invites_invitation_id_key"'
   ) {
     toast.error('This user has already been invited')
-    return
+    throw new Error('This user has already been invited')
   } else if (
     error?.message ===
     'new row violates row-level security policy for table "invites"'
   ) {
     toast.error('The user is already a member of this board')
-    return
+    throw new Error('The user is already a member of this board')
   }
   if (error) {
     toast.error(error.message)
-    return
+    throw new Error(error.message)
   }
   toast.success('Board Access Invitations Sent')
+
+  return async function () {
+    const { data } = await supabase
+      .from('users')
+      .select('name')
+      .in('user_id', inviteDetails)
+
+    const suffix =
+      data?.length! > 2
+        ? ` and ${data?.length! - 2} more user${
+            data?.length! - 2 === 1 ? '' : 's'
+          }`
+        : ''
+    const invitedUsers =
+      data
+        ?.map(user => user.name)
+        .slice(0, 2)
+        .join(', ') + suffix
+    await supabase.rpc('create_board_notifications', {
+      board_id: board_id,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      sender_id: userDetails.id,
+      message: `invited ${invitedUsers} to the board`,
+    })
+  }
 }
 
 const getNotifications = async function () {
@@ -409,6 +433,17 @@ const assignUsersToBoard = async function ({
   if (error) toast.error('this user has been assigned to the task')
 }
 
+const getBoardNotifications = function (boardId: number) {
+  return async function () {
+    const { data, error } = await supabase
+      .from('board_notifications')
+      .select('*')
+      .eq('board_id', boardId)
+    if (error) toast.error('Error fetching notifications')
+    return data
+  }
+}
+
 export {
   addBoard,
   getBoards,
@@ -430,4 +465,5 @@ export {
   replyInvitation,
   getTaskUsers,
   assignUsersToBoard,
+  getBoardNotifications,
 }

@@ -36,6 +36,7 @@
   &__notifications {
     margin-inline: auto $spacer * 3;
     position: relative;
+    z-index: 1;
     &.unread {
       &::after {
         content: '';

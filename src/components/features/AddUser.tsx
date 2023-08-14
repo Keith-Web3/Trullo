@@ -19,19 +19,29 @@ const AddUser = function ({
   setIsAddUserShown,
 }: AddUserProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [notifications, setNotifications] = useState<string[]>([])
+  const [successData, setSuccessData] = useState<{
+    handleNotifyUsers: () => Promise<void>
+  }>()
   const inputRef = useRef<HTMLInputElement>(null)
   const addUserRef = useRef<HTMLDivElement>(null)
+
   const { isLoading, data } = useQuery({
     queryKey: ['get-board-users', searchQuery, boardId],
     queryFn: getUsers(searchQuery, boardId),
   })
-  const [notifications, setNotifications] = useState<string[]>([])
-  const { mutate, isLoading: isSendingInvites } = useMutation({
+  const {
+    mutate,
+    isLoading: isSendingInvites,
+    isSuccess,
+  } = useMutation({
     mutationFn: sendInvite,
-    onSuccess() {
+    onSuccess(data) {
       setNotifications([])
+      setSuccessData({ handleNotifyUsers: data })
     },
   })
+
   const handleSelectUser = function (userId: string) {
     return function () {
       setNotifications(prev => {
@@ -52,6 +62,13 @@ const AddUser = function ({
 
     return () => document.removeEventListener('click', handleOuterClick)
   }, [])
+
+  useEffect(() => {
+    if (isSuccess === false) return
+    ;(async () => {
+      await successData?.handleNotifyUsers()
+    })()
+  }, [isSuccess])
 
   return (
     <motion.div

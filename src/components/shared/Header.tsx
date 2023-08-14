@@ -1,15 +1,16 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Await, Link, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import Button from '../ui/Button'
 import '../../sass/shared/header.scss'
 import Loader from '../ui/Loader'
 import { supabase } from '../data/supabase'
-import { getNotifications } from '../utils/apis'
+import { getBoardNotifications, getNotifications } from '../utils/apis'
 import Notifications from './Notifications'
+import BoardNotifications from './BoardNotifications'
 
 type ResolvedData = {
   name: string
@@ -34,7 +35,12 @@ const loaderRenderProp = function (resolvedData: ResolvedData) {
 const Header = function ({ userDetails }: { userDetails: unknown }) {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
+  const notificationRef = useRef<HTMLDivElement>(null)
   const params = useParams()
+  const queryClient = useQueryClient()
+
+  const isBoardOpen = params.boardId !== undefined
+
   const { isLoading, data } = useQuery({
     queryKey: ['get-board-name', params.boardId],
     queryFn: async function () {
@@ -45,11 +51,13 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
       if (error) toast.error(error.message)
       return data
     },
-    enabled: params.boardId !== undefined,
+    enabled: isBoardOpen,
   })
   const { data: notifications } = useQuery({
-    queryKey: ['get-notifications'],
-    queryFn: getNotifications,
+    queryKey: ['get-notifications', params?.boardId!],
+    queryFn: isBoardOpen
+      ? getBoardNotifications(+params.boardId!)
+      : getNotifications,
   })
   const areNotificationsUnread = notifications?.some(
     notifs => notifs.read_status === 'unread'
@@ -60,6 +68,23 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
         ? { rotate: ['0deg', '10deg', '-10deg', '10deg', '-10deg', '0deg'] }
         : { rotate: '0deg' },
   }
+  function handleOuterClick(this: Document, e: MouseEvent) {
+    if (
+      notificationRef.current &&
+      !notificationRef.current?.contains(e.target as Node)
+    )
+      setShowNotifications(false)
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleOuterClick, true)
+
+    return () => {
+      document.removeEventListener('click', handleOuterClick)
+      queryClient.invalidateQueries({ queryKey: ['get-notifications'] })
+    }
+  }, [])
+
   return (
     <header className="header">
       <img className="header__logo" src="/Logo.svg" alt="logo" />
@@ -85,12 +110,20 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
         onClick={() => setShowNotifications(true)}
       >
         <img className="bell" src="/bell.svg" alt="notifications" />
-        {showNotifications && (
-          <Notifications
-            setShowNotifications={setShowNotifications}
-            notifications={notifications}
-          />
-        )}
+        {showNotifications &&
+          (isBoardOpen ? (
+            <BoardNotifications
+              ref={notificationRef}
+              setShowNotifications={setShowNotifications}
+              notifications={notifications}
+            />
+          ) : (
+            <Notifications
+              ref={notificationRef}
+              setShowNotifications={setShowNotifications}
+              notifications={notifications}
+            />
+          ))}
       </motion.div>
       <label className="header__label" htmlFor="search">
         <input placeholder="Keyword..." type="text" id="search" />

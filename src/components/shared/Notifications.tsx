@@ -1,28 +1,22 @@
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { ForwardedRef, forwardRef, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import '../../sass/shared/notifications.scss'
 import formatDate from '../utils/formatDate'
-import { supabase } from '../data/supabase'
+import Notification from './Notification'
 import { replyInvitation } from '../utils/apis'
 
 interface NotificationsProps {
   setShowNotifications: React.Dispatch<React.SetStateAction<boolean>>
   notifications: any[] | null | undefined
 }
-interface NotificationProps {
-  children: ReactNode
-  id: number
-  isRead: boolean
-}
 
-const Notifications = function ({
-  notifications,
-  setShowNotifications,
-}: NotificationsProps) {
+const Notifications = function (
+  { notifications, setShowNotifications }: NotificationsProps,
+  ref: ForwardedRef<HTMLDivElement>
+) {
   const [notifFilter, setNotifFilter] = useState('unread')
-  const notificationRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
   const { mutate, isLoading } = useMutation({
     mutationFn: replyInvitation,
@@ -41,25 +35,9 @@ const Notifications = function ({
   const filteredNotifications = notifications?.filter(
     notif => notif.read_status === notifFilter
   )
-  function handleOuterClick(this: Document, e: MouseEvent) {
-    if (
-      notificationRef.current &&
-      !notificationRef.current?.contains(e.target as Node)
-    )
-      setShowNotifications(false)
-  }
-
-  useEffect(() => {
-    document.addEventListener('click', handleOuterClick, true)
-
-    return () => {
-      document.removeEventListener('click', handleOuterClick)
-      queryClient.invalidateQueries({ queryKey: ['get-notifications'] })
-    }
-  }, [])
 
   return (
-    <div className="notifications" ref={notificationRef}>
+    <div className="notifications" ref={ref}>
       <div className="notifications__header">
         <h1>Notifications</h1>
         <img
@@ -97,6 +75,7 @@ const Notifications = function ({
                 isRead={notification.read_status === 'read'}
                 id={notification.id}
                 key={notification.id}
+                from="invites"
               >
                 <img
                   className="notification__img"
@@ -145,42 +124,4 @@ const Notifications = function ({
   )
 }
 
-const Notification = function ({ children, id, isRead }: NotificationProps) {
-  const notificationRef = useRef<HTMLDivElement>(null)
-  const { mutate } = useMutation({
-    mutationFn: async function () {
-      await supabase
-        .from('invites')
-        .update({ read_status: 'read' })
-        .eq('id', id)
-        .select()
-    },
-  })
-  useEffect(() => {
-    if (isRead) return
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          observer.unobserve(entry.target)
-          mutate()
-        }
-      })
-    })
-    if (notificationRef.current) {
-      observer.observe(notificationRef.current)
-    }
-
-    return () => {
-      if (notificationRef.current) {
-        observer.unobserve(notificationRef.current)
-      }
-    }
-  }, [])
-  return (
-    <div className="notification" ref={notificationRef}>
-      {children}
-    </div>
-  )
-}
-
-export default Notifications
+export default forwardRef(Notifications)
