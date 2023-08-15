@@ -1,0 +1,68 @@
+@use '../variables' as *;
+
+.message-skeleton {
+  &__header {
+    display: grid;
+    grid-template: repeat(2, auto) / auto 1fr auto;
+    grid-template-areas: 'img name container' 'img date .';
+    column-gap: $spacer * 0.5;
+    align-items: center;
+
+    .image {
+      grid-area: img;
+      width: 40px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 8px;
+
+      span {
+        display: block;
+        height: 100%;
+      }
+    }
+    .sender-name {
+      grid-area: name;
+      font-family: 'Poppins';
+      font-weight: 500;
+      color: $black;
+      width: 60%;
+    }
+    .button-container {
+      grid-area: container;
+      display: flex;
+      align-items: center;
+      gap: $spacer * 0.5;
+
+      button {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color: $gray-200;
+        text-transform: capitalize;
+        cursor: pointer;
+        display: block;
+        width: 50px;
+      }
+      div {
+        height: 2px;
+        width: 8px;
+
+        span {
+          display: block;
+          height: 100%;
+        }
+      }
+    }
+    .time {
+      grid-area: date;
+      font-family: 'Noto Sans';
+      font-weight: 500;
+      color: $gray-200;
+      font-size: 0.9rem;
+      width: 45%;
+    }
+  }
+  .message {
+    margin-top: $spacer;
+  }
+}

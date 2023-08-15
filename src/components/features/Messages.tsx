@@ -1,13 +1,13 @@
+import { useRef } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import Button from '../ui/Button'
 import '../../sass/features/messages.scss'
 import { getMessages, sendMessage } from '../utils/apis'
-import { useRef } from 'react'
 import useNotifyOnSuccess from '../hooks/useNotifyOnSuccess'
-import Loader from '../ui/Loader'
 import { formatTimestamp } from '../utils/formatDate'
+import MessageSkeleton from '../ui/MessageSkeleton'
 
 interface MessagesProps {
   userImg: string
@@ -72,7 +72,10 @@ function Messages({ userImg, taskId }: MessagesProps) {
       </div>
       <div className="messages__container">
         {isLoading ? (
-          <Loader />
+          <>
+            <MessageSkeleton />
+            <MessageSkeleton />
+          </>
         ) : (
           data?.data.map(message => {
             return (
