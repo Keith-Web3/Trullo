@@ -62,10 +62,16 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
     notifs => notifs.read_status === 'unread'
   )
   const notificationVariants = {
-    animate:
-      areNotificationsUnread && !showNotifications
-        ? { rotate: ['0deg', '10deg', '-10deg', '10deg', '-10deg', '0deg'] }
-        : { rotate: '0deg' },
+    animate: {
+      rotate: ['0deg', '10deg', '-10deg', '10deg', '-10deg', '0deg'],
+      transition: { duration: 0.6, repeat: 8, repeatDelay: 1 },
+    },
+    final: {
+      rotate: ['0deg', '0deg'],
+      transition: {
+        repeat: 0,
+      },
+    },
   }
   function handleOuterClick(this: Document, e: MouseEvent) {
     if (
@@ -100,8 +106,9 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
       )}
       <motion.div
         variants={notificationVariants}
-        transition={{ duration: 0.6, repeat: 8, repeatDelay: 1 }}
-        animate="animate"
+        animate={
+          areNotificationsUnread && !showNotifications ? 'animate' : 'final'
+        }
         className={`header__notifications ${
           areNotificationsUnread ? 'unread' : ''
         }`}
