@@ -34,29 +34,34 @@ const BoardNotifications = function (
           alt="close-btn"
         />
       </header>
-      {notifications?.map(notif => {
-        const { formattedDate, formattedTime } = formatDate(notif.created_at)
-        return (
-          <Notification
-            key={notif.id}
-            id={notif.id}
-            isRead={notif.read_status == 'read'}
-            from="board_notifications"
-          >
-            <img className="sender_img" src={notif.sender_img || '/user.svg'} />
-            <p className="board-notification__message">
-              <span>{notif.sender_name}</span> {notif.message}
-            </p>
-            <div
-              className={notif.read_status === 'read' ? 'dot' : 'dot active'}
-            ></div>
-            <div className="notification__time">
-              <p className="time">{formattedTime}</p>
-              <p className="date">{formattedDate}</p>
-            </div>
-          </Notification>
-        )
-      })}
+      {notifications
+        ?.sort((a, b) => b.id - a.id)
+        .map(notif => {
+          const { formattedDate, formattedTime } = formatDate(notif.created_at)
+          return (
+            <Notification
+              key={notif.id}
+              id={notif.id}
+              isRead={notif.read_status == 'read'}
+              from="board_notifications"
+            >
+              <img
+                className="sender_img"
+                src={notif.sender_img || '/user.svg'}
+              />
+              <p className="board-notification__message">
+                <span>{notif.sender_name}</span> {notif.message}
+              </p>
+              <div
+                className={notif.read_status === 'read' ? 'dot' : 'dot active'}
+              ></div>
+              <div className="notification__time">
+                <p className="time">{formattedTime}</p>
+                <p className="date">{formattedDate}</p>
+              </div>
+            </Notification>
+          )
+        })}
     </div>
   )
 }

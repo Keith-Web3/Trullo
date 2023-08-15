@@ -71,7 +71,7 @@ const Notifications = function (
       </div>
       <div className="notifications__container">
         {filteredNotifications
-          ?.sort((a, b) => a.id - b.id)
+          ?.sort((a, b) => b.id - a.id)
           .map(notification => {
             const { formattedDate, formattedTime } = formatDate(
               notification.created_at
