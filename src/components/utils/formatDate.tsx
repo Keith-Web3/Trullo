@@ -21,4 +21,22 @@ const formatDate = function (timestamp: string) {
   return { formattedTime, formattedDate }
 }
 
+export function formatTimestamp(timestamp: string) {
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: false,
+  }
+  const date = new Date(timestamp)
+  const formattedDate = date.toLocaleDateString('en-US', options)
+
+  const day = date.getDate()
+  const month = formattedDate.split(' ')[0]
+  const time = formattedDate.split(' ')[3]
+
+  return `${day} ${month} at ${time}`
+}
+
 export default formatDate

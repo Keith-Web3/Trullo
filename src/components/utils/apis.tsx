@@ -32,6 +32,17 @@ export type ListData =
       }[]
     }
 
+interface NewMessage {
+  messageData: {
+    task_id: number
+    message: string
+  }
+  notificationData: {
+    board_id: number
+    task_id: number
+  }
+}
+
 const addBoard = async function (boardData: BoardData) {
   const { data, error } = await supabase
     .from('Boards')
@@ -508,6 +519,57 @@ const getBoardNotifications = function (boardId: number) {
   }
 }
 
+const sendMessage = async function ({
+  messageData,
+  notificationData,
+}: NewMessage) {
+  const userDetails = await getUserDetails()
+
+  const { error } = await supabase
+    .from('Messages')
+    .insert([
+      {
+        ...messageData,
+        sender_img: userDetails.img,
+        sender_name: userDetails.name,
+        sender_id: userDetails.id,
+      },
+    ])
+    .select()
+
+  if (error) {
+    toast.error(error.message)
+    throw new Error(error.message)
+  }
+  return async function () {
+    const { data, error } = await supabase.rpc(
+      'create_notifications_for_task_users',
+      {
+        board_id: notificationData.board_id,
+        sender_name: userDetails.name,
+        sender_img: userDetails.img || '',
+        sender_id: userDetails.id,
+        task_id: notificationData.task_id,
+      }
+    )
+    console.log(data, error)
+  }
+}
+const getMessages = function (taskId: number) {
+  return async function () {
+    const user = await requireAuth()
+    const { data, error } = await supabase
+      .from('Messages')
+      .select('*')
+      .eq('task_id', taskId)
+    if (error) {
+      toast.error('Error fetching messages')
+      throw new Error(error.message)
+    }
+    return { data, userId: user!.id }
+  }
+}
+
 export {
   addBoard,
   getBoards,
@@ -530,4 +592,6 @@ export {
   getTaskUsers,
   assignUsersToBoard,
   getBoardNotifications,
+  sendMessage,
+  getMessages,
 }

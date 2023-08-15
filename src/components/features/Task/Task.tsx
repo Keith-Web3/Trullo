@@ -7,12 +7,6 @@ import '../../../sass/features/task/task.scss'
 import TaskInfo from './TaskInfo'
 import Img from '../../ui/Img'
 
-type User = {
-  id: number
-  img: string
-  name: string
-}
-
 interface TaskProps {
   image: string
   taskName: string
@@ -22,11 +16,6 @@ interface TaskProps {
   listName: string
   blurhash: string
   listId: number
-  messages: {
-    user: User
-    timestamp: string
-    message: string
-  }[]
 }
 
 const Task = function ({
@@ -34,7 +23,6 @@ const Task = function ({
   taskName,
   tags,
   users,
-  messages,
   taskId,
   listName,
   blurhash,
@@ -77,7 +65,7 @@ const Task = function ({
         <div className="task__info">
           <p>
             <img src="/comment.svg" alt="comment" />
-            <span>{messages?.length || 0}</span>
+            <span>{0}</span>
           </p>
           <p>
             <img src="/attach.svg" alt="attachments" />

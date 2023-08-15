@@ -42,6 +42,75 @@
       grid-area: button;
       width: max-content;
       margin-left: auto;
+
+      &:disabled {
+        background-color: $gray-200;
+        cursor: not-allowed;
+      }
+    }
+  }
+  &__container {
+    margin-top: $spacer;
+    .task-message {
+      &:not(:last-child) {
+        border-bottom: 1px solid $gray-100;
+        margin-bottom: $spacer;
+        padding-bottom: $spacer * 0.9;
+      }
+      &__header {
+        display: grid;
+        grid-template: repeat(2, auto) / auto 1fr auto;
+        grid-template-areas: 'img name container' 'img date .';
+        column-gap: $spacer * 0.5;
+
+        img {
+          grid-area: img;
+          width: 40px;
+          aspect-ratio: 1 / 1;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+        .sender-name {
+          grid-area: name;
+          font-family: 'Poppins';
+          font-weight: 500;
+          color: $black;
+        }
+        .button-container {
+          grid-area: container;
+          display: flex;
+          align-items: center;
+          gap: $spacer * 0.5;
+
+          button {
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: $gray-200;
+            text-transform: capitalize;
+            cursor: pointer;
+          }
+          div {
+            height: 2px;
+            width: 8px;
+            background-color: $gray-300;
+          }
+        }
+        .time {
+          grid-area: date;
+          font-family: 'Noto Sans';
+          font-weight: 500;
+          color: $gray-200;
+          font-size: 0.9rem;
+        }
+      }
+      .message {
+        font-family: 'Noto Sans';
+        font-weight: 400;
+        color: $gray-400;
+        font-size: 1.2rem;
+        margin-top: $spacer * 0.2;
+      }
     }
   }
 }
