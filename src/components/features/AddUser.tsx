@@ -6,6 +6,7 @@ import '../../sass/features/add-user.scss'
 import { getUsers, sendInvite } from '../utils/apis'
 import SuggestedUserSkeleton from '../ui/SuggestedUserSkeleton'
 import Loader from '../ui/Loader'
+import useNotifyOnSuccess from '../hooks/useNotifyOnSuccess'
 
 interface AddUserProps {
   boardName: string
@@ -20,9 +21,6 @@ const AddUser = function ({
 }: AddUserProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [notifications, setNotifications] = useState<string[]>([])
-  const [successData, setSuccessData] = useState<{
-    handleNotifyUsers: () => Promise<void>
-  }>()
   const inputRef = useRef<HTMLInputElement>(null)
   const addUserRef = useRef<HTMLDivElement>(null)
 
@@ -38,9 +36,10 @@ const AddUser = function ({
     mutationFn: sendInvite,
     onSuccess(data) {
       setNotifications([])
-      setSuccessData({ handleNotifyUsers: data })
+      handleNotify(data)
     },
   })
+  const handleNotify = useNotifyOnSuccess(isSuccess)
 
   const handleSelectUser = function (userId: string) {
     return function () {
@@ -62,13 +61,6 @@ const AddUser = function ({
 
     return () => document.removeEventListener('click', handleOuterClick)
   }, [])
-
-  useEffect(() => {
-    if (isSuccess === false) return
-    ;(async () => {
-      await successData?.handleNotifyUsers()
-    })()
-  }, [isSuccess])
 
   return (
     <motion.div

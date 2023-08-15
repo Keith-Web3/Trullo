@@ -6,6 +6,7 @@ import '../../../sass/pages/board/list.scss'
 import NewCard from '../../ui/NewCard'
 import { addTask, getListTasks } from '../../utils/apis'
 import TaskSkeleton from '../../ui/TaskSkeleton'
+import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 
 interface ListProps {
   name: string
@@ -23,13 +24,15 @@ const List = function ({
   setNewTaskIndex,
 }: ListProps) {
   const queryClient = useQueryClient()
-  const { isLoading, mutate } = useMutation({
+  const { isLoading, mutate, isSuccess } = useMutation({
     mutationKey: ['add-task'],
     mutationFn: addTask,
-    onSuccess() {
+    onSuccess(data) {
+      handleNotify(data!)
       queryClient.invalidateQueries({ queryKey: ['get-tasks', id] })
     },
   })
+  const handleNotify = useNotifyOnSuccess(isSuccess)
   const { isLoading: isFetchingTasks, data } = useQuery({
     queryKey: ['get-tasks', id],
     queryFn: getListTasks(id),

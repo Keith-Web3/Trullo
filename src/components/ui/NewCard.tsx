@@ -14,7 +14,12 @@ interface NewCardProps {
     | React.Dispatch<React.SetStateAction<number | boolean>>
     | React.Dispatch<React.SetStateAction<boolean>>
   type: string
-  mutate: UseMutateFunction<void, unknown, ListData, unknown>
+  mutate: UseMutateFunction<
+    (() => Promise<void>) | undefined,
+    unknown,
+    ListData,
+    unknown
+  >
   isLoading: boolean
   id?: number
 }
@@ -52,6 +57,7 @@ const NewCard = function ({
           : {
               task_name: textAreaRef.current!.value,
               list_id: id!,
+              board_id: +params.boardId!,
               users: [
                 { ...(await getUserDetails()), role: 'admin' as 'admin' },
               ],
@@ -84,7 +90,7 @@ const NewCard = function ({
         placeholder={`Enter a title for this ${type}...`}
         ref={textAreaRef}
         onKeyDown={e => {
-          if (e.key === 'Enter') {
+          if (e.key === 'Enter' && !isLoading) {
             e.preventDefault()
             ;(handleSubmitList as () => void)()
           }

@@ -8,6 +8,7 @@ import '../../../sass/pages/board/board.scss'
 import NewCard from '../../ui/NewCard'
 import { addList, getBoard, getLists } from '../../utils/apis'
 import Loader from '../../ui/Loader'
+import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 
 const Board = function () {
   const params = useParams<{ boardId: string }>()
@@ -27,14 +28,20 @@ const Board = function () {
         },
       ],
     })
-  const { isLoading: isAdding, mutate } = useMutation({
+  const {
+    isLoading: isAdding,
+    mutate,
+    isSuccess,
+  } = useMutation({
     mutationKey: ['add-list'],
     mutationFn: addList,
-    onSuccess: function () {
+    onSuccess: function (data) {
       setIsNewListBoxShown(false)
+      handleNotify(data!)
       queryClient.invalidateQueries({ queryKey: ['get-lists'] })
     },
   })
+  const handleNotify = useNotifyOnSuccess(isSuccess)
 
   return boardData && boardData.length === 0 ? (
     <Navigate to="/*" />

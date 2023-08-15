@@ -23,6 +23,7 @@ export type ListData =
   | {
       task_name: string
       list_id: number
+      board_id: number
       users: {
         name?: string
         img: string
@@ -58,13 +59,50 @@ const getUser = async function (id: string) {
 
 const addList = async function (listData: ListData) {
   const { error } = await supabase.from('BoardList').insert([listData]).select()
-  if (error) toast.error(error.message)
-  if (!error) toast.success('Saved successfully')
+  if (error) {
+    toast.error(error.message)
+    throw new Error(error.message)
+  }
+  if (!error) {
+    toast.success('Saved successfully')
+    if ('name' in listData && 'board_id' in listData) {
+      return async function () {
+        const userDetails = await getUserDetails()
+        await supabase.rpc('create_board_notifications', {
+          board_id: listData.board_id,
+          sender_name: userDetails.name,
+          sender_img: userDetails.img || '',
+          sender_id: userDetails.id,
+          message: `created a new list: ${listData.name}`,
+        })
+      }
+    }
+  }
 }
 const addTask = async function (taskData: ListData) {
-  const { error } = await supabase.from('Tasks').insert([taskData]).select()
-  if (error) toast.error(error.message)
-  if (!error) toast.success('Saved successfully')
+  const newTaskData: Partial<ListData> = { ...taskData }
+  delete newTaskData.board_id
+
+  const { error } = await supabase.from('Tasks').insert([newTaskData]).select()
+  if (error) {
+    toast.error(error.message)
+    throw new Error(error.message)
+  }
+  if (!error) {
+    toast.success('Saved successfully')
+    if ('task_name' in taskData)
+      return async function () {
+        const userDetails = await getUserDetails()
+
+        await supabase.rpc('create_board_notifications', {
+          board_id: taskData.board_id,
+          sender_name: userDetails.name,
+          sender_img: userDetails.img || '',
+          sender_id: userDetails.id,
+          message: `created a new task: ${taskData.task_name}`,
+        })
+      }
+  }
 }
 
 const getLists = function (boardId: number) {
