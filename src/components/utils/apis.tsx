@@ -372,7 +372,7 @@ const sendInvite = async function ({
       sender_name: userDetails.name,
       sender_img: userDetails.img || '',
       sender_id: userDetails.id,
-      message: `invited ${invitedUsers} to the board`,
+      message: `invited ${invitedUsers} to the board.`,
     })
   }
 }
@@ -415,7 +415,7 @@ const replyInvitation = async function ({
       sender_name: userDetails.name,
       sender_img: userDetails.img || '',
       sender_id: userDetails.id,
-      message: ' has joined the board',
+      message: ' has joined the board!',
     })
 
     if (error) {
