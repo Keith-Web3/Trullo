@@ -470,15 +470,31 @@ const replyInvitation = async function ({
 const assignUsersToBoard = async function ({
   users,
   taskId,
+  boardId,
 }: {
   users: { img?: string; id: string; name: string; role: 'assignee' }[]
   taskId: number
+  boardId: number
 }) {
   const { error } = await supabase.rpc('add_users_to_task', {
     task_id: taskId,
     new_users: users,
   })
-  if (error) toast.error('this user has been assigned to the task')
+  if (error) {
+    toast.error('this user has been assigned to the task')
+    throw new Error(error.message)
+  }
+  return async function () {
+    const userDetails = await getUserDetails()
+
+    await supabase.rpc('insert_board_notifications', {
+      board_id: boardId,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      task_id: taskId,
+      users,
+    })
+  }
 }
 
 const getBoardNotifications = function (boardId: number) {

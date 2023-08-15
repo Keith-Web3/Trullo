@@ -14,7 +14,7 @@ export type Users = (
 
 function renderUsers(users: Users) {
   return users.map((el, idx) => {
-    if (el.img !== undefined && el.img !== '') {
+    if (el.img != undefined && el.img !== '') {
       return <img src={el.img} title={el.name} alt={el.name} key={idx} />
     }
     return (

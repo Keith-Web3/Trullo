@@ -5,6 +5,9 @@ import { motion } from 'framer-motion'
 import '../../sass/features/add-user.scss'
 import { assignUsersToBoard, getTaskUsers } from '../utils/apis'
 import SuggestedUserSkeleton from '../ui/SuggestedUserSkeleton'
+import useNotifyOnSuccess from '../hooks/useNotifyOnSuccess'
+import Loader from '../ui/Loader'
+import toast from 'react-hot-toast'
 
 interface AddUserProps {
   boardId: number
@@ -25,14 +28,21 @@ const AddUser = function ({
     queryKey: ['get-task-users', searchQuery, boardId, taskId],
     queryFn: getTaskUsers(searchQuery, boardId, taskId),
   })
-  const { isLoading: isAssigning, mutate } = useMutation({
+  const {
+    isLoading: isAssigning,
+    mutate,
+    isSuccess,
+  } = useMutation({
     mutationFn: assignUsersToBoard,
-    onSuccess() {
+    onSuccess(data) {
+      handleNotify(data)
+      toast.success('Assigned users to task')
       queryClient.invalidateQueries({
         queryKey: ['get-task-users', searchQuery, boardId, taskId],
       })
     },
   })
+  const handleNotify = useNotifyOnSuccess(isSuccess)
   const [notifications, setNotifications] = useState<string[]>([])
 
   const handleSelectUser = function (userId: string) {
@@ -121,10 +131,10 @@ const AddUser = function ({
             name: string
             img?: string | undefined
           }[]
-          mutate({ taskId, users })
+          mutate({ taskId, users, boardId })
         }}
       >
-        add users
+        {isAssigning && <Loader />} add users
       </button>
     </motion.div>
   )
