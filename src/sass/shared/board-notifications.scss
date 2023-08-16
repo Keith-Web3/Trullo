@@ -9,7 +9,10 @@
     grid-template: repeat(2, auto) / auto 1fr auto;
     grid-template-areas: 'img message dot' 'img date date';
     gap: $spacer * 0.5;
-    margin-top: $spacer;
+
+    &:not(:first-of-type) {
+      margin-top: $spacer;
+    }
 
     .sender_img {
       grid-area: img;
