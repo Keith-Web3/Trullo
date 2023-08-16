@@ -217,9 +217,11 @@ const getTaskDescription = function (taskId: number) {
 const updateTaskDescription = async function ({
   taskId,
   description,
+  boardId,
 }: {
   taskId: number
   description: string
+  boardId: number
 }) {
   const { data, error } = await supabase
     .from('Tasks')
@@ -229,14 +231,26 @@ const updateTaskDescription = async function ({
 
   if (error) {
     toast.error(error.message)
-    return
+    throw new Error(error.message)
   }
   if (data.length === 0) {
     toast.error('Unauthorized to edit this task.')
     return
   }
   toast.success('Description successfully updated')
-  return data
+
+  return async function () {
+    const userDetails = await getUserDetails()
+
+    await supabase.rpc('create_notifications_for_task_users', {
+      board_id: boardId,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      sender_id: userDetails.id,
+      task_id: taskId,
+      message_sent: 'updated the description of the',
+    })
+  }
 }
 
 const getTaskMembers = function (taskId: number) {
@@ -557,6 +571,7 @@ const sendMessage = async function ({
       sender_img: userDetails.img || '',
       sender_id: userDetails.id,
       task_id: notificationData.task_id,
+      message_sent: 'made a new comment in the',
     })
   }
 }

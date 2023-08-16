@@ -2,28 +2,37 @@ import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { toast } from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 import { getTaskDescription, updateTaskDescription } from '../../utils/apis'
 import Loader from '../../ui/Loader'
+import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 
 interface DescriptionProps {
   taskId: number
 }
 const Description = function ({ taskId }: DescriptionProps) {
   const queryClient = useQueryClient()
+  const params = useParams()
   const { isLoading, data } = useQuery({
     queryKey: ['get-task-description', taskId],
     queryFn: getTaskDescription(taskId),
   })
-  const { isLoading: isUpdating, mutate } = useMutation({
+  const {
+    isLoading: isUpdating,
+    mutate,
+    isSuccess,
+  } = useMutation({
     mutationFn: updateTaskDescription,
-    onSuccess() {
+    onSuccess(data) {
       queryClient.invalidateQueries({
         queryKey: ['get-task-description', taskId],
       })
       setIsEditing(false)
+      handleNotify(data!)
     },
   })
+  const handleNotify = useNotifyOnSuccess(isSuccess)
   const [isEditing, setIsEditing] = useState(false)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -89,7 +98,11 @@ const Description = function ({ taskId }: DescriptionProps) {
                   toast.error('Please enter a description')
                   return
                 }
-                mutate({ taskId, description: textAreaRef.current!.value })
+                mutate({
+                  taskId,
+                  description: textAreaRef.current!.value,
+                  boardId: +params.boardId!,
+                })
               }}
             >
               {isUpdating && <Loader />} save
@@ -102,11 +115,3 @@ const Description = function ({ taskId }: DescriptionProps) {
 }
 
 export default Description
-
-// Ideas are created and share here through a card. Here you can describe
-//         what you'd like to accomplish. For example you can follow three simple
-//         questions to create the card related to your idea: * Why ? (Why do you
-//         wish to do it ?) * What ? (What it is it, what are the goals, who is
-//         concerned) * How ? (How do you think you can do it ? What are the
-//         required steps ?) After creation, you can move your card to the todo
-//         list.

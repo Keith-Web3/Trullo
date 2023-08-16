@@ -23,9 +23,6 @@ html {
 [data-lastpass-icon-root] {
   display: none;
 }
-#root {
-  isolation: isolate;
-}
 #modal-root {
   position: fixed;
   overflow-y: auto;
