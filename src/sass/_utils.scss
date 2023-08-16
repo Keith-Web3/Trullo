@@ -236,6 +236,7 @@
 @mixin notifications {
   width: 390px;
   padding: $spacer;
+  padding-top: 0;
   box-shadow: 0 0 4px rgba($gray-400, 0.1);
   border-radius: 8px;
   position: absolute;
@@ -256,7 +257,11 @@
   &__header {
     display: grid;
     grid-template: repeat(2, auto) / 1fr auto;
+    padding-block: $spacer;
     align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: $white;
 
     h1 {
       font-size: 1.5rem;
