@@ -25,7 +25,7 @@ const AddUser = function ({
   const addUserRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
   const { isLoading, data } = useQuery({
-    queryKey: ['get-task-users', searchQuery, boardId, taskId],
+    queryKey: ['get-task-users', taskId, searchQuery, boardId],
     queryFn: getTaskUsers(searchQuery, boardId, taskId),
   })
   const {
@@ -38,7 +38,7 @@ const AddUser = function ({
       handleNotify(data)
       toast.success('Assigned users to task')
       queryClient.invalidateQueries({
-        queryKey: ['get-task-users', searchQuery, boardId, taskId],
+        queryKey: ['get-task-users', taskId],
       })
     },
   })

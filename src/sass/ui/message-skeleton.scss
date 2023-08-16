@@ -1,6 +1,7 @@
 @use '../variables' as *;
 
 .message-skeleton {
+  margin-top: $spacer;
   &__header {
     display: grid;
     grid-template: repeat(2, auto) / auto 1fr auto;

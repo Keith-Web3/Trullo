@@ -487,14 +487,16 @@ const assignUsersToBoard = async function ({
   taskId: number
   boardId: number
 }) {
-  const { error } = await supabase.rpc('add_users_to_task', {
+  const { error, data } = await supabase.rpc('add_users_to_task', {
     task_id: taskId,
     new_users: users,
   })
+  console.log(error, data)
   if (error) {
-    toast.error('this user has been assigned to the task')
+    toast.error(error.message)
     throw new Error(error.message)
   }
+
   return async function () {
     const userDetails = await getUserDetails()
 
@@ -538,21 +540,24 @@ const sendMessage = async function ({
     .select()
 
   if (error) {
+    if (
+      error.message ===
+      'new row violates row-level security policy for table "Messages"'
+    ) {
+      toast.error("You're not authorized to comment on this task.")
+      throw new Error(error.message)
+    }
     toast.error(error.message)
     throw new Error(error.message)
   }
   return async function () {
-    const { data, error } = await supabase.rpc(
-      'create_notifications_for_task_users',
-      {
-        board_id: notificationData.board_id,
-        sender_name: userDetails.name,
-        sender_img: userDetails.img || '',
-        sender_id: userDetails.id,
-        task_id: notificationData.task_id,
-      }
-    )
-    console.log(data, error)
+    await supabase.rpc('create_notifications_for_task_users', {
+      board_id: notificationData.board_id,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      sender_id: userDetails.id,
+      task_id: notificationData.task_id,
+    })
   }
 }
 const getMessages = function (taskId: number) {
@@ -567,6 +572,34 @@ const getMessages = function (taskId: number) {
       throw new Error(error.message)
     }
     return { data, userId: user!.id }
+  }
+}
+
+const editMessage = async function ({
+  message,
+  id,
+}: {
+  message: string
+  id: number
+}) {
+  const { error } = await supabase
+    .from('Messages')
+    .update({ message })
+    .eq('id', id)
+    .select()
+  if (error) {
+    toast.error(error.message)
+    throw new Error(error.message)
+  }
+}
+
+const deleteMessage = async function (id: number) {
+  const toastId = toast.loading('deleting...')
+  const { error } = await supabase.from('Messages').delete().eq('id', id)
+  toast.dismiss(toastId)
+  if (error) {
+    toast.error(error.message)
+    throw new Error(error.message)
   }
 }
 
@@ -594,4 +627,6 @@ export {
   getBoardNotifications,
   sendMessage,
   getMessages,
+  editMessage,
+  deleteMessage,
 }
