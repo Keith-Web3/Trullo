@@ -1,9 +1,10 @@
 import { toast } from 'react-hot-toast'
+import { deleteObject, ref } from 'firebase/storage'
 
 import { supabase } from '../data/supabase'
 import { getUserDetails, requireAuth } from './requireAuth'
-import { deleteObject, ref } from 'firebase/storage'
 import { storage } from '../data/firebase'
+import calculateSize from './calculateSize'
 
 interface BoardData {
   name: string
@@ -630,6 +631,7 @@ const uploadFile = async function ({
   name,
   customId,
   boardId,
+  size,
 }: {
   taskId: number
   url: string
@@ -637,6 +639,7 @@ const uploadFile = async function ({
   name: string
   customId: string
   boardId: number
+  size: number
 }) {
   const user = await requireAuth()
   const { error } = await supabase
@@ -665,7 +668,7 @@ const uploadFile = async function ({
       sender_img: userDetails.img || '',
       sender_id: userDetails.id,
       task_id: taskId,
-      message_sent: 'uploaded a new file to the',
+      message_sent: `uploaded a ${calculateSize(size)} file to the`,
     })
   }
 }

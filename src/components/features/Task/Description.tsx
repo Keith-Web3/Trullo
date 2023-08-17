@@ -49,7 +49,6 @@ const Description = function ({ taskId }: DescriptionProps) {
           description
         </p>
         <motion.button
-          layout
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="edit-btn"

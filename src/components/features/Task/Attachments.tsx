@@ -44,6 +44,7 @@ const Attachments = function ({ taskId }: AttachmentsProps) {
   const handleUpload: React.ChangeEventHandler<HTMLInputElement> =
     async function (e) {
       const file = e.target.files![0]
+
       const customId = nanoid()
       const storageRef = ref(storage, `${taskId}/${customId}`)
 
@@ -59,6 +60,7 @@ const Attachments = function ({ taskId }: AttachmentsProps) {
         name: file.name,
         customId,
         boardId: +params.boardId!,
+        size: file.size,
       })
     }
 
@@ -69,11 +71,16 @@ const Attachments = function ({ taskId }: AttachmentsProps) {
           <img src="/description.svg" alt="attachments" />
           attachments
         </p>
-        <label htmlFor="file-upload" className="edit-btn">
+        <motion.label
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          htmlFor="file-upload"
+          className="edit-btn"
+        >
           <input onChange={handleUpload} type="file" id="file-upload" />
           <img src="/add.svg" alt="add" />
           add
-        </label>
+        </motion.label>
       </div>
       {isLoading ? (
         <>
