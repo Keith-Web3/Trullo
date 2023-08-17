@@ -665,7 +665,7 @@ const uploadFile = async function ({
       sender_img: userDetails.img || '',
       sender_id: userDetails.id,
       task_id: taskId,
-      message_sent: 'uploaded a new document to the',
+      message_sent: 'uploaded a new file to the',
     })
   }
 }
