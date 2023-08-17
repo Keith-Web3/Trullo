@@ -95,6 +95,7 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
         name,
         img: user!.user_metadata.avatar_url,
         id: user!.id,
+        role: 'admin',
       }
 
       mutate({

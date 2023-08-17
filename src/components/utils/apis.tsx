@@ -12,6 +12,7 @@ interface BoardData {
     name: string | null
     img: string | null
     id: string
+    role: string
   }[]
   cover_img: string
   cover_blurhash: string

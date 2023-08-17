@@ -6,6 +6,8 @@ import { Users, renderUsers } from '../../utils/renderusers'
 import '../../../sass/features/task/task.scss'
 import TaskInfo from './TaskInfo'
 import Img from '../../ui/Img'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAttachments, getMessages } from '../../utils/apis'
 
 interface TaskProps {
   image: string
@@ -29,6 +31,14 @@ const Task = function ({
   listId,
 }: TaskProps) {
   const [isTaskInfoShown, setIsTaskInfoShown] = useState(false)
+  const { data } = useQuery({
+    queryKey: ['get-task-messages', taskId],
+    queryFn: getMessages(taskId),
+  })
+  const { data: attachments } = useQuery({
+    queryKey: ['get-attachments', taskId],
+    queryFn: fetchAttachments(taskId),
+  })
   return (
     <div className="task" onClick={() => setIsTaskInfoShown(true)}>
       {!!image && (
@@ -65,11 +75,11 @@ const Task = function ({
         <div className="task__info">
           <p>
             <img src="/comment.svg" alt="comment" />
-            <span>{0}</span>
+            <span>{data?.data.length || 0}</span>
           </p>
           <p>
             <img src="/attach.svg" alt="attachments" />
-            <span>3</span>
+            <span>{attachments?.data.length || 0}</span>
           </p>
         </div>
       </div>
