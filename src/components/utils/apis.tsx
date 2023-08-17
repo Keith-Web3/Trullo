@@ -675,6 +675,7 @@ const uploadFile = async function ({
 
 const fetchAttachments = function (taskId: number) {
   return async function () {
+    const user = await requireAuth()
     const { data, error } = await supabase
       .from('Files')
       .select('*')
@@ -683,7 +684,7 @@ const fetchAttachments = function (taskId: number) {
       toast.error(error.message)
       throw new Error(error.message)
     }
-    return data
+    return { data, userId: user?.id }
   }
 }
 

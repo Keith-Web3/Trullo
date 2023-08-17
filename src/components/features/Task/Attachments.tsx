@@ -88,7 +88,7 @@ const Attachments = function ({ taskId }: AttachmentsProps) {
           <FileSkeleton />
         </>
       ) : (
-        data?.map(file => {
+        data?.data.map(file => {
           const fileName = file.file_type.split('/')
           const { formattedDate } = formatDate(file.created_at)
           let preview
@@ -132,9 +132,16 @@ const Attachments = function ({ taskId }: AttachmentsProps) {
                   download
                 </motion.button>
                 <motion.button
+                  title={
+                    data.userId !== file.sender_id
+                      ? 'only the file uploader can delete the file'
+                      : ''
+                  }
+                  disabled={data.userId !== file.sender_id}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
+                    if (data.userId !== file.sender_id) return
                     handleDeleteFile({ taskId, customId: file.custom_id })
                   }}
                 >
