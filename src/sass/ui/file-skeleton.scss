@@ -1,0 +1,41 @@
+@use '../variables' as *;
+
+.file-skeleton {
+  display: grid;
+  align-items: center;
+  grid-template: repeat(3, auto) / 100px 1fr;
+  grid-template-areas: 'preview date' 'preview name' 'preview buttons';
+  column-gap: $spacer;
+  margin-top: $spacer;
+
+  .file-preview {
+    grid-area: preview;
+    height: 100%;
+    span {
+      display: block;
+      height: 100%;
+    }
+  }
+
+  .date {
+    grid-area: date;
+    width: 40%;
+  }
+  .name {
+    grid-area: name;
+    font-size: 1.05rem;
+    width: 70%;
+  }
+  .button-container {
+    grid-area: buttons;
+    display: flex;
+    align-items: center;
+    gap: $spacer;
+
+    div {
+      width: 80px;
+      font-size: 1.7rem;
+      margin-top: auto;
+    }
+  }
+}

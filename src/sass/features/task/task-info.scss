@@ -135,7 +135,8 @@
     gap: $spacer;
 
     p,
-    button {
+    button,
+    label {
       display: flex;
       align-items: center;
       gap: $spacer * 0.65;
@@ -147,10 +148,14 @@
         width: 20px;
       }
     }
+    label input[type='file'] {
+      display: none;
+    }
     p {
       color: $gray-300;
     }
-    button {
+    button,
+    label {
       border: 1px solid $gray-300;
       color: $gray-200;
       outline: none;
@@ -165,6 +170,66 @@
 
       img {
         width: 17px;
+      }
+    }
+  }
+  .attachment {
+    display: grid;
+    align-items: center;
+    grid-template: repeat(3, auto) / 100px 1fr;
+    grid-template-areas: 'preview date' 'preview name' 'preview buttons';
+    column-gap: $spacer;
+    margin-top: $spacer;
+
+    .file-preview {
+      width: 100%;
+      grid-area: preview;
+      height: 100%;
+      max-height: 85px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    div.file-preview {
+      background-color: $gray-50;
+      display: grid;
+      place-content: center;
+      color: $gray-400;
+      font-size: 1.2rem;
+      font-weight: 500;
+      font-family: 'Poppins';
+      text-transform: uppercase;
+    }
+    .date {
+      grid-area: date;
+      font-family: 'Poppins';
+      font-weight: 500;
+      color: $gray-300;
+      font-size: 0.9rem;
+    }
+    .name {
+      grid-area: name;
+      font-family: 'Poppins';
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: $dark-100;
+    }
+    .button-container {
+      grid-area: buttons;
+      display: flex;
+      align-items: center;
+      gap: $spacer;
+      margin-top: $spacer * 0.5;
+
+      button {
+        background-color: transparent;
+        border: 2px solid $gray-300;
+        color: $gray-200;
+        border-radius: 8px;
+        padding: 0.5em 1em;
+        text-transform: capitalize;
+        font-size: 0.9rem;
+        cursor: pointer;
+        font-weight: 500;
       }
     }
   }

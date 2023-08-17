@@ -2,6 +2,8 @@ import { toast } from 'react-hot-toast'
 
 import { supabase } from '../data/supabase'
 import { getUserDetails, requireAuth } from './requireAuth'
+import { deleteObject, ref } from 'firebase/storage'
+import { storage } from '../data/firebase'
 
 interface BoardData {
   name: string
@@ -269,7 +271,10 @@ const uploadUserOnSignUp = async function () {
     data: { user },
     error,
   } = await supabase.auth.refreshSession()
-  if (error) toast.error('Error fetching user details')
+  if (error) {
+    toast.error('Error fetching user details')
+    throw new Error('Error fetching user details')
+  }
   if (user?.created_at!.slice(0, -7) !== user?.last_sign_in_at!.slice(0, -7))
     return
 
@@ -618,6 +623,87 @@ const deleteMessage = async function (id: number) {
   }
 }
 
+const uploadFile = async function ({
+  taskId,
+  url,
+  fileType,
+  name,
+  customId,
+}: {
+  taskId: number
+  url: string
+  fileType: string
+  name: string
+  customId: string
+}) {
+  const user = await requireAuth()
+  const { error } = await supabase
+    .from('Files')
+    .insert([
+      {
+        task_id: taskId,
+        file_type: fileType,
+        sender_id: user!.id,
+        file_name: name,
+        custom_id: customId,
+        url,
+      },
+    ])
+    .select()
+  if (error) {
+    toast.error('Error uploading file')
+    throw new Error(error.message)
+  }
+  toast.success('successfully uploaded file')
+}
+
+const fetchAttachments = function (taskId: number) {
+  return async function () {
+    const { data, error } = await supabase
+      .from('Files')
+      .select('*')
+      .eq('task_id', taskId)
+    if (error) {
+      toast.error(error.message)
+      throw new Error(error.message)
+    }
+    return data
+  }
+}
+
+const deleteFile = async function ({
+  taskId,
+  customId,
+}: {
+  taskId: number
+  customId: string
+}) {
+  const toastId = toast.loading('deleting file')
+  const { error } = await supabase
+    .from('Files')
+    .delete()
+    .eq('custom_id', customId)
+
+  if (error) {
+    toast.dismiss(toastId)
+    toast.error(error.message)
+    throw new Error(error.message)
+  }
+
+  const fileRef = ref(storage, `${taskId}/${customId}`)
+
+  deleteObject(fileRef)
+    .then(() => {
+      toast.dismiss(toastId)
+      toast.success('deleted file successfully')
+    })
+    .catch(error => {
+      toast.dismiss(toastId)
+      toast.error(error.message)
+      throw new Error(error.message)
+    })
+}
+
 export {
   addBoard,
   getBoards,
@@ -644,4 +730,7 @@ export {
   getMessages,
   editMessage,
   deleteMessage,
+  uploadFile,
+  fetchAttachments,
+  deleteFile,
 }

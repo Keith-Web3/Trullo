@@ -99,7 +99,7 @@ const TaskInfo = function ({
           <span>{listName}</span>
         </p>
         <Description taskId={taskId} />
-        <Attachments />
+        <Attachments taskId={taskId} />
         <Messages taskId={taskId} userImg="/user.svg" />
       </div>
       <Actions

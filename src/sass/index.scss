@@ -30,7 +30,7 @@ html {
   display: grid;
   place-items: center;
   height: 100vh;
-  z-index: 1;
+  z-index: 3;
   &::-webkit-scrollbar {
     width: 6px !important;
     height: 6px !important;

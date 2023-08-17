@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import Header from '../shared/Header'
 import { getUserDetails, requireAuth } from '../utils/requireAuth'
 import { uploadUserOnSignUp } from '../utils/apis'
+import { supabase } from '../data/supabase'
 
 export const loader = async function ({ request }: { request: Request }) {
   const path = new URL(request.url).pathname
@@ -29,7 +30,9 @@ const HomeLayout = function () {
       setSearchParams(params)
       return
     }
-    uploadUserOnSignUp()
+    uploadUserOnSignUp().catch(async _err => {
+      await supabase.auth.signOut()
+    })
   }, [])
 
   return (
