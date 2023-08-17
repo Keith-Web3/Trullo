@@ -1,13 +1,15 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import { nanoid } from 'nanoid'
+import { motion } from 'framer-motion'
+import { useParams } from 'react-router-dom'
 
 import { storage } from '../../data/firebase'
 import { deleteFile, fetchAttachments, uploadFile } from '../../utils/apis'
 import formatDate from '../../utils/formatDate'
-import { nanoid } from 'nanoid'
-import { motion } from 'framer-motion'
 import FileSkeleton from '../../ui/FileSkeleton'
+import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 
 interface AttachmentsProps {
   taskId: number
@@ -16,15 +18,18 @@ interface AttachmentsProps {
 const Attachments = function ({ taskId }: AttachmentsProps) {
   let toastId: string
   const queryClient = useQueryClient()
-  const { mutate } = useMutation({
+  const params = useParams()
+  const { mutate, isSuccess } = useMutation({
     mutationFn: uploadFile,
-    onSuccess() {
+    onSuccess(data) {
       queryClient.invalidateQueries({ queryKey: ['get-attachments', taskId] })
+      handleNotify(data)
     },
     onSettled() {
       toast.dismiss(toastId)
     },
   })
+  const handleNotify = useNotifyOnSuccess(isSuccess)
   const { mutate: handleDeleteFile } = useMutation({
     mutationFn: deleteFile,
     onSuccess() {
@@ -53,6 +58,7 @@ const Attachments = function ({ taskId }: AttachmentsProps) {
         fileType: file.type,
         name: file.name,
         customId,
+        boardId: +params.boardId!,
       })
     }
 

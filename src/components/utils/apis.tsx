@@ -629,12 +629,14 @@ const uploadFile = async function ({
   fileType,
   name,
   customId,
+  boardId,
 }: {
   taskId: number
   url: string
   fileType: string
   name: string
   customId: string
+  boardId: number
 }) {
   const user = await requireAuth()
   const { error } = await supabase
@@ -655,6 +657,17 @@ const uploadFile = async function ({
     throw new Error(error.message)
   }
   toast.success('successfully uploaded file')
+  return async function () {
+    const userDetails = await getUserDetails()
+    await supabase.rpc('create_notifications_for_task_users', {
+      board_id: boardId,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      sender_id: userDetails.id,
+      task_id: taskId,
+      message_sent: 'uploaded a new document to the',
+    })
+  }
 }
 
 const fetchAttachments = function (taskId: number) {
