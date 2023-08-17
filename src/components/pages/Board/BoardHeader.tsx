@@ -23,7 +23,6 @@ interface BoardHeaderProps {
       }
   )[]
   isPrivate: boolean
-  boardInfo: string
   boardName: string
   boardId: number
   isFetchingBoard: boolean
@@ -31,7 +30,6 @@ interface BoardHeaderProps {
 const BoardHeader = function ({
   users,
   isPrivate,
-  boardInfo,
   boardName,
   boardId,
   isFetchingBoard,
