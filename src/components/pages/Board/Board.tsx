@@ -9,7 +9,7 @@ import NewCard from '../../ui/NewCard'
 import { addList, getBoard, getLists } from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
-// import BoardInfo from './BoardInfo'
+import BoardInfo from './BoardInfo'
 
 const Board = function () {
   const params = useParams<{ boardId: string }>()
@@ -55,12 +55,7 @@ const Board = function () {
         users={boardData?.[0].users}
         isPrivate={boardData?.[0].isPrivate}
       />
-      {/* <BoardInfo
-        boardInfo={boardData?.[0].board_info}
-        boardName={boardData?.[0].name}
-        users={boardData?.[0].users}
-        createdAt={boardData?.[0].created_at}
-      /> */}
+      <BoardInfo />
       <div className="board__body">
         {isLoading ? (
           <Loader />

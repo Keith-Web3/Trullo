@@ -98,7 +98,7 @@ const TaskInfo = function ({
           in list
           <span>{listName}</span>
         </p>
-        <Description taskId={taskId} />
+        <Description cardId={taskId} />
         <Attachments taskId={taskId} />
         <Messages taskId={taskId} userImg="/user.svg" />
       </div>

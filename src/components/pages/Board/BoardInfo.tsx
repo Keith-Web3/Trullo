@@ -1,40 +1,30 @@
-import { motion } from 'framer-motion'
+import { useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 
 import formatDate from '../../utils/formatDate'
 import '../../../sass/pages/board/board-info.scss'
+import { getBoard } from '../../utils/apis'
+import Loader from '../../ui/Loader'
+import Description from '../../features/Task/Description'
+import Button from '../../ui/Button'
 
-interface BoardInfoProps {
-  boardName: string
-  users: (
-    | {
-        img: string
-        name: string
-        id: string
-        role?: string
-      }
-    | {
-        img: undefined
-        name: string
-        id: string
-        role?: string
-      }
-  )[]
-  boardInfo: string
-  createdAt: string
-}
-const BoardInfo = function ({
-  boardName,
-  boardInfo,
-  users,
-  createdAt,
-}: BoardInfoProps) {
-  const author = users?.find(user => user.role === 'admin')
-  const { formattedDate } = formatDate(createdAt)
+const BoardInfo = function () {
+  const params = useParams()
+  const { isLoading, data } = useQuery({
+    queryKey: ['get-board', params.boardId],
+    queryFn: getBoard(+params.boardId!),
+  })
+  const author = data?.[0].users?.find(
+    (user: { role: string }) => user.role === 'admin'
+  )
+  const { formattedDate } = formatDate(data?.[0].created_at)
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <div className="board-info">
       <div className="board-info__header">
-        <p>{boardName}</p>
+        <p>{data?.[0].name}</p>
         <img src="/close-gray.svg" alt="close" />
       </div>
       <div className="made-by">
@@ -46,27 +36,23 @@ const BoardInfo = function ({
         <p className="name">{author!.name}</p>
         <p className="date">on {formattedDate}</p>
       </div>
-      <div className="board-info__description">
-        <div className="description-header">
-          <p>
-            <img src="/description.svg" alt="description" />
-            description
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="edit-btn"
-          >
-            <img src="/edit.svg" alt="edit" />
-            edit
-          </motion.button>
-        </div>
-        <pre className="description">{boardInfo}</pre>
-      </div>
+      <Description boardDescription={data?.[0].board_info} />
       <div className="team">
         <div className="team__header">
           <img src="/description.svg" alt="team" />
           <p>team</p>
+          {data?.[0].users.map(user => {
+            const isAdmin = user.role === 'admin'
+
+            return (
+              <div className="board-user" key={user.id}>
+                <img src={user.img || '/user.svg'} alt="user-image" />
+                <p className="name">{user.name}</p>
+                {isAdmin && <p>admin</p>}
+                {!isAdmin && <button>remove</button>}
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

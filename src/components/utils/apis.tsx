@@ -722,6 +722,35 @@ const deleteFile = async function ({
     })
 }
 
+const updateBoardDescription = async function ({
+  id,
+  boardInfo,
+}: {
+  id: number
+  boardInfo: string
+}) {
+  const { error } = await supabase
+    .from('Boards')
+    .update({ board_info: boardInfo })
+    .eq('id', id)
+    .select()
+  if (error) {
+    toast.error('Error updating board description')
+    throw new Error(error.message)
+  }
+  return async function () {
+    const userDetails = await getUserDetails()
+
+    await supabase.rpc('create_board_notifications', {
+      board_id: id,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      sender_id: userDetails.id,
+      message: `updated the board's description.`,
+    })
+  }
+}
+
 export {
   addBoard,
   getBoards,
@@ -751,4 +780,5 @@ export {
   uploadFile,
   fetchAttachments,
   deleteFile,
+  updateBoardDescription,
 }

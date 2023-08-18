@@ -4,19 +4,26 @@ import { motion } from 'framer-motion'
 import { toast } from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
-import { getTaskDescription, updateTaskDescription } from '../../utils/apis'
+import {
+  getTaskDescription,
+  updateBoardDescription,
+  updateTaskDescription,
+} from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
+import '../../../sass/features/task/description.scss'
 
 interface DescriptionProps {
-  taskId: number
+  cardId?: number
+  boardDescription?: string
 }
-const Description = function ({ taskId }: DescriptionProps) {
+const Description = function ({ cardId, boardDescription }: DescriptionProps) {
   const queryClient = useQueryClient()
   const params = useParams()
   const { isLoading, data } = useQuery({
-    queryKey: ['get-task-description', taskId],
-    queryFn: getTaskDescription(taskId),
+    queryKey: ['get-task-description', cardId!],
+    queryFn: getTaskDescription(cardId!),
+    enabled: boardDescription === undefined,
   })
   const {
     isLoading: isUpdating,
@@ -26,13 +33,29 @@ const Description = function ({ taskId }: DescriptionProps) {
     mutationFn: updateTaskDescription,
     onSuccess(data) {
       queryClient.invalidateQueries({
-        queryKey: ['get-task-description', taskId],
+        queryKey: ['get-task-description', cardId],
       })
       setIsEditing(false)
       handleNotify(data!)
     },
   })
-  const handleNotify = useNotifyOnSuccess(isSuccess)
+  const {
+    isLoading: isUpdatingBoard,
+    mutate: mutateBoard,
+    isSuccess: isBoardUpdateSuccess,
+  } = useMutation({
+    mutationFn: updateBoardDescription,
+    onSuccess(data) {
+      queryClient.invalidateQueries({
+        queryKey: ['get-board', params.boardId],
+      })
+      setIsEditing(false)
+      handleNotify(data!)
+    },
+  })
+  const handleNotify = useNotifyOnSuccess(
+    boardDescription === undefined ? isSuccess : isBoardUpdateSuccess
+  )
   const [isEditing, setIsEditing] = useState(false)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -42,7 +65,7 @@ const Description = function ({ taskId }: DescriptionProps) {
   }, [isEditing])
 
   return (
-    <div className="task-info__description">
+    <div className="card-description">
       <div className="description-header">
         <p>
           <img src="/description.svg" alt="description" />
@@ -52,7 +75,7 @@ const Description = function ({ taskId }: DescriptionProps) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="edit-btn"
-          disabled={isLoading}
+          disabled={boardDescription === undefined ? isLoading : false}
           onClick={() => setIsEditing(true)}
         >
           <img src="/edit.svg" alt="edit" />
@@ -60,15 +83,26 @@ const Description = function ({ taskId }: DescriptionProps) {
         </motion.button>
       </div>
       <pre className="description">
-        {isLoading ? <Loader /> : !isEditing && data}
+        {boardDescription === undefined ? (
+          isLoading ? (
+            <Loader />
+          ) : (
+            !isEditing && data
+          )
+        ) : (
+          !isEditing && boardDescription
+        )}
       </pre>
-      {!Boolean(data) && !isEditing && (
-        <p className="no-description">This task has no description</p>
-      )}
+      {(boardDescription === undefined
+        ? !Boolean(data)
+        : !Boolean(boardDescription)) &&
+        !isEditing && (
+          <p className="no-description">This task has no description</p>
+        )}
       {isEditing && (
         <>
           <textarea
-            defaultValue={data}
+            defaultValue={boardDescription || data}
             name="edit-description"
             className="edit-input"
             ref={textAreaRef}
@@ -82,13 +116,13 @@ const Description = function ({ taskId }: DescriptionProps) {
             <button
               onClick={() => setIsEditing(false)}
               className="cancel-btn"
-              disabled={isUpdating}
+              disabled={isUpdating || isUpdatingBoard}
             >
               cancel
             </button>
             <button
               className="save-btn"
-              disabled={isUpdating}
+              disabled={isUpdating || isUpdatingBoard}
               onClick={() => {
                 if (
                   textAreaRef.current &&
@@ -97,14 +131,19 @@ const Description = function ({ taskId }: DescriptionProps) {
                   toast.error('Please enter a description')
                   return
                 }
-                mutate({
-                  taskId,
-                  description: textAreaRef.current!.value,
-                  boardId: +params.boardId!,
-                })
+                boardDescription === undefined
+                  ? mutate({
+                      taskId: cardId!,
+                      description: textAreaRef.current!.value,
+                      boardId: +params.boardId!,
+                    })
+                  : mutateBoard({
+                      id: +params.boardId!,
+                      boardInfo: textAreaRef.current!.value,
+                    })
               }}
             >
-              {isUpdating && <Loader />} save
+              {(isUpdating || isUpdatingBoard) && <Loader />} save
             </button>
           </div>
         </>
