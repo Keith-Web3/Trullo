@@ -133,12 +133,13 @@ const getLists = function (boardId: number) {
 
 const getBoard = function (boardId: number) {
   return async function () {
+    const user = await requireAuth()
     const { data, error } = await supabase
       .from('Boards')
       .select('*')
       .eq('id', boardId)
     if (error) toast.error('Could not fetch board data')
-    return data
+    return { data, userId: user!.id }
   }
 }
 
@@ -751,6 +752,20 @@ const updateBoardDescription = async function ({
   }
 }
 
+const removeUserFromBoard = async function ({
+  boardId,
+  userId,
+}: {
+  boardId: number
+  userId: string
+}) {
+  const { error } = await supabase.rpc('remove_user_from_board', {
+    board_id: boardId,
+    user_id: userId,
+  })
+  console.log(error)
+}
+
 export {
   addBoard,
   getBoards,
@@ -781,4 +796,5 @@ export {
   fetchAttachments,
   deleteFile,
   updateBoardDescription,
+  removeUserFromBoard,
 }

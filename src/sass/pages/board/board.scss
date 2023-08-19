@@ -2,6 +2,7 @@
 
 .board {
   padding: $spacer $spacer * 1.5 0;
+  position: relative;
 
   @include screen(650) {
     padding-inline: 0;

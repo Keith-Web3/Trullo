@@ -10,10 +10,12 @@ import { addList, getBoard, getLists } from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 import BoardInfo from './BoardInfo'
+import { AnimatePresence } from 'framer-motion'
 
 const Board = function () {
   const params = useParams<{ boardId: string }>()
   const queryClient = useQueryClient()
+  const [showBoardInfo, setShowBoardInfo] = useState(false)
   const [newTaskIndex, setNewTaskIndex] = useState<number | boolean>(-1)
   const [isNewListBoxShown, setIsNewListBoxShown] = useState(false)
   const [{ isLoading, data }, { isLoading: isFetchingBoard, data: boardData }] =
@@ -44,18 +46,21 @@ const Board = function () {
   })
   const handleNotify = useNotifyOnSuccess(isSuccess)
 
-  return boardData && boardData.length === 0 ? (
+  return boardData?.data?.length === 0 ? (
     <Navigate to="/*" />
   ) : (
     <div className="board">
       <BoardHeader
         isFetchingBoard={isFetchingBoard}
-        boardName={boardData?.[0].name}
-        boardId={boardData?.[0].id}
-        users={boardData?.[0].users}
-        isPrivate={boardData?.[0].isPrivate}
+        boardName={boardData?.data?.[0].name}
+        boardId={boardData?.data?.[0].id}
+        users={boardData?.data?.[0].users}
+        isPrivate={boardData?.data?.[0].isPrivate}
+        setShowBoardInfo={setShowBoardInfo}
       />
-      <BoardInfo />
+      <AnimatePresence>
+        {showBoardInfo && <BoardInfo setShowBoardInfo={setShowBoardInfo} />}
+      </AnimatePresence>
       <div className="board__body">
         {isLoading ? (
           <Loader />

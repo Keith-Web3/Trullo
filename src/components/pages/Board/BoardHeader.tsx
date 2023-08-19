@@ -26,6 +26,7 @@ interface BoardHeaderProps {
   boardName: string
   boardId: number
   isFetchingBoard: boolean
+  setShowBoardInfo: React.Dispatch<React.SetStateAction<boolean>>
 }
 const BoardHeader = function ({
   users,
@@ -33,6 +34,7 @@ const BoardHeader = function ({
   boardName,
   boardId,
   isFetchingBoard,
+  setShowBoardInfo,
 }: BoardHeaderProps) {
   const [isVisibilityOpen, setIsVisibilityOpen] = useState(false)
   const visibility = useRef<HTMLDivElement>(null)
@@ -89,7 +91,7 @@ const BoardHeader = function ({
           </div>
         </>
       )}
-      <Button tag>
+      <Button tag onClick={() => setShowBoardInfo(true)}>
         <img src="/ellipsis.svg" alt="menu" />
         <span>show menu</span>
       </Button>
