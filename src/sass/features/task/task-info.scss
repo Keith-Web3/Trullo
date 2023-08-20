@@ -5,7 +5,7 @@
   position: relative;
   z-index: 1;
   padding: $spacer * 1.5;
-  width: min(90%, 700px);
+  width: 700px;
   display: grid;
   grid-template: auto 1fr / 1fr max-content;
   grid-template-areas: 'cover cover' 'main actions';

@@ -16,6 +16,9 @@
     align-items: start;
     gap: $spacer * 2;
     overflow: auto;
+    isolation: isolate;
+    position: relative;
+    z-index: 0;
 
     &::-webkit-scrollbar {
       width: 6px !important;

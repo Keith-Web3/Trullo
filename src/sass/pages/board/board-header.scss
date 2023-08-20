@@ -6,6 +6,7 @@
   gap: $spacer * 1.5;
   padding-block: $spacer;
   position: relative;
+  z-index: 1;
 
   @include screen(650) {
     padding-inline: $spacer;
