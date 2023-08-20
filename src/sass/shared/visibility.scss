@@ -8,6 +8,7 @@
   position: absolute;
   inset: 90% auto auto 0;
   background-color: $white;
+  z-index: 2;
 
   &__header {
     text-transform: capitalize;

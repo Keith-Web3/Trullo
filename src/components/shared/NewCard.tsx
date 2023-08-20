@@ -4,9 +4,9 @@ import { UseMutateFunction } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
-import '../../sass/ui/new-card.scss'
+import '../../sass/shared/new-card.scss'
 import { ListData } from '../utils/apis'
-import Loader from './Loader'
+import Loader from '../ui/Loader'
 import { getUserDetails } from '../utils/requireAuth'
 
 interface NewCardProps {

@@ -48,6 +48,20 @@ interface NewMessage {
 }
 
 const addBoard = async function (boardData: BoardData) {
+  const user = await requireAuth()
+  let name = user!.user_metadata.name
+
+  if (!name) {
+    const users = await getUser(user!.id)
+    name = users?.[0].name
+  }
+  const currentUser = {
+    name,
+    img: user!.user_metadata.avatar_url,
+    id: user!.id,
+    role: 'admin',
+  }
+  boardData.users = [currentUser]
   const { data, error } = await supabase
     .from('Boards')
     .insert([boardData])

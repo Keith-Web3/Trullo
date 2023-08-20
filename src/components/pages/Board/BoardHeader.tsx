@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { nanoid } from 'nanoid'
+import toast from 'react-hot-toast'
 
 import Button from '../../ui/Button'
 import { renderUsers } from '../../utils/renderusers'
 import '../../../sass/pages/board/board-header.scss'
-import Visibility from '../../ui/Visibility'
+import Visibility from '../../shared/Visibility'
 import Loader from '../../ui/Loader'
 import AddUser from '../../features/AddUser'
 
@@ -75,7 +76,13 @@ const BoardHeader = function ({
             {renderUsers(users)}{' '}
             <div
               className="add-user-btn"
-              onClick={() => setIsAddUserShown(true)}
+              onClick={() => {
+                if (!isPrivate) {
+                  toast.error('Invites are disabled for public boards.')
+                  return
+                }
+                setIsAddUserShown(true)
+              }}
             >
               +
               <AnimatePresence>

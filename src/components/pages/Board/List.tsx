@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import Task from '../../features/Task/Task'
 import '../../../sass/pages/board/list.scss'
-import NewCard from '../../ui/NewCard'
+import NewCard from '../../shared/NewCard'
 import {
   addTask,
   deleteList,

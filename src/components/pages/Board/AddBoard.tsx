@@ -6,10 +6,9 @@ import toast from 'react-hot-toast'
 import Button from '../../ui/Button'
 import '../../../sass/pages/board/add-board.scss'
 import PhotoSearch from '../../features/PhotoSearch'
-import { addBoard, getUser } from '../../utils/apis'
+import { addBoard } from '../../utils/apis'
 import Loader from '../../ui/Loader'
-import { requireAuth } from '../../utils/requireAuth'
-import Visibility from '../../ui/Visibility'
+import Visibility from '../../shared/Visibility'
 import Img from '../../ui/Img'
 
 interface AddCardProps {
@@ -84,23 +83,9 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
         return
       }
 
-      const user = await requireAuth()
-      let name = user!.user_metadata.name
-
-      if (!name) {
-        const users = await getUser(user!.id)
-        name = users?.[0].name
-      }
-      const currentUser = {
-        name,
-        img: user!.user_metadata.avatar_url,
-        id: user!.id,
-        role: 'admin',
-      }
-
       mutate({
         name: inputRef.current!.value,
-        users: [currentUser],
+        users: [],
         cover_img: coverSrc,
         cover_blurhash: coverBlurHash!,
         isPrivate: isPrivate,
