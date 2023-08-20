@@ -795,7 +795,7 @@ const deleteList = async function ({
       sender_name: userDetails.name,
       sender_img: userDetails.img || '',
       sender_id: userDetails.id,
-      message: `deleted the ${listName} list`,
+      message: `deleted the "${listName}" list`,
     })
   }
 }
@@ -828,7 +828,7 @@ const updateListName = async function ({
       sender_name: userDetails.name,
       sender_img: userDetails.img || '',
       sender_id: userDetails.id,
-      message: `renamed the ${prevName} list to ${name}`,
+      message: `renamed the "${prevName}" list to "${name}"`,
     })
   }
 }
