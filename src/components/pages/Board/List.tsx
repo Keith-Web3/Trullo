@@ -4,7 +4,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Task from '../../features/Task/Task'
 import '../../../sass/pages/board/list.scss'
 import NewCard from '../../ui/NewCard'
-import { addTask, deleteList, getListTasks } from '../../utils/apis'
+import {
+  addTask,
+  deleteList,
+  getListTasks,
+  updateListName,
+} from '../../utils/apis'
 import TaskSkeleton from '../../ui/TaskSkeleton'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 import { useEffect, useRef, useState } from 'react'
@@ -27,13 +32,16 @@ const List = function ({
 }: ListProps) {
   const queryClient = useQueryClient()
   const [showListOptions, setShowListOptions] = useState(false)
+  const [isEditingName, setIsEditingName] = useState(false)
   const listOptionsRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const params = useParams()
 
   const { isLoading, mutate, isSuccess } = useMutation({
     mutationKey: ['add-task'],
     mutationFn: addTask,
     onSuccess(data) {
+      setNewTaskIndex(-1)
       handleNotify(data!)
       queryClient.invalidateQueries({ queryKey: ['get-tasks', id] })
     },
@@ -58,6 +66,7 @@ const List = function ({
   ) {
     if (!listOptionsRef.current?.contains(e.target as Node))
       setShowListOptions(false)
+    if (!inputRef.current?.contains(e.target as Node)) setIsEditingName(false)
   }
 
   useEffect(() => {
@@ -68,7 +77,27 @@ const List = function ({
   return (
     <div className="list">
       <div className="list__header">
-        <span>{name}</span>
+        {isEditingName ? (
+          <input
+            ref={inputRef}
+            defaultValue={name}
+            onKeyDown={async e => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                await updateListName({
+                  name: (e.target as HTMLInputElement).value,
+                  listId: id,
+                  prevName: name,
+                  boardId: +params.boardId!,
+                })
+                queryClient.invalidateQueries({ queryKey: ['get-lists'] })
+                setIsEditingName(false)
+              }
+            }}
+          />
+        ) : (
+          <span>{name}</span>
+        )}
         <img
           onClick={() => setShowListOptions(true)}
           src="/ellipsis.svg"
@@ -83,7 +112,7 @@ const List = function ({
               ref={listOptionsRef}
               className="list-options"
             >
-              <p>Rename</p>
+              <p onClick={() => setIsEditingName(true)}>Rename</p>
               <p
                 onClick={() =>
                   handleDeleteList({

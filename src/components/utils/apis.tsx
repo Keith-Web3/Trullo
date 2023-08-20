@@ -800,6 +800,39 @@ const deleteList = async function ({
   }
 }
 
+const updateListName = async function ({
+  name,
+  listId,
+  prevName,
+  boardId,
+}: {
+  name: string
+  listId: number
+  prevName: string
+  boardId: number
+}) {
+  const { error } = await supabase
+    .from('BoardList')
+    .update({ name })
+    .eq('id', listId)
+    .select()
+  if (error) {
+    toast.error('Error deleting list')
+    throw new Error(error.message)
+  }
+  return async function () {
+    const userDetails = await getUserDetails()
+
+    await supabase.rpc('create_board_notifications', {
+      board_id: boardId,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      sender_id: userDetails.id,
+      message: `renamed the ${prevName} list to ${name}`,
+    })
+  }
+}
+
 export {
   addBoard,
   getBoards,
@@ -832,4 +865,5 @@ export {
   updateBoardDescription,
   removeUserFromBoard,
   deleteList,
+  updateListName,
 }

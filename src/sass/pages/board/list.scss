@@ -17,6 +17,17 @@
       font-weight: 500;
       text-transform: capitalize;
     }
+    input {
+      border: none;
+      outline: none;
+      font-family: 'Poppins';
+      color: $gray-200;
+      font-weight: 500;
+      border: 1px solid $gray-100;
+      padding: 0.5em 1em;
+      border-radius: 8px;
+      margin-bottom: 0.2em;
+    }
     img {
       cursor: pointer;
     }
