@@ -763,7 +763,41 @@ const removeUserFromBoard = async function ({
     board_id: boardId,
     user_id: userId,
   })
-  console.log(error)
+  if (error) {
+    toast.error('Error removing user from board')
+    throw new Error(error.message)
+  }
+}
+
+const deleteList = async function ({
+  listId,
+  boardId,
+  listName,
+}: {
+  listId: number
+  boardId: number
+  listName: string
+}) {
+  const toastId = toast.loading('deleting list')
+  const { error } = await supabase.from('BoardList').delete().eq('id', listId)
+  if (error) {
+    toast.dismiss(toastId)
+    toast.error('Error deleting list')
+    throw new Error(error.message)
+  }
+  toast.dismiss(toastId)
+  toast.success('successfully deleted list')
+  return async function () {
+    const userDetails = await getUserDetails()
+
+    await supabase.rpc('create_board_notifications', {
+      board_id: boardId,
+      sender_name: userDetails.name,
+      sender_img: userDetails.img || '',
+      sender_id: userDetails.id,
+      message: `deleted the ${listName} list`,
+    })
+  }
 }
 
 export {
@@ -797,4 +831,5 @@ export {
   deleteFile,
   updateBoardDescription,
   removeUserFromBoard,
+  deleteList,
 }

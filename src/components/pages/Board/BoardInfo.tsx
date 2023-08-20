@@ -1,12 +1,13 @@
+import { useRef, useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 import formatDate from '../../utils/formatDate'
 import '../../../sass/pages/board/board-info.scss'
 import { getBoard, removeUserFromBoard } from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import Description from '../../features/Task/Description'
-import { motion } from 'framer-motion'
 
 const BoardInfo = function ({
   setShowBoardInfo,
@@ -14,6 +15,7 @@ const BoardInfo = function ({
   setShowBoardInfo: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const params = useParams()
+  const boardInfoRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
   const { isLoading, data } = useQuery({
     queryKey: ['get-board', params.boardId],
@@ -23,7 +25,7 @@ const BoardInfo = function ({
     mutationFn: removeUserFromBoard,
     onSuccess() {
       queryClient.invalidateQueries({
-        queryKey: ['get-task-description', +params.boardId!],
+        queryKey: ['get-board', params.boardId!],
       })
     },
   })
@@ -31,6 +33,19 @@ const BoardInfo = function ({
     (user: { role: string }) => user.role === 'admin'
   )
   const { formattedDate } = formatDate(data?.data?.[0].created_at)
+
+  const handleOuterClick: (this: Document, ev: MouseEvent) => any = function (
+    e
+  ) {
+    if (!boardInfoRef.current?.contains(e.target as Node))
+      setShowBoardInfo(false)
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleOuterClick, true)
+
+    return () => document.removeEventListener('click', handleOuterClick)
+  }, [])
 
   return isLoading ? (
     <Loader />
@@ -41,6 +56,7 @@ const BoardInfo = function ({
       exit={{ x: '100%', opacity: 0 }}
       transition={{ type: 'tween', duration: 0.2 }}
       className="board-info"
+      ref={boardInfoRef}
     >
       <div className="board-info__header">
         <p>{data?.data?.[0].name}</p>

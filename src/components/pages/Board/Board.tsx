@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query'
+import { AnimatePresence } from 'framer-motion'
 
 import BoardHeader from './BoardHeader'
 import List from './List'
@@ -10,7 +11,6 @@ import { addList, getBoard, getLists } from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 import BoardInfo from './BoardInfo'
-import { AnimatePresence } from 'framer-motion'
 
 const Board = function () {
   const params = useParams<{ boardId: string }>()

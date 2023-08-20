@@ -1,12 +1,14 @@
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import Task from '../../features/Task/Task'
 import '../../../sass/pages/board/list.scss'
 import NewCard from '../../ui/NewCard'
-import { addTask, getListTasks } from '../../utils/apis'
+import { addTask, deleteList, getListTasks } from '../../utils/apis'
 import TaskSkeleton from '../../ui/TaskSkeleton'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
+import { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 interface ListProps {
   name: string
@@ -24,6 +26,10 @@ const List = function ({
   setNewTaskIndex,
 }: ListProps) {
   const queryClient = useQueryClient()
+  const [showListOptions, setShowListOptions] = useState(false)
+  const listOptionsRef = useRef<HTMLDivElement>(null)
+  const params = useParams()
+
   const { isLoading, mutate, isSuccess } = useMutation({
     mutationKey: ['add-task'],
     mutationFn: addTask,
@@ -33,16 +39,66 @@ const List = function ({
     },
   })
   const handleNotify = useNotifyOnSuccess(isSuccess)
+  const { mutate: handleDeleteList, isSuccess: isListDeleteSuccess } =
+    useMutation({
+      mutationFn: deleteList,
+      onSuccess(data) {
+        handleListNotify(data)
+        queryClient.invalidateQueries({ queryKey: ['get-lists'] })
+      },
+    })
+  const handleListNotify = useNotifyOnSuccess(isListDeleteSuccess)
   const { isLoading: isFetchingTasks, data } = useQuery({
     queryKey: ['get-tasks', id],
     queryFn: getListTasks(id),
   })
+
+  const handleOuterClick: (this: Document, ev: MouseEvent) => any = function (
+    e
+  ) {
+    if (!listOptionsRef.current?.contains(e.target as Node))
+      setShowListOptions(false)
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleOuterClick, true)
+
+    return () => document.removeEventListener('click', handleOuterClick)
+  }, [])
   return (
     <div className="list">
-      <p>
+      <div className="list__header">
         <span>{name}</span>
-        <img src="/ellipsis.svg" alt="ellipsis" />
-      </p>
+        <img
+          onClick={() => setShowListOptions(true)}
+          src="/ellipsis.svg"
+          alt="ellipsis"
+        />
+        <AnimatePresence>
+          {showListOptions && (
+            <motion.div
+              initial={{ top: 0, opacity: 0 }}
+              animate={{ top: '100%', opacity: 1 }}
+              exit={{ top: 0, opacity: 0 }}
+              ref={listOptionsRef}
+              className="list-options"
+            >
+              <p>Rename</p>
+              <p
+                onClick={() =>
+                  handleDeleteList({
+                    listId: id,
+                    listName: name,
+                    boardId: +params.boardId!,
+                  })
+                }
+              >
+                Delete this list
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
       {isFetchingTasks ? (
         <TaskSkeleton />
       ) : (
