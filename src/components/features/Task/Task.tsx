@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { nanoid } from 'nanoid'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { Users, renderUsers } from '../../utils/renderusers'
 import '../../../sass/features/task/task.scss'
 import TaskInfo from './TaskInfo'
 import Img from '../../ui/Img'
-import { useQuery } from '@tanstack/react-query'
-import { fetchAttachments, getMessages } from '../../utils/apis'
+import { deleteTag, fetchAttachments, getMessages } from '../../utils/apis'
 
 interface TaskProps {
   image: string
@@ -31,6 +31,7 @@ const Task = function ({
   listId,
 }: TaskProps) {
   const [isTaskInfoShown, setIsTaskInfoShown] = useState(false)
+  const queryClient = useQueryClient()
   const { data } = useQuery({
     queryKey: ['get-task-messages', taskId],
     queryFn: getMessages(taskId),
@@ -61,6 +62,11 @@ const Task = function ({
                 style={{
                   color: `rgb(${tag.color})`,
                   backgroundColor: `rgba(${tag.color}, 0.25)`,
+                }}
+                onClick={e => e.stopPropagation()}
+                onDoubleClick={async () => {
+                  await deleteTag(taskId, tag.text)
+                  queryClient.invalidateQueries({ queryKey: ['get-tasks'] })
                 }}
               >
                 {tag.text}

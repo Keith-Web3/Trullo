@@ -70,6 +70,11 @@ const List = function ({
   }
 
   useEffect(() => {
+    if (isEditingName === true) inputRef.current?.focus()
+  }),
+    [isEditingName]
+
+  useEffect(() => {
     document.addEventListener('click', handleOuterClick, true)
 
     return () => document.removeEventListener('click', handleOuterClick)
@@ -112,7 +117,14 @@ const List = function ({
               ref={listOptionsRef}
               className="list-options"
             >
-              <p onClick={() => setIsEditingName(true)}>Rename</p>
+              <p
+                onClick={() => {
+                  setIsEditingName(true)
+                  setShowListOptions(false)
+                }}
+              >
+                Rename
+              </p>
               <p
                 onClick={() =>
                   handleDeleteList({

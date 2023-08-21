@@ -57,6 +57,7 @@ const Labels = function ({ taskId, listId, setShowLabel }: LabelsProps) {
     document
       .getElementById('modal-root')!
       .addEventListener('click', handleOuterClick, true)
+    inputRef.current!.focus()
 
     return () =>
       document

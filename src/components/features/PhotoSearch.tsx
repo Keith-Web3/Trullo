@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import { ForwardedRef, forwardRef, useRef } from 'react'
+import { ForwardedRef, forwardRef, useEffect, useRef } from 'react'
 
 import '../../sass/features/photo-search.scss'
 import Loader from '../ui/Loader'
@@ -30,6 +30,10 @@ const PhotoSearch = function (
     queryKey: ['photo-search', searchQuery],
     refetchOnWindowFocus: false,
   })
+
+  useEffect(() => {
+    searchBar.current!.focus()
+  }, [])
 
   return (
     <motion.div

@@ -62,6 +62,7 @@ const Description = function ({ cardId, boardDescription }: DescriptionProps) {
   useEffect(() => {
     if (textAreaRef.current === null) return
     textAreaRef.current!.style.height = `${textAreaRef.current!.scrollHeight}px`
+    textAreaRef.current!.focus()
   }, [isEditing])
 
   return (

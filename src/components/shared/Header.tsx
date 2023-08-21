@@ -91,7 +91,9 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
 
   return (
     <header className="header">
-      <img className="header__logo" src="/Logo.svg" alt="logo" />
+      <Link to="/">
+        <img className="header__logo" src="/Logo.svg" alt="logo" />
+      </Link>
       {params.boardId !== undefined && (
         <div className="boards__info">
           {isLoading ? <Loader /> : data?.[0]?.name}

@@ -847,6 +847,20 @@ const updateListName = async function ({
   }
 }
 
+const deleteTag = async function (taskId: number, tag: string) {
+  const toastId = toast.loading(`removing ${tag} tag`)
+  const { error } = await supabase.rpc('remove_tag_from_task', {
+    text: tag,
+    task_id: taskId,
+  })
+  if (error) {
+    toast.dismiss(toastId)
+    toast.error(error.message)
+    return
+  }
+  toast.dismiss(toastId)
+}
+
 export {
   addBoard,
   getBoards,
@@ -880,4 +894,5 @@ export {
   removeUserFromBoard,
   deleteList,
   updateListName,
+  deleteTag,
 }
