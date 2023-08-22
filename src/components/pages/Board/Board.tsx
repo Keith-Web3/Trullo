@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence } from 'framer-motion'
@@ -8,10 +8,16 @@ import BoardHeader from './BoardHeader'
 import List from './List'
 import '../../../sass/pages/board/board.scss'
 import NewCard from '../../shared/NewCard'
-import { addList, getBoard, getLists } from '../../utils/apis'
+import {
+  addList,
+  getBoard,
+  getLists,
+  subscribeToCurrentBoard,
+} from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 import BoardInfo from './BoardInfo'
+import { supabase } from '../../services/supabase'
 
 const Board = function () {
   const params = useParams<{ boardId: string }>()
@@ -46,6 +52,17 @@ const Board = function () {
     },
   })
   const handleNotify = useNotifyOnSuccess(isSuccess)
+
+  useEffect(() => {
+    const tasks = subscribeToCurrentBoard({
+      boardId: +params.boardId!,
+      queryClient,
+    })
+
+    return () => {
+      supabase.removeChannel(tasks)
+    }
+  }, [])
 
   return boardData?.data?.length === 0 ? (
     <Navigate to="/*" />

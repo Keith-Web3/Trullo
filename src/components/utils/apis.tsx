@@ -5,6 +5,7 @@ import { supabase } from '../services/supabase'
 import { getUserDetails, requireAuth } from './requireAuth'
 import { storage } from '../services/firebase'
 import calculateSize from './calculateSize'
+import { QueryClient } from '@tanstack/react-query'
 
 interface BoardData {
   name: string
@@ -109,10 +110,7 @@ const addList = async function (listData: ListData) {
   }
 }
 const addTask = async function (taskData: ListData) {
-  const newTaskData: Partial<ListData> = { ...taskData }
-  delete newTaskData.board_id
-
-  const { error } = await supabase.from('Tasks').insert([newTaskData]).select()
+  const { error } = await supabase.from('Tasks').insert([taskData]).select()
   if (error) {
     toast.error(error.message)
     throw new Error(error.message)
@@ -861,6 +859,32 @@ const deleteTag = async function (taskId: number, tag: string) {
   toast.dismiss(toastId)
 }
 
+const subscribeToCurrentBoard = function ({
+  boardId,
+  queryClient,
+}: {
+  boardId: number
+  queryClient: QueryClient
+}) {
+  const tasks = supabase
+    .channel('custom-filter-channel')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'Tasks',
+        filter: `board_id=eq.${boardId}`,
+      },
+      _payload => {
+        queryClient.invalidateQueries({ queryKey: ['get-tasks'] })
+      }
+    )
+    .subscribe()
+
+  return tasks
+}
+
 export {
   addBoard,
   getBoards,
@@ -895,4 +919,5 @@ export {
   deleteList,
   updateListName,
   deleteTag,
+  subscribeToCurrentBoard,
 }

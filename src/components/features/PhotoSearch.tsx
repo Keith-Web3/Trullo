@@ -66,9 +66,8 @@ const PhotoSearch = function (
           <Loader />
         ) : (
           data?.map((el: any) => (
-            <div>
+            <div key={el.blur_hash}>
               <Img
-                key={el.blur_hash}
                 onClick={() => {
                   setCoverSrc(el.urls.regular)
                   setCoverBlurHash(el.blur_hash)
@@ -79,12 +78,14 @@ const PhotoSearch = function (
                       }`
                   )
                 }}
-                blurhash={el.blur_hash}
+                blurhash={el.blur_hash || 'LEHV6nWB2yk8pyo0adR*.7kCMdnj'}
                 src={el.urls.regular}
                 alt="random_image"
               />
               <a
-                href={el.user.links.html}
+                href={
+                  el.user.links.html + '?utm_source=thullo&utm_medium=referral'
+                }
                 title={`By ${el.user.name} on unsplash`}
               >
                 By {el.user.name} on unsplash

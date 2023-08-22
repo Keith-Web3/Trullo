@@ -78,7 +78,9 @@ const List = function ({
   useEffect(() => {
     document.addEventListener('click', handleOuterClick, true)
 
-    return () => document.removeEventListener('click', handleOuterClick)
+    return () => {
+      document.removeEventListener('click', handleOuterClick)
+    }
   }, [])
   return (
     <div className="list">
