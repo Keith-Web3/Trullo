@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { ReactNode, useRef, useEffect } from 'react'
 
-import { supabase } from '../data/supabase'
+import { supabase } from '../services/supabase'
 
 interface NotificationProps {
   children: ReactNode

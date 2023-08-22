@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence } from 'framer-motion'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 import BoardHeader from './BoardHeader'
 import List from './List'
@@ -62,20 +63,22 @@ const Board = function () {
         {showBoardInfo && <BoardInfo setShowBoardInfo={setShowBoardInfo} />}
       </AnimatePresence>
       <div className="board__body">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          data?.map((listData, idx) => (
-            <List
-              name={listData.name}
-              newTaskIndex={newTaskIndex}
-              setNewTaskIndex={setNewTaskIndex}
-              idx={idx}
-              id={listData.id}
-              key={listData.id}
-            />
-          ))
-        )}
+        <DragDropContext onDragEnd={() => {}}>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            data?.map((listData, idx) => (
+              <List
+                name={listData.name}
+                newTaskIndex={newTaskIndex}
+                setNewTaskIndex={setNewTaskIndex}
+                idx={idx}
+                id={listData.id}
+                key={listData.id}
+              />
+            ))
+          )}
+        </DragDropContext>
         <div className="aside">
           {isNewListBoxShown && (
             <NewCard

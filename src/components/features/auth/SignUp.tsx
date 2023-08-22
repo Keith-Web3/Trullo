@@ -8,7 +8,7 @@ import {
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 
-import { supabase } from '../../data/supabase'
+import { supabase } from '../../services/supabase'
 import '../../../sass/features/auth/signup.scss'
 import Loader from '../../ui/Loader'
 
@@ -27,7 +27,9 @@ export const authAction: ActionFunction = async function ({ request }) {
 
   const { error: nameError } = await supabase
     .from('users')
-    .insert([{ user_id: data.user?.id, name: name.trim(), email: email.trim() }])
+    .insert([
+      { user_id: data.user?.id, name: name.trim(), email: email.trim() },
+    ])
     .select()
 
   if (error === null && nameError === null) throw redirect(searchParams || '/')

@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid'
 import { motion } from 'framer-motion'
 import { useParams } from 'react-router-dom'
 
-import { storage } from '../../data/firebase'
+import { storage } from '../../services/firebase'
 import { deleteFile, fetchAttachments, uploadFile } from '../../utils/apis'
 import formatDate from '../../utils/formatDate'
 import FileSkeleton from '../../ui/FileSkeleton'

@@ -1,3 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
@@ -12,8 +15,6 @@ import {
 } from '../../utils/apis'
 import TaskSkeleton from '../../ui/TaskSkeleton'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
-import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 interface ListProps {
   name: string
@@ -140,23 +141,44 @@ const List = function ({
           )}
         </AnimatePresence>
       </div>
-      {isFetchingTasks ? (
-        <TaskSkeleton />
-      ) : (
-        data?.map(task => (
-          <Task
-            listName={name}
-            tags={task.tags}
-            listId={id}
-            key={task.id}
-            taskId={task.id}
-            taskName={task.task_name}
-            users={task.users}
-            image={task.image}
-            blurhash={task.image_blurhash}
-          />
-        ))
-      )}
+      <Droppable droppableId={`${id}`} type="group">
+        {provided => {
+          return (
+            <div
+              className="list__body"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {isFetchingTasks ? (
+                <TaskSkeleton />
+              ) : (
+                data?.map((task, idx) => (
+                  <Draggable
+                    draggableId={`${task.id}`}
+                    key={task.id}
+                    index={idx}
+                  >
+                    {provided => (
+                      <Task
+                        listName={name}
+                        tags={task.tags}
+                        listId={id}
+                        key={task.id}
+                        taskId={task.id}
+                        taskName={task.task_name}
+                        users={task.users}
+                        image={task.image}
+                        blurhash={task.image_blurhash}
+                        provided={provided}
+                      />
+                    )}
+                  </Draggable>
+                ))
+              )}
+            </div>
+          )
+        }}
+      </Droppable>
       <AnimatePresence>
         {newTaskIndex === idx && (
           <NewCard

@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 import Header from '../shared/Header'
 import { getUserDetails, requireAuth } from '../utils/requireAuth'
 import { uploadUserOnSignUp } from '../utils/apis'
-import { supabase } from '../data/supabase'
+import { supabase } from '../services/supabase'
 
 export const loader = async function ({ request }: { request: Request }) {
   const path = new URL(request.url).pathname

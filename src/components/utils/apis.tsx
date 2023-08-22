@@ -1,9 +1,9 @@
 import { toast } from 'react-hot-toast'
 import { deleteObject, ref } from 'firebase/storage'
 
-import { supabase } from '../data/supabase'
+import { supabase } from '../services/supabase'
 import { getUserDetails, requireAuth } from './requireAuth'
-import { storage } from '../data/firebase'
+import { storage } from '../services/firebase'
 import calculateSize from './calculateSize'
 
 interface BoardData {

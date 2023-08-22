@@ -9,7 +9,7 @@ import { useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import '../../../sass/features/auth/login.scss'
-import { supabase } from '../../data/supabase'
+import { supabase } from '../../services/supabase'
 import Loader from '../../ui/Loader'
 import { signinWithGoogle } from '../../utils/requireAuth'
 

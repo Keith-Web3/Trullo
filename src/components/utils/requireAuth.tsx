@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 
-import { supabase } from '../data/supabase'
+import { supabase } from '../services/supabase'
 import { getUser } from './apis'
 
 export async function requireAuth() {

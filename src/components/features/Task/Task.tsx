@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { nanoid } from 'nanoid'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { DraggableProvided } from 'react-beautiful-dnd'
 
 import { Users, renderUsers } from '../../utils/renderusers'
 import '../../../sass/features/task/task.scss'
@@ -18,6 +19,7 @@ interface TaskProps {
   listName: string
   blurhash: string
   listId: number
+  provided: DraggableProvided
 }
 
 const Task = function ({
@@ -29,6 +31,7 @@ const Task = function ({
   listName,
   blurhash,
   listId,
+  provided,
 }: TaskProps) {
   const [isTaskInfoShown, setIsTaskInfoShown] = useState(false)
   const queryClient = useQueryClient()
@@ -41,7 +44,13 @@ const Task = function ({
     queryFn: fetchAttachments(taskId),
   })
   return (
-    <div className="task" onClick={() => setIsTaskInfoShown(true)}>
+    <div
+      className="task"
+      onClick={() => setIsTaskInfoShown(true)}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+      ref={provided.innerRef}
+    >
       {!!image && (
         <Img
           className="task__image"

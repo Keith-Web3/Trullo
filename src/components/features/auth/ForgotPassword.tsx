@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import '../../../sass/features/auth/forgot-password.scss'
-import { supabase } from '../../data/supabase'
+import { supabase } from '../../services/supabase'
 
 const ForgotPassword = function () {
   const passwordRef = useRef<HTMLInputElement>(null)
