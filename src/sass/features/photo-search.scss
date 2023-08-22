@@ -62,5 +62,25 @@
       object-fit: cover;
       border-radius: 4px;
     }
+    div {
+      position: relative;
+      overflow: hidden;
+
+      a {
+        position: absolute;
+        display: block;
+        inset: auto 0 0 0;
+        width: max-content;
+        color: $white;
+        font-size: 0.75rem;
+        text-decoration: none;
+        overflow: hidden;
+        background-color: rgba($gray-300, 0.2);
+        top: 120%;
+      }
+      &:hover a {
+        top: auto;
+      }
+    }
   }
 }

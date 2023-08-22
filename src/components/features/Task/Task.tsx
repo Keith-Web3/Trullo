@@ -59,6 +59,7 @@ const Task = function ({
               <p
                 key={nanoid()}
                 className="tag"
+                title="double tap to remove"
                 style={{
                   color: `rgb(${tag.color})`,
                   backgroundColor: `rgba(${tag.color}, 0.25)`,

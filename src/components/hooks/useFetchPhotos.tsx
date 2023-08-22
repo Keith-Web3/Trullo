@@ -16,6 +16,7 @@ const useFetchPhotos: hookType = function () {
       }&page=1&query=${searchQuery.trim()}&per_page=12`
     )
     const data = await res.json()
+    console.log(data.results)
     return data.results
   }
   return [searchQuery, setSearchQuery, getPhotos]
