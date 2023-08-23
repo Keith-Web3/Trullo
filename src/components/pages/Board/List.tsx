@@ -72,8 +72,7 @@ const List = function ({
 
   useEffect(() => {
     if (isEditingName === true) inputRef.current?.focus()
-  }),
-    [isEditingName]
+  }, [isEditingName])
 
   useEffect(() => {
     document.addEventListener('click', handleOuterClick, true)
