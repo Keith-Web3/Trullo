@@ -20,6 +20,7 @@ interface TaskProps {
   blurhash: string
   listId: number
   provided: DraggableProvided
+  isDragging: boolean
 }
 
 const Task = function ({
@@ -32,6 +33,7 @@ const Task = function ({
   blurhash,
   listId,
   provided,
+  isDragging,
 }: TaskProps) {
   const [isTaskInfoShown, setIsTaskInfoShown] = useState(false)
   const queryClient = useQueryClient()
@@ -45,7 +47,7 @@ const Task = function ({
   })
   return (
     <div
-      className="task"
+      className={`task ${isDragging ? 'drag' : ''}`}
       onClick={() => setIsTaskInfoShown(true)}
       {...provided.draggableProps}
       {...provided.dragHandleProps}

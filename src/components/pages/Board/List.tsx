@@ -161,7 +161,7 @@ const List = function ({
                       key={task.id}
                       index={task.order}
                     >
-                      {provided => (
+                      {(provided, snapshot) => (
                         <Task
                           listName={name}
                           tags={task.tags}
@@ -173,6 +173,7 @@ const List = function ({
                           image={task.image}
                           blurhash={task.image_blurhash}
                           provided={provided}
+                          isDragging={snapshot.isDragging}
                         />
                       )}
                     </Draggable>

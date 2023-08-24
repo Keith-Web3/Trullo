@@ -10,6 +10,11 @@
   min-width: 243px;
   cursor: pointer;
 
+  &.drag {
+    transition: 200ms linear;
+    rotate: 5deg !important;
+  }
+
   &__image,
   canvas {
     aspect-ratio: 219 / 130;
