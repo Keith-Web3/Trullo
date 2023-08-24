@@ -153,29 +153,32 @@ const List = function ({
               {isFetchingTasks ? (
                 <TaskSkeleton />
               ) : (
-                data?.map((task, idx) => (
-                  <Draggable
-                    draggableId={`${task.id}`}
-                    key={task.id}
-                    index={idx}
-                  >
-                    {provided => (
-                      <Task
-                        listName={name}
-                        tags={task.tags}
-                        listId={id}
-                        key={task.id}
-                        taskId={task.id}
-                        taskName={task.task_name}
-                        users={task.users}
-                        image={task.image}
-                        blurhash={task.image_blurhash}
-                        provided={provided}
-                      />
-                    )}
-                  </Draggable>
-                ))
+                data
+                  ?.sort((a, b) => a.order - b.order)
+                  .map(task => (
+                    <Draggable
+                      draggableId={`${task.id}`}
+                      key={task.id}
+                      index={task.order}
+                    >
+                      {provided => (
+                        <Task
+                          listName={name}
+                          tags={task.tags}
+                          listId={id}
+                          key={task.id}
+                          taskId={task.id}
+                          taskName={task.task_name}
+                          users={task.users}
+                          image={task.image}
+                          blurhash={task.image_blurhash}
+                          provided={provided}
+                        />
+                      )}
+                    </Draggable>
+                  ))
               )}
+              {provided.placeholder}
             </div>
           )
         }}
@@ -188,6 +191,7 @@ const List = function ({
             id={id}
             type="card"
             setCardDisplay={setNewTaskIndex}
+            tasksLength={data?.length}
           />
         )}
       </AnimatePresence>

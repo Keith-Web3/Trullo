@@ -56,6 +56,9 @@
       }
     }
   }
+  &__body {
+    min-height: 1px;
+  }
   .add-card {
     background-color: $blue-100;
     color: $blue-300;

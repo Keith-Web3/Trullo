@@ -22,6 +22,7 @@ interface NewCardProps {
   >
   isLoading: boolean
   id?: number
+  tasksLength?: number
 }
 
 const NewCard = function ({
@@ -30,6 +31,7 @@ const NewCard = function ({
   mutate,
   isLoading,
   id,
+  tasksLength,
 }: NewCardProps) {
   const params = useParams<{ boardId: string }>()
   const newCardRef = useRef<HTMLDivElement>(null)
@@ -58,6 +60,8 @@ const NewCard = function ({
               task_name: textAreaRef.current!.value,
               list_id: id!,
               board_id: +params.boardId!,
+              order: tasksLength!,
+              'order-id': `${id!}-${tasksLength!}`,
               users: [
                 { ...(await getUserDetails()), role: 'admin' as 'admin' },
               ],

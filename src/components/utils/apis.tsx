@@ -1,11 +1,12 @@
 import { toast } from 'react-hot-toast'
 import { deleteObject, ref } from 'firebase/storage'
+import { QueryClient } from '@tanstack/react-query'
 
 import { supabase } from '../services/supabase'
 import { getUserDetails, requireAuth } from './requireAuth'
 import { storage } from '../services/firebase'
 import calculateSize from './calculateSize'
-import { QueryClient } from '@tanstack/react-query'
+import { DraggableLocation, DroppableId } from 'react-beautiful-dnd'
 
 interface BoardData {
   name: string
@@ -29,6 +30,8 @@ export type ListData =
       task_name: string
       list_id: number
       board_id: number
+      order: number
+      'order-id': string
       users: {
         name?: string
         img: string
@@ -885,6 +888,185 @@ const subscribeToCurrentBoard = function ({
   return tasks
 }
 
+const batchUpdateTasks = async function ({
+  remoteTodos,
+}: {
+  remoteTodos: unknown[]
+  reordered: unknown[]
+  destination_id: DroppableId
+  source_id: DroppableId
+}) {
+  const { error } = await supabase.rpc('batch_update_tasks', {
+    tasks_to_update: remoteTodos,
+  })
+  if (error) {
+    toast.error(error.message)
+    throw new Error(error.message)
+  }
+}
+
+const handleTasksReorder = function (
+  destination: DraggableLocation,
+  source: DraggableLocation,
+  queryClient: QueryClient,
+  draggableId: number
+) {
+  if (source.droppableId === destination.droppableId) {
+    const previousTodos = (
+      queryClient.getQueryData(['get-tasks', +source.droppableId]) as {
+        id: number
+        order: number
+        list_id: number
+        'order-id': string
+      }[]
+    ).sort((a, b) => a.order - b.order)
+    const previousTodosCopy = [...previousTodos]
+
+    const draggedTask = {
+      ...previousTodos.find(task => task.id === draggableId)!,
+    }
+
+    let bottom = previousTodosCopy.splice(
+      source.index + 1,
+      previousTodos.length - source.index - 1
+    )
+
+    bottom = bottom.map(task => {
+      return {
+        ...task,
+        order: task.order - 1,
+        'order-id': `${task.list_id}-${task.order - 1}`,
+      }
+    })
+    previousTodosCopy.splice(source.index, 1, ...bottom)
+
+    let top = previousTodosCopy.splice(
+      destination.index,
+      previousTodos.length - destination.index
+    )
+    top = top.map(task => {
+      return {
+        ...task,
+        order: task.order + 1,
+        'order-id': `${task.list_id}-${task.order + 1}`,
+      }
+    })
+    draggedTask!.order = destination.index
+    draggedTask!['order-id'] = `${source.droppableId}-${destination.index}`
+
+    const reordered = [...previousTodosCopy, draggedTask, ...top]
+
+    const remoteTodos = reordered.reduce(
+      (acc, curr) => {
+        const reorderCurr = previousTodos.find(el => el.id === curr.id)
+        if (curr['order-id'] !== reorderCurr!['order-id']) {
+          return [
+            ...acc,
+            {
+              id: curr.id,
+              order: curr.order,
+              list_id: curr.list_id,
+              'order-id': curr['order-id'],
+            },
+          ]
+        }
+        return acc
+      },
+      [] as {
+        id: number
+        order: number
+        list_id: number
+        'order-id': string
+      }[]
+    )
+    return { remoteTodos, reordered }
+  } else {
+    const sourceColumn = (
+      queryClient.getQueryData(['get-tasks', +source.droppableId]) as {
+        id: number
+        order: number
+        list_id: number
+        'order-id': string
+      }[]
+    ).sort((a, b) => a.order - b.order)
+
+    const draggedTask = {
+      ...sourceColumn.find(task => task.id === draggableId)!,
+    }
+
+    const sourceColumnCopy = [...sourceColumn]
+
+    let bottom = sourceColumnCopy.splice(
+      source.index + 1,
+      sourceColumn.length - source.index - 1
+    )
+
+    bottom = bottom.map(task => {
+      return {
+        ...task,
+        order: task.order - 1,
+        'order-id': `${task.list_id}-${task.order - 1}`,
+      }
+    })
+    sourceColumnCopy.splice(source.index, 1, ...bottom)
+
+    const destinationColumn = (
+      queryClient.getQueryData(['get-tasks', +destination.droppableId]) as {
+        id: number
+        order: number
+        list_id: number
+        'order-id': string
+      }[]
+    ).sort((a, b) => a.order - b.order)
+
+    const destinationColumnCopy = [...destinationColumn]
+    let top = destinationColumnCopy.splice(
+      destination.index,
+      destinationColumn.length - destination.index
+    )
+    top = top.map(task => {
+      return {
+        ...task,
+        order: task.order + 1,
+        'order-id': `${task.list_id}-${task.order + 1}`,
+      }
+    })
+    draggedTask!.order = destination.index
+    draggedTask!['order-id'] = `${destination.droppableId}-${destination.index}`
+    draggedTask.list_id = +destination.droppableId
+
+    const reorderedDestination = [...destinationColumnCopy, draggedTask, ...top]
+
+    const allTasks = [...sourceColumn, ...destinationColumn]
+    const allEditedTasks = [...reorderedDestination, ...sourceColumnCopy]
+    const remoteTodos = allEditedTasks.reduce(
+      (acc, curr) => {
+        const reorderCurr = allTasks.find(el => el.id === curr.id)
+        if (curr['order-id'] !== reorderCurr!['order-id']) {
+          return [
+            ...acc,
+            {
+              id: curr.id,
+              order: curr.order,
+              list_id: curr.list_id,
+              'order-id': curr['order-id'],
+            },
+          ]
+        }
+        return acc
+      },
+      [] as {
+        id: number
+        order: number
+        list_id: number
+        'order-id': string
+      }[]
+    )
+
+    return { remoteTodos, reordered: [reorderedDestination, sourceColumnCopy] }
+  }
+}
+
 export {
   addBoard,
   getBoards,
@@ -920,4 +1102,6 @@ export {
   updateListName,
   deleteTag,
   subscribeToCurrentBoard,
+  batchUpdateTasks,
+  handleTasksReorder,
 }
