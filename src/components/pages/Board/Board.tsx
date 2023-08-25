@@ -19,7 +19,6 @@ import {
 import Loader from '../../ui/Loader'
 import useNotifyOnSuccess from '../../hooks/useNotifyOnSuccess'
 import BoardInfo from './BoardInfo'
-import { supabase } from '../../services/supabase'
 
 const Board = function () {
   const params = useParams<{ boardId: string }>()
@@ -105,14 +104,12 @@ const Board = function () {
   const handleNotify = useNotifyOnSuccess(isSuccess)
 
   useEffect(() => {
-    const tasks = subscribeToCurrentBoard({
+    const unsubscribe = subscribeToCurrentBoard({
       boardId: +params.boardId!,
       queryClient,
     })
 
-    return () => {
-      supabase.removeChannel(tasks)
-    }
+    return unsubscribe
   }, [])
 
   const handleDragDrop = function (results: DropResult) {

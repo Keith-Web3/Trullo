@@ -885,7 +885,26 @@ const subscribeToCurrentBoard = function ({
     )
     .subscribe()
 
-  return tasks
+  const boardNotifications = supabase
+    .channel('custom-filter-channel')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'board_notifications',
+        filter: `board_id=eq.${boardId}`,
+      },
+      _payload => {
+        queryClient.invalidateQueries({ queryKey: ['get-notifications'] })
+      }
+    )
+    .subscribe()
+
+  return function () {
+    supabase.removeChannel(tasks)
+    supabase.removeChannel(boardNotifications)
+  }
 }
 
 const batchUpdateTasks = async function ({
