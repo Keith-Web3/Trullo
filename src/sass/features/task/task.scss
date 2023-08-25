@@ -9,10 +9,10 @@
   margin-bottom: $spacer * 1.5;
   min-width: 243px;
   cursor: pointer;
+  transition: rotate 150ms linear;
 
   &.drag {
-    transition: 200ms linear;
-    rotate: 5deg !important;
+    rotate: 8deg !important;
   }
 
   &__image,

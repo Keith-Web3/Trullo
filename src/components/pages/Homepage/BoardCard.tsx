@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 
-import '../../sass/ui/boardcard.scss'
-import { renderUsers } from '../utils/renderusers'
-import Img from './Img'
+import '../../../sass/pages/homepage/boardcard.scss'
+import { renderUsers } from '../../utils/renderusers'
+import Img from '../../ui/Img'
 
 interface BoardCardProps {
   name: string

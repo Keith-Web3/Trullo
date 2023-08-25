@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useQuery } from '@tanstack/react-query'
 
-import BoardCard from '../ui/BoardCard'
-import Button from '../ui/Button'
-import '../../sass/pages/homepage.scss'
-import AddBoard from './Board/AddBoard'
-import { getBoards } from '../utils/apis'
-import BoardCardSkeleton from '../ui/BoardCardSkeleton'
+import BoardCard from './BoardCard'
+import Button from '../../ui/Button'
+import '../../../sass/pages/homepage/homepage.scss'
+import AddBoard from '../Board/AddBoard'
+import { getBoards } from '../../utils/apis'
+import BoardCardSkeleton from '../../ui/BoardCardSkeleton'
 
 const HomePage = function () {
   const [isAddCardModalShown, setIsAddCardModalShown] = useState(false)

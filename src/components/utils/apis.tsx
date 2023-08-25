@@ -1,12 +1,12 @@
 import { toast } from 'react-hot-toast'
 import { deleteObject, ref } from 'firebase/storage'
 import { QueryClient } from '@tanstack/react-query'
+import { DraggableLocation, DroppableId } from 'react-beautiful-dnd'
 
 import { supabase } from '../services/supabase'
 import { getUserDetails, requireAuth } from './requireAuth'
 import { storage } from '../services/firebase'
 import calculateSize from './calculateSize'
-import { DraggableLocation, DroppableId } from 'react-beautiful-dnd'
 
 interface BoardData {
   name: string

@@ -8,7 +8,7 @@ import {
 import HomeLayout, {
   loader as HomeLayoutLoader,
 } from './components/layouts/HomeLayout'
-import HomePage from './components/pages/HomePage'
+import HomePage from './components/pages/Homepage/HomePage'
 import Board from './components/pages/Board/Board'
 import Login, {
   authAction as loginAction,

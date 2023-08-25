@@ -1,5 +1,5 @@
-@use '../variables' as *;
-@use '../utils' as utils;
+@use '../../variables' as *;
+@use '../../utils' as utils;
 
 .board-card {
   background-color: $white;
