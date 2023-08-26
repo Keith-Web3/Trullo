@@ -1,6 +1,12 @@
 import { Suspense, useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Await, Link, useParams, useSearchParams } from 'react-router-dom'
+import {
+  Await,
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
@@ -36,11 +42,11 @@ const loaderRenderProp = function (resolvedData: ResolvedData) {
   )
 }
 const Header = function ({ userDetails }: HeaderProps) {
-  const [isDropDownOpen, setIsDropDownOpen] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
   const notificationRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [_searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
   const params = useParams()
 
   const isBoardOpen = params.boardId !== undefined
@@ -117,7 +123,7 @@ const Header = function ({ userDetails }: HeaderProps) {
           areNotificationsUnread && !showNotifications ? 'animate' : 'final'
         }
         className={`header__notifications ${
-          areNotificationsUnread ? 'unread' : ''
+          areNotificationsUnread && !showNotifications ? 'unread' : ''
         } ${showNotifications ? 'shown' : ''}`}
         onClick={() => setShowNotifications(true)}
       >
@@ -164,12 +170,15 @@ const Header = function ({ userDetails }: HeaderProps) {
         <Suspense fallback={<Loader />}>
           <Await resolve={userDetails}>{loaderRenderProp}</Await>
         </Suspense>
-        <motion.img
-          animate={{ rotate: isDropDownOpen ? '180deg' : '0deg' }}
-          onClick={() => setIsDropDownOpen(prev => !prev)}
+        <img
           className="user__caret"
-          src="/caret-down-solid.svg"
+          title="logout"
+          src="/logout.svg"
           alt="drop down"
+          onClick={async () => {
+            await supabase.auth.signOut()
+            navigate('/login')
+          }}
         />
       </div>
     </header>
