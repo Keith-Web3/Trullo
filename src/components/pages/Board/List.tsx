@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -35,6 +35,7 @@ const List = function ({
   const [showListOptions, setShowListOptions] = useState(false)
   const [isEditingName, setIsEditingName] = useState(false)
   const listOptionsRef = useRef<HTMLDivElement>(null)
+  const [searchParams] = useSearchParams()
   const inputRef = useRef<HTMLInputElement>(null)
   const params = useParams()
 
@@ -154,7 +155,12 @@ const List = function ({
                 <TaskSkeleton />
               ) : (
                 data
-                  ?.sort((a, b) => a.order - b.order)
+                  ?.filter(el =>
+                    el.task_name
+                      .toLowerCase()
+                      .includes(searchParams.get('filter') || '')
+                  )
+                  .sort((a, b) => a.order - b.order)
                   .map(task => (
                     <Draggable
                       draggableId={`${task.id}`}

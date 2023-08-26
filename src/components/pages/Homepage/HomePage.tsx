@@ -8,9 +8,11 @@ import '../../../sass/pages/homepage/homepage.scss'
 import AddBoard from '../Board/AddBoard'
 import { getBoards } from '../../utils/apis'
 import BoardCardSkeleton from '../../ui/BoardCardSkeleton'
+import { useSearchParams } from 'react-router-dom'
 
 const HomePage = function () {
   const [isAddCardModalShown, setIsAddCardModalShown] = useState(false)
+  const [searchParams] = useSearchParams()
   const { data, isLoading } = useQuery({
     queryKey: ['getBoards'],
     queryFn: getBoards,
@@ -33,16 +35,20 @@ const HomePage = function () {
             <BoardCardSkeleton />
           </>
         ) : (
-          data!.map(el => (
-            <BoardCard
-              key={el.id}
-              id={el.id}
-              name={el.name}
-              image={el.cover_img}
-              users={el.users}
-              blurhash={el.cover_blurhash}
-            />
-          ))
+          data!
+            .filter(el =>
+              el.name.toLowerCase().includes(searchParams.get('filter') || '')
+            )
+            .map(el => (
+              <BoardCard
+                key={el.id}
+                id={el.id}
+                name={el.name}
+                image={el.cover_img}
+                users={el.users}
+                blurhash={el.cover_blurhash}
+              />
+            ))
         )}
         {isAddCardModalShown &&
           createPortal(

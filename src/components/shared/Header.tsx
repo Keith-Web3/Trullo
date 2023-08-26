@@ -1,6 +1,6 @@
 import { Suspense, useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Await, Link, useParams } from 'react-router-dom'
+import { Await, Link, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
@@ -17,6 +17,9 @@ type ResolvedData = {
   img: string | undefined
   id: string
 }
+interface HeaderProps {
+  userDetails: unknown
+}
 
 const loaderRenderProp = function (resolvedData: ResolvedData) {
   return (
@@ -32,10 +35,12 @@ const loaderRenderProp = function (resolvedData: ResolvedData) {
     </>
   )
 }
-const Header = function ({ userDetails }: { userDetails: unknown }) {
+const Header = function ({ userDetails }: HeaderProps) {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
   const notificationRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [_searchParams, setSearchParams] = useSearchParams()
   const params = useParams()
 
   const isBoardOpen = params.boardId !== undefined
@@ -133,8 +138,27 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
           ))}
       </motion.div>
       <label className="header__label" htmlFor="search">
-        <input placeholder="Keyword..." type="text" id="search" />
-        <Button>search</Button>
+        <input
+          onKeyDown={e => {
+            if (e.key === 'Enter')
+              setSearchParams(
+                `filter=${inputRef.current!.value.trim().toLowerCase()}`
+              )
+          }}
+          placeholder="Keyword..."
+          ref={inputRef}
+          type="text"
+          id="search"
+        />
+        <Button
+          onClick={() =>
+            setSearchParams(
+              `filter=${inputRef.current!.value.trim().toLowerCase()}`
+            )
+          }
+        >
+          search
+        </Button>
       </label>
       <div className="user">
         <Suspense fallback={<Loader />}>
