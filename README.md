@@ -1,6 +1,6 @@
 # Thullo
 
-Enhance your team's productivity and collaboration with our feature-rich Collaboration Tool. Create boards, assign tasks, share files, and communicate effectively, all within a secure environment.
+Challenge from [devchallenges](https://devchallenges.io/). Enhance team productivity and collaboration with this feature-rich Collaboration Tool. Create boards, assign tasks, share files, and communicate effectively, all within a secure environment.
 
 ![Screenshot (220)](https://github.com/Keith-Web3/Trullo---Trello-Clone/assets/96974022/b0764e81-5ec2-4b1c-9973-2179b886b268)
 
