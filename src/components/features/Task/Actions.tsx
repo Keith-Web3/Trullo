@@ -25,7 +25,7 @@ const Actions = function ({
         <img src="/user.svg" alt="user" />
         <p>actions</p>
       </div>
-      <div className="action" onClick={() => setShowLabel(true)}>
+      <div className="action action--labels" onClick={() => setShowLabel(true)}>
         <img src="/label.svg" alt="label" />
         <p>labels</p>
         <AnimatePresence>
@@ -38,7 +38,10 @@ const Actions = function ({
           )}
         </AnimatePresence>
       </div>
-      <div className="action" onClick={() => setShowPhotoSearch(true)}>
+      <div
+        className="action action--cover"
+        onClick={() => setShowPhotoSearch(true)}
+      >
         <img src="/gallery.svg" alt="cover" />
         <p>cover</p>
         {children}

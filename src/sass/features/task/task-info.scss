@@ -15,6 +15,11 @@
   border-radius: 8px;
   box-shadow: 0px 2px 4px 0px #0000000d;
 
+  @include screen(730) {
+    grid-template: auto auto 1fr / 1fr;
+    grid-template-areas: 'cover' 'actions' 'main';
+    width: max(90%, 412px);
+  }
   .cover-container {
     position: relative;
     grid-area: cover;

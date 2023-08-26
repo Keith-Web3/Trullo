@@ -2,10 +2,18 @@
 
 .actions {
   grid-area: actions;
+  @include screen(730) {
+    display: grid;
+    grid-template: repeat(3, auto) / auto auto;
+    grid-template-areas: 'header members' 'labels members' 'cover members';
+    align-items: start;
+    column-gap: $spacer;
+  }
   &__header {
     display: flex;
     align-items: center;
     gap: 1ch;
+    grid-area: header;
 
     img {
       opacity: 0.7;
@@ -26,6 +34,12 @@
       display: flex;
       align-items: center;
       gap: $spacer;
+    }
+    &--labels {
+      grid-area: labels;
+    }
+    &--cover {
+      grid-area: cover;
     }
     font-weight: 500;
     text-transform: capitalize;
@@ -52,7 +66,11 @@
       background-color: unset;
       padding: unset;
       margin-top: $spacer * 2;
+      grid-area: members;
 
+      @include screen(730) {
+        margin-top: 0;
+      }
       p {
         color: #bdbdbd;
       }

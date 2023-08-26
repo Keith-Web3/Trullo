@@ -9,6 +9,9 @@
   position: relative;
   z-index: 2;
 
+  &__logo {
+    margin-right: $spacer;
+  }
   .boards__info {
     display: flex;
     align-items: center;
@@ -40,6 +43,13 @@
     margin-inline: auto $spacer * 3;
     position: relative;
     z-index: 1;
+
+    @include screen(521) {
+      &.shown {
+        transform: none !important;
+      }
+      position: unset;
+    }
     &.unread {
       &::after {
         content: '';

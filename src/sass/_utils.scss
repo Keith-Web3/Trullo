@@ -246,6 +246,10 @@
   border: 1px solid $gray-50;
   max-height: 368px;
   overflow: auto;
+  @include screen(521) {
+    inset: 105% auto auto $spacer;
+    width: min(90%, 390px);
+  }
   &::-webkit-scrollbar {
     width: 6px !important;
     height: 6px !important;
@@ -283,10 +287,14 @@
       font-weight: 500;
       cursor: pointer;
       margin-top: $spacer * 0.5;
+      user-select: none;
+      -webkit-user-select: none;
 
       p {
         text-decoration: none;
         color: $gray-200;
+        user-select: none;
+        -webkit-user-select: none;
 
         &.active {
           color: $dark-100;

@@ -7,9 +7,11 @@
   border-radius: 12px;
   padding: $spacer;
   text-decoration: none;
+  width: 100%;
+  max-width: 300px;
 
   @include screen(559) {
-    max-width: 300px;
+    width: 300px;
     margin-inline: auto;
   }
 

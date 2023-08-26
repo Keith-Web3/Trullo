@@ -113,7 +113,7 @@ const Header = function ({ userDetails }: { userDetails: unknown }) {
         }
         className={`header__notifications ${
           areNotificationsUnread ? 'unread' : ''
-        }`}
+        } ${showNotifications ? 'shown' : ''}`}
         onClick={() => setShowNotifications(true)}
       >
         <img className="bell" src="/bell.svg" alt="notifications" />
