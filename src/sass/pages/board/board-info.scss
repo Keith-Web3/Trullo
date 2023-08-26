@@ -1,4 +1,5 @@
 @use '../../variables' as *;
+@use '../../utils' as utils;
 
 .board-info {
   width: min(100%, 390px);
@@ -82,6 +83,15 @@
       color: $gray-300;
     }
   }
+  .delete-board {
+    @include utils.delete;
+    margin-top: $spacer;
+    border-radius: 8px;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
   .team {
     &__header {
       display: flex;
@@ -125,17 +135,7 @@
         text-align: center;
       }
       button:last-child {
-        background-color: transparent;
-        color: $red-100;
-        border: 2px solid $red-100;
-        border-radius: 15px;
-        outline: none;
-        padding: 0.5em 1em;
-        text-transform: capitalize;
-        font-family: 'Poppins';
-        font-weight: 500;
-        font-size: 0.9rem;
-        cursor: pointer;
+        @include utils.delete;
       }
     }
   }

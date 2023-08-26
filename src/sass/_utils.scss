@@ -304,3 +304,17 @@
     }
   }
 }
+
+@mixin delete {
+  background-color: transparent;
+  color: $red-100;
+  border: 2px solid $red-100;
+  border-radius: 15px;
+  outline: none;
+  padding: 0.5em 1em;
+  text-transform: capitalize;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+}

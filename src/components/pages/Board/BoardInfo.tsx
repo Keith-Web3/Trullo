@@ -1,11 +1,11 @@
 import { useRef, useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 import formatDate from '../../utils/formatDate'
 import '../../../sass/pages/board/board-info.scss'
-import { getBoard, removeUserFromBoard } from '../../utils/apis'
+import { deleteBoard, getBoard, removeUserFromBoard } from '../../utils/apis'
 import Loader from '../../ui/Loader'
 import Description from '../../features/Task/Description'
 
@@ -17,6 +17,7 @@ const BoardInfo = function ({
   const params = useParams()
   const boardInfoRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const { isLoading, data } = useQuery({
     queryKey: ['get-board', params.boardId],
     queryFn: getBoard(+params.boardId!),
@@ -27,6 +28,15 @@ const BoardInfo = function ({
       queryClient.invalidateQueries({
         queryKey: ['get-board', params.boardId!],
       })
+    },
+  })
+  const { mutate: handleDeleteBoard, isLoading: isDeleting } = useMutation({
+    mutationFn: deleteBoard,
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ['getBoards'],
+      })
+      navigate('/')
     },
   })
   const author = data?.data?.[0].users?.find(
@@ -75,6 +85,15 @@ const BoardInfo = function ({
         <p className="name">{author!.name}</p>
         <p className="date">on {formattedDate}</p>
       </div>
+      {data?.userId === author.id && (
+        <button
+          className="delete-board"
+          disabled={isDeleting}
+          onClick={() => handleDeleteBoard(+params.boardId!)}
+        >
+          delete board
+        </button>
+      )}
       <Description boardDescription={data?.data?.[0].board_info} />
       <div className="team">
         <div className="team__header">

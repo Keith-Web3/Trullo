@@ -880,30 +880,14 @@ const subscribeToCurrentBoard = function ({
         filter: `board_id=eq.${boardId}`,
       },
       _payload => {
+        console.log('changed')
         queryClient.invalidateQueries({ queryKey: ['get-tasks'] })
-      }
-    )
-    .subscribe()
-
-  const boardNotifications = supabase
-    .channel('custom-filter-channel')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'board_notifications',
-        filter: `board_id=eq.${boardId}`,
-      },
-      _payload => {
-        queryClient.invalidateQueries({ queryKey: ['get-notifications'] })
       }
     )
     .subscribe()
 
   return function () {
     supabase.removeChannel(tasks)
-    supabase.removeChannel(boardNotifications)
   }
 }
 
@@ -1085,6 +1069,16 @@ const handleTasksReorder = function (
     return { remoteTodos, reordered: [reorderedDestination, sourceColumnCopy] }
   }
 }
+const deleteBoard = async function (boardId: number) {
+  const toastId = toast.loading('deleting board...')
+  const { error } = await supabase.from('Boards').delete().eq('id', boardId)
+  if (error) {
+    toast.dismiss(toastId)
+    toast.error(error.message)
+    return
+  }
+  toast.dismiss(toastId)
+}
 
 export {
   addBoard,
@@ -1123,4 +1117,5 @@ export {
   subscribeToCurrentBoard,
   batchUpdateTasks,
   handleTasksReorder,
+  deleteBoard,
 }
