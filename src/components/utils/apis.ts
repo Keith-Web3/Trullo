@@ -1081,7 +1081,7 @@ const updateBoardPrivacy = async function ({
   isPrivate: boolean
 }) {
   const toastId = toast.loading('updating board privacy')
-  const { error } = await supabase.rpc('remove_tag_from_task', {
+  const { error } = await supabase.rpc('update_board_privacy', {
     board_id: boardId,
     new_private: isPrivate,
   })
