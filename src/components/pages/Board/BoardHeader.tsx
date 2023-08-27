@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { nanoid } from 'nanoid'
 import toast from 'react-hot-toast'
 
 import Button from '../../ui/Button'
