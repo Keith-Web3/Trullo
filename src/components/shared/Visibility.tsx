@@ -4,7 +4,9 @@ import { ForwardedRef, forwardRef } from 'react'
 import '../../sass/shared/visibility.scss'
 
 interface VisibilityProps {
-  setIsPrivate?: React.Dispatch<React.SetStateAction<boolean>>
+  setIsPrivate?:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((isPrivate: boolean) => void)
 }
 
 const visibilityAnimation = {

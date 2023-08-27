@@ -1073,6 +1073,26 @@ const deleteBoard = async function (boardId: number) {
   toast.dismiss(toastId)
 }
 
+const updateBoardPrivacy = async function ({
+  boardId,
+  isPrivate,
+}: {
+  boardId: number
+  isPrivate: boolean
+}) {
+  const toastId = toast.loading('updating board privacy')
+  const { error } = await supabase.rpc('remove_tag_from_task', {
+    board_id: boardId,
+    new_private: isPrivate,
+  })
+  if (error) {
+    toast.dismiss(toastId)
+    toast.error(error.message)
+    throw new Error(error.message)
+  }
+  toast.dismiss(toastId)
+}
+
 export {
   addBoard,
   getBoards,
@@ -1111,4 +1131,5 @@ export {
   batchUpdateTasks,
   handleTasksReorder,
   deleteBoard,
+  updateBoardPrivacy,
 }

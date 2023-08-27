@@ -9,6 +9,9 @@ import '../../../sass/pages/board/board-header.scss'
 import Visibility from '../../shared/Visibility'
 import Loader from '../../ui/Loader'
 import AddUser from '../../features/AddUser'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { updateBoardPrivacy } from '../../utils/apis'
+import { useParams } from 'react-router-dom'
 
 interface BoardHeaderProps {
   users: (
@@ -40,6 +43,20 @@ const BoardHeader = function ({
   const [isVisibilityOpen, setIsVisibilityOpen] = useState(false)
   const visibility = useRef<HTMLDivElement>(null)
   const [isAddUserShown, setIsAddUserShown] = useState(false)
+  const params = useParams()
+  const queryClient = useQueryClient()
+
+  const { mutate } = useMutation({
+    mutationFn: updateBoardPrivacy,
+    onSuccess() {
+      toast.success('Board privacy updated successfully!')
+      queryClient.invalidateQueries({ queryKey: ['get-board', params.boardId] })
+    },
+  })
+
+  const handleUpdateBoardPrivacy = function (isPrivate: boolean) {
+    mutate({ boardId: +params.boardId!, isPrivate })
+  }
 
   const handleOuterClick = function (e: MouseEvent) {
     if (!visibility.current) return
@@ -103,7 +120,13 @@ const BoardHeader = function ({
         <span>show menu</span>
       </Button>
       <AnimatePresence>
-        {isVisibilityOpen && <Visibility key={nanoid()} ref={visibility} />}
+        {isVisibilityOpen && (
+          <Visibility
+            setIsPrivate={handleUpdateBoardPrivacy}
+            key={nanoid()}
+            ref={visibility}
+          />
+        )}
       </AnimatePresence>
     </div>
   )
