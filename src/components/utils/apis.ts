@@ -243,19 +243,13 @@ const updateTaskDescription = async function ({
   description: string
   boardId: number
 }) {
-  const { data, error } = await supabase
-    .from('Tasks')
-    .update({ description })
-    .eq('id', taskId)
-    .select()
-
+  const { error } = await supabase.rpc('update_task_description', {
+    task_id: taskId,
+    new_description: description,
+  })
   if (error) {
     toast.error(error.message)
     throw new Error(error.message)
-  }
-  if (data.length === 0) {
-    toast.error('Unauthorized to edit this task.')
-    return
   }
   toast.success('Description successfully updated')
 
