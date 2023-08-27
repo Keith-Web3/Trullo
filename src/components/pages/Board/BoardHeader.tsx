@@ -123,7 +123,6 @@ const BoardHeader = function ({
         {isVisibilityOpen && (
           <Visibility
             setIsPrivate={handleUpdateBoardPrivacy}
-            key={nanoid()}
             ref={visibility}
           />
         )}
