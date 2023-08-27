@@ -874,7 +874,6 @@ const subscribeToCurrentBoard = function ({
         filter: `board_id=eq.${boardId}`,
       },
       _payload => {
-        console.log('changed')
         queryClient.invalidateQueries({ queryKey: ['get-tasks'] })
       }
     )
