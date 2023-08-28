@@ -32,7 +32,10 @@ export const authAction: ActionFunction = async function ({ request }) {
     ])
     .select()
 
-  if (error === null && nameError === null) throw redirect(searchParams || '/')
+  if (error === null && nameError === null)
+    throw redirect(
+      searchParams ? `${searchParams}?isManual=true` : '/?isManual=true'
+    )
   toast.error((error || nameError)!.message)
 
   return null
