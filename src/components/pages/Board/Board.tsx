@@ -151,16 +151,18 @@ const Board = function () {
           {isLoading ? (
             <Loader />
           ) : (
-            data?.map((listData, idx) => (
-              <List
-                name={listData.name}
-                newTaskIndex={newTaskIndex}
-                setNewTaskIndex={setNewTaskIndex}
-                idx={idx}
-                id={listData.id}
-                key={listData.id}
-              />
-            ))
+            data
+              ?.sort((a, b) => a.id - b.id)
+              .map((listData, idx) => (
+                <List
+                  name={listData.name}
+                  newTaskIndex={newTaskIndex}
+                  setNewTaskIndex={setNewTaskIndex}
+                  idx={idx}
+                  id={listData.id}
+                  key={listData.id}
+                />
+              ))
           )}
         </DragDropContext>
         <div className="aside">
