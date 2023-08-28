@@ -290,7 +290,7 @@ const uploadUserOnSignUp = async function () {
   if (user?.created_at!.slice(0, -7) !== user?.last_sign_in_at!.slice(0, -7))
     return
 
-  const { error: nameError } = await supabase
+  await supabase
     .from('users')
     .insert([
       {
@@ -301,7 +301,6 @@ const uploadUserOnSignUp = async function () {
       },
     ])
     .select()
-  if (nameError) toast.error('Error uploading user details')
 }
 
 const getUsers = function (searchQuery: string, boardId: number) {
