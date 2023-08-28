@@ -18,11 +18,12 @@ import SignUp, {
 } from './components/features/auth/SignUp'
 import ForgotPassword from './components/features/auth/ForgotPassword'
 import PageNotFound from './components/pages/PageNotFound'
+import Error from './components/pages/Error'
 
 const App = function () {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/">
+      <Route path="/" errorElement={<Error />}>
         <Route path="login" action={loginAction} element={<Login />} />
         <Route path="signup" action={signUpAction} element={<SignUp />} />
         <Route loader={HomeLayoutLoader} element={<HomeLayout />}>

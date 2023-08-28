@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 
 import Button from '../../ui/Button'
 import { renderUsers } from '../../utils/renderusers'
@@ -8,9 +10,7 @@ import '../../../sass/pages/board/board-header.scss'
 import Visibility from '../../shared/Visibility'
 import Loader from '../../ui/Loader'
 import AddUser from '../../features/AddUser'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateBoardPrivacy } from '../../utils/apis'
-import { useParams } from 'react-router-dom'
 
 interface BoardHeaderProps {
   users: (

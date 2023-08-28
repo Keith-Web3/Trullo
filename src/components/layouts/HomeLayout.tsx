@@ -34,7 +34,6 @@ const HomeLayout = function () {
       await supabase.auth.signOut()
     })
   }, [])
-
   return (
     <main>
       <Header userDetails={userDetails} />

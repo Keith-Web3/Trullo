@@ -1,0 +1,53 @@
+@use '../variables' as *;
+
+.error {
+  &__container {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    min-height: 100vh;
+    padding: $spacer;
+    max-width: 1440px;
+    margin-inline: auto;
+
+    @include screen(832) {
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+  &__image {
+    width: 50%;
+
+    @include screen(832) {
+      width: 100%;
+    }
+  }
+  &__main {
+    font-family: 'Poppins';
+
+    h1 {
+      color: $dark-100;
+      font-weight: 500;
+      margin-bottom: $spacer * 0.8;
+    }
+    p {
+      color: $gray-400;
+      margin-bottom: $spacer * 1.5;
+    }
+    & > a {
+      button {
+        background-color: $blue-300;
+        color: $white;
+        padding: 0.5em 1em;
+        border: none;
+        outline: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+    }
+    @include screen(832) {
+      text-align: center;
+      margin-top: $spacer;
+    }
+  }
+}
