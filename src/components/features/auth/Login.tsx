@@ -22,7 +22,7 @@ export const authAction: ActionFunction = async function ({ request }) {
 
   if (password === '') {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:5173/update-password',
+      redirectTo: 'https://thulloo.netlify.app/update-password',
     })
     if (error) toast.error(error.message)
     if (!error) toast.success(`reset email sent to ${email}`)
