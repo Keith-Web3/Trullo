@@ -42,23 +42,6 @@ Challenge from [devchallenges](https://devchallenges.io/). Enhance team producti
 2. Navigate to the project directory: `cd Trullo---Trello-Clone`.
 3. Install dependencies: `npm install`.
 
-## Usage
-
-1. Create a Supabase account and set up your database.
-2. Configure environment variables for Supabase credentials.
-3. Obtain an Unsplash API key and update the relevant section.
-4. Start the development server: `npm start`.
-
-## Contributing
-
-We welcome contributions from the community! If you'd like to contribute, please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/your-feature`.
-3. Make your changes and commit them.
-4. Push to your branch: `git push origin feature/your-feature`.
-5. Open a pull request and describe your changes.
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
