@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
 
 import '../../sass/features/add-user.scss'
 import { assignUsersToBoard, getTaskUsers } from '../utils/apis'
 import SuggestedUserSkeleton from '../ui/SuggestedUserSkeleton'
 import useNotifyOnSuccess from '../hooks/useNotifyOnSuccess'
 import Loader from '../ui/Loader'
-import toast from 'react-hot-toast'
 
 interface AddUserProps {
   boardId: number

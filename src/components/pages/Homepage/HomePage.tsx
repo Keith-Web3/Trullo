@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
 
 import BoardCard from './BoardCard'
 import Button from '../../ui/Button'
@@ -8,7 +9,6 @@ import '../../../sass/pages/homepage/homepage.scss'
 import AddBoard from '../Board/AddBoard'
 import { getBoards } from '../../utils/apis'
 import BoardCardSkeleton from '../../ui/BoardCardSkeleton'
-import { useSearchParams } from 'react-router-dom'
 
 const HomePage = function () {
   const [isAddCardModalShown, setIsAddCardModalShown] = useState(false)
