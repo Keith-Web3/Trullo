@@ -45,7 +45,7 @@ const PhotoSearch = function (
     >
       <h1>photo search</h1>
       <p>Search Unsplash for photos</p>
-      <label htmlFor="search">
+      <label htmlFor="photo-search">
         <input
           ref={searchBar}
           onKeyDown={e => {
