@@ -47,5 +47,3 @@ Challenge from [devchallenges](https://devchallenges.io/). Enhance team producti
 This project is licensed under the [MIT License](LICENSE).
 
 ---
-
-Feel free to customize the content further to accurately reflect your project's details and goals.
