@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import queryString from 'query-string'
 
 import Button from '../ui/Button'
 import '../../sass/shared/header.scss'
@@ -17,6 +18,7 @@ import { supabase } from '../services/supabase'
 import { getBoardNotifications, getNotifications } from '../utils/apis'
 import Notifications from './Notifications'
 import BoardNotifications from './BoardNotifications'
+import useDebouncedInput from '../hooks/useDebounce'
 
 type ResolvedData = {
   name: string
@@ -44,7 +46,7 @@ const loaderRenderProp = function (resolvedData: ResolvedData) {
 const Header = function ({ userDetails }: HeaderProps) {
   const [showNotifications, setShowNotifications] = useState(false)
   const notificationRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [_searchQuery, setSearchQuery, debouncedQuery] = useDebouncedInput('')
   const [_searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const params = useParams()
@@ -100,6 +102,19 @@ const Header = function ({ userDetails }: HeaderProps) {
     }
   }, [])
 
+  useEffect(() => {
+    const query = {
+      filter: debouncedQuery,
+    }
+
+    const searchParams = queryString.stringify(query, {
+      skipEmptyString: true,
+      skipNull: true,
+    })
+
+    setSearchParams(searchParams)
+  }, [debouncedQuery])
+
   return (
     <header className="header">
       <Link to="/">
@@ -145,18 +160,14 @@ const Header = function ({ userDetails }: HeaderProps) {
       </motion.div>
       <label className="header__label" htmlFor="search">
         <input
-          onKeyDown={e => {
-            if (e.key === 'Enter')
-              setSearchParams(
-                `filter=${inputRef.current!.value.trim().toLowerCase()}`
-              )
+          onChange={e => {
+            setSearchQuery(e.target.value.trim().toLowerCase())
           }}
           placeholder="Keyword..."
-          ref={inputRef}
           type="text"
           id="search"
         />
-        <Button
+        {/* <Button
           onClick={() =>
             setSearchParams(
               `filter=${inputRef.current!.value.trim().toLowerCase()}`
@@ -164,7 +175,7 @@ const Header = function ({ userDetails }: HeaderProps) {
           }
         >
           search
-        </Button>
+        </Button> */}
       </label>
       <div className="user">
         <Suspense fallback={<Loader />}>
