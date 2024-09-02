@@ -26,9 +26,7 @@ const AddBoard = function ({ setIsAddCardModalShown }: AddCardProps) {
 
   const queryClient = useQueryClient()
   const [coverSrc, setCoverSrc] = useState(
-    `https://source.unsplash.com/random/?collaboration?${
-      Math.random() * 100000
-    }`
+    `https://images.unsplash.com/photo-1552664730-d307ca884978?ixid=M3w0ODE5MjF8MHwxfHNlYXJjaHwzfHx0YXNrJTEwbWFuYWdlbWVudHxlbnwwfHx8fDE3MjUzMDI2ODB8MA&ixlib=rb-4.0.3`
   )
   const [coverBlurHash, setCoverBlurHash] = useState(
     'L4N,_8e-4ms:DhDiofIA4maeRPof'

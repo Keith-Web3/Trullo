@@ -12,6 +12,7 @@ import '../../../sass/features/auth/login.scss'
 import { supabase } from '../../services/supabase'
 import Loader from '../../ui/Loader'
 import { signinWithGoogle } from '../../utils/requireAuth'
+import Img from '../../ui/Img'
 
 export const authAction: ActionFunction = async function ({ request }) {
   const formData = await request.formData()
@@ -130,14 +131,11 @@ const Login = function () {
           </p>
         </Form>
       </div>
-      <img
-        src={`https://source.unsplash.com/random/?task-management`}
+      <Img
+        src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixid=M3w0ODE5MjF8MHwxfHNlYXJjaHwxfHx0YXNrJTEwbWFuYWdlbWVudHxlbnwwfHx8fDE3MjUzMDI2ODB8MA&ixlib=rb-4.0.3"
         alt="thullo"
+        blurhash="LAHBYn00Dh9bMyRP4;s,Ql%1?coJ"
       />
-      {/* <img
-        src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dGFzayUyMG1hbmFnZW1lbnR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
-        alt="thullo"
-      /> */}
     </div>
   )
 }

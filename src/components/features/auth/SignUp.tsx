@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 import { supabase } from '../../services/supabase'
 import '../../../sass/features/auth/signup.scss'
 import Loader from '../../ui/Loader'
+import Img from '../../ui/Img'
 
 export const authAction: ActionFunction = async function ({ request }) {
   const formData = await request.formData()
@@ -108,8 +109,9 @@ const SignUp = function () {
           </p>
         </Form>
       </div>
-      <img
-        src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dGFzayUyMG1hbmFnZW1lbnR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+      <Img
+        src="https://images.unsplash.com/photo-1542626991-cbc4e32524cc?ixid=M3w0ODE5MjF8MHwxfHNlYXJjaHwyfHx0YXNrJTEwbWFuYWdlbWVudHxlbnwwfHx8fDE3MjUzMDI2ODB8MA&ixlib=rb-4.0.3"
+        blurhash="LVLqCFtm4n-o~qfixubJ?bxvt7oe"
         alt="thullo"
       />
     </div>
